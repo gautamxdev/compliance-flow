@@ -3,27 +3,32 @@ import { ArrowRight } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 
 const HeroSection = () => {
+  const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    // Calculate tilt (max ±4 degrees)
-    const rotateY = ((x - centerX) / centerX) * 4;
-    const rotateX = ((centerY - y) / centerY) * 4;
-    
-    setTilt({ rotateX, rotateY });
-  }, []);
+  // It's safe to omit cardRef from the dependency array because refs are stable and do not change between renders.
+ const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  if (!cardRef.current) return;
 
+  const rect = cardRef.current.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const centerX = rect.width / 2;
+  const centerY = rect.height / 2;
+
+  const rotateY = ((x - centerX) / centerX) * 4;
+  const rotateX = ((centerY - y) / centerY) * 4;
+
+  // NEW: background position (0–100%)
+  const bgX = (x / rect.width) * 100;
+  const bgY = (y / rect.height) * 100;
+
+  setTilt({ rotateX, rotateY });
+  setBgPos({ x: bgX, y: bgY });
+}, []);
   const handleMouseLeave = useCallback(() => {
     setTilt({ rotateX: 0, rotateY: 0 });
     setIsHovering(false);
@@ -58,25 +63,45 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* Interface Mockup */}
-        <div className="mt-16 md:mt-20 animate-fade-in" style={{ animationDelay: "0.3s", perspective: "900px" }}>
-          <div 
-            ref={cardRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            onMouseEnter={handleMouseEnter}
-            className="bg-card rounded-xl border border-border shadow-sm overflow-hidden"
-            style={{
-              transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
-              transition: "transform 160ms ease-out, box-shadow 160ms ease-out, border-color 160ms ease-out",
-              boxShadow: isHovering 
-                ? "0 4px 20px -4px hsl(220 15% 20% / 0.08)" 
-                : "0 1px 3px 0 hsl(220 15% 20% / 0.04)",
-              borderColor: isHovering 
-                ? "hsl(220 13% 85%)" 
-                : undefined,
-            }}
-          >
+{/* Interface Mockup */}
+<div
+  className="mt-16 md:mt-20 animate-fade-in"
+  style={{ animationDelay: "0.3s", perspective: "900px" }}
+>
+  {/* OUTER WRAPPER = BORDER */}
+  <div
+    ref={cardRef}
+    onMouseMove={handleMouseMove}
+    onMouseLeave={handleMouseLeave}
+    onMouseEnter={handleMouseEnter}
+    className="relative rounded-xl"
+   style={{
+  transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+  transition: "transform 120ms ease-out",
+  padding: "4px",
+background: isHovering
+  ? `
+radial-gradient(
+  120% 120% at ${bgPos.x}% ${bgPos.y}%,
+  hsl(210 100% 98%),
+  hsl(230 90% 82%),
+  hsl(260 85% 65%)
+)
+  `
+  : "hsl(220 13% 90%)",
+}}
+  >
+    {/* REAL CARD */}
+    <div
+      className="bg-card rounded-[11px] shadow-sm overflow-hidden"
+      style={{
+        boxShadow: isHovering
+          ? "0 8px 28px -8px hsl(220 15% 20% / 0.14)"
+          : "0 1px 3px 0 hsl(220 15% 20% / 0.04)",
+        transition: "box-shadow 160ms ease-out",
+      }}
+    >
+
             {/* Window Controls */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-divider bg-muted/30">
               <div className="flex gap-1.5">
@@ -85,7 +110,7 @@ const HeroSection = () => {
                 <div className="w-3 h-3 rounded-full bg-[hsl(142,71%,45%)]"></div>
               </div>
               <div className="flex-1 text-center">
-                <span className="text-xs text-text-tertiary">ComplianceWork — Client Dashboard</span>
+                <span className="text-xs text-text-tertiary">FirmOps— Client Dashboard</span>
               </div>
             </div>
             
@@ -167,8 +192,9 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 };
 
 export default HeroSection;
