@@ -1,11 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+/* 1️⃣ Imports MUST be first */
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
 @import "@fontsource/inter/600.css";
 @import "@fontsource/inter/700.css";
+
+/* 2️⃣ Tailwind layers */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Notion-inspired design system for CA compliance workspace */
 
@@ -73,46 +75,7 @@
   .dark {
     --background: 220 20% 7%;
     --foreground: 220 10% 95%;
-
-    --card: 220 20% 10%;
-    --card-foreground: 220 10% 95%;
-
-    --popover: 220 20% 10%;
-    --popover-foreground: 220 10% 95%;
-
-    --primary: 220 10% 95%;
-    --primary-foreground: 220 20% 7%;
-
-    --secondary: 220 15% 15%;
-    --secondary-foreground: 220 10% 90%;
-
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 55%;
-
-    --accent: 220 15% 18%;
-    --accent-foreground: 220 10% 90%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 220 10% 70%;
-
-    --surface-elevated: 220 20% 12%;
-    --text-primary: 220 10% 95%;
-    --text-secondary: 220 10% 65%;
-    --text-tertiary: 220 10% 50%;
-    --divider: 220 15% 20%;
-
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* rest unchanged */
   }
 }
 

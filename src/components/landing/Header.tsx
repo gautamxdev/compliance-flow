@@ -10,7 +10,7 @@ const Header = () => {
           <img
             src="/logo/firmops.svg"
             alt="FirmOps"
-            className="h-12 w-14"
+            className="h-14 w-14"
           />
           <span className="font-semibold text-xl text-text-primary">
       FirmOps
@@ -19,13 +19,13 @@ const Header = () => {
 
         {/* Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#problem" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
+          <a href="#problem" className="text-[15px] text-text-secondary hover:text-text-primary transition-colors">
             The Problem
           </a>
-          <a href="#how-it-works" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
+          <a href="#how-it-works" className="text-[15px] text-text-secondary hover:text-text-primary transition-colors">
             How It Works
           </a>
-          <a href="#who-its-for" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
+          <a href="#who-its-for" className="text-[15px] text-text-secondary hover:text-text-primary transition-colors">
             Who It's For
           </a>
         </nav>

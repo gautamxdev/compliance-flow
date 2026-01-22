@@ -34,7 +34,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="pt-32 pb-20 md:pt-40 md:pb-28">
+    <section className="pt-32 pb-20 md:pt-30 md:pb-28">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6 animate-fade-in">
