@@ -68,12 +68,9 @@ const HeroSection = () => {
             className="bg-card rounded-xl border border-border shadow-sm overflow-hidden"
             style={{
               transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
-              transition: "transform 160ms ease-out, box-shadow 160ms ease-out, border-color 160ms ease-out",
-              boxShadow: isHovering 
-                ? "0 4px 20px -4px hsl(220 15% 20% / 0.08)" 
-                : "0 1px 3px 0 hsl(220 15% 20% / 0.04)",
+              transition: "transform 160ms ease-out, border-color 180ms ease-out",
               borderColor: isHovering 
-                ? "hsl(220 13% 85%)" 
+                ? "hsl(220 10% 78%)" 
                 : undefined,
             }}
           >
