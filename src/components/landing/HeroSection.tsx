@@ -1,57 +1,53 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
+
 const HeroSection = () => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({
-    rotateX: 0,
-    rotateY: 0
-  });
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [isHovering, setIsHovering] = useState(false);
+
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
+    
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-
+    
     // Calculate tilt (max ±4 degrees)
-    const rotateY = (x - centerX) / centerX * 4;
-    const rotateX = (centerY - y) / centerY * 4;
-    setTilt({
-      rotateX,
-      rotateY
-    });
+    const rotateY = ((x - centerX) / centerX) * 4;
+    const rotateX = ((centerY - y) / centerY) * 4;
+    
+    setTilt({ rotateX, rotateY });
   }, []);
+
   const handleMouseLeave = useCallback(() => {
-    setTilt({
-      rotateX: 0,
-      rotateY: 0
-    });
+    setTilt({ rotateX: 0, rotateY: 0 });
     setIsHovering(false);
   }, []);
+
   const handleMouseEnter = useCallback(() => {
     setIsHovering(true);
   }, []);
-  return <section className="pt-32 pb-20 md:pt-30 md:pb-28">
+
+  return (
+    <section className="pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6 animate-fade-in">
             A structured workspace for CA firms to run compliance work without chaos.
           </h1>
           
-          <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-10 max-w-2xl animate-fade-in" style={{
-          animationDelay: "0.1s"
-        }}>
+          <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
             Clients, financial years, filings, and documents — all connected logically.
             <br />
             No folders. No Excel trackers. No guesswork.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{
-          animationDelay: "0.2s"
-        }}>
+          <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <Button size="lg" className="h-12 px-8 text-base">
               Request early access
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -63,15 +59,24 @@ const HeroSection = () => {
         </div>
 
         {/* Interface Mockup */}
-        <div className="mt-16 md:mt-20 animate-fade-in" style={{
-        animationDelay: "0.3s",
-        perspective: "900px"
-      }}>
-          <div ref={cardRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} onMouseEnter={handleMouseEnter} className="bg-card rounded-xl border border-border shadow-sm overflow-hidden" style={{
-          transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
-          transition: "transform 160ms ease-out, border-color 180ms ease-out",
-          borderColor: isHovering ? "hsl(220 10% 78%)" : undefined
-        }}>
+        <div className="mt-16 md:mt-20 animate-fade-in" style={{ animationDelay: "0.3s", perspective: "900px" }}>
+          <div 
+            ref={cardRef}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            onMouseEnter={handleMouseEnter}
+            className="bg-card rounded-xl border border-border shadow-sm overflow-hidden"
+            style={{
+              transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
+              transition: "transform 160ms ease-out, box-shadow 160ms ease-out, border-color 160ms ease-out",
+              boxShadow: isHovering 
+                ? "0 4px 20px -4px hsl(220 15% 20% / 0.08)" 
+                : "0 1px 3px 0 hsl(220 15% 20% / 0.04)",
+              borderColor: isHovering 
+                ? "hsl(220 13% 85%)" 
+                : undefined,
+            }}
+          >
             {/* Window Controls */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-divider bg-muted/30">
               <div className="flex gap-1.5">
@@ -111,7 +116,7 @@ const HeroSection = () => {
                   <span className="text-xs text-text-tertiary">4 tasks</span>
                 </div>
                 
-                <div className="border-border rounded-lg overflow-hidden border-solid border-0">
+                <div className="border border-border rounded-lg overflow-hidden">
                   <table className="w-full text-sm">
                     <thead className="bg-muted/50">
                       <tr>
@@ -162,6 +167,8 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;
