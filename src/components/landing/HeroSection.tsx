@@ -33,9 +33,9 @@ const HeroSection = () => {
             {/* Window Controls */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-divider bg-muted/30">
               <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-border"></div>
-                <div className="w-3 h-3 rounded-full bg-border"></div>
-                <div className="w-3 h-3 rounded-full bg-border"></div>
+                <div className="w-3 h-3 rounded-full bg-[hsl(0,72%,51%)]"></div>
+                <div className="w-3 h-3 rounded-full bg-[hsl(45,93%,47%)]"></div>
+                <div className="w-3 h-3 rounded-full bg-[hsl(142,71%,45%)]"></div>
               </div>
               <div className="flex-1 text-center">
                 <span className="text-xs text-text-tertiary">ComplianceWork — Client Dashboard</span>
