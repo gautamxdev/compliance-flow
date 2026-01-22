@@ -5,3 +5,4 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSSpublic repo activity
+next day activity
