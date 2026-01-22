@@ -30,10 +30,10 @@ const arrowBase =
           ref={ref}
           className="bg-card rounded-xl border border-border p-8 md:p-12"
         >
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 overflow-x-auto">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
 
             {/* Step 1 — Anchor */}
-            <div className={`${stepBase} ${visible ? "opacity-100" : "opacity-0"}`}>
+            <div className={`${stepBase} ${visible ? "opacity-100" : "opacity-0"} w-max`}>
               <div className="px-6 py-4 bg-primary text-primary-foreground rounded-lg">
                 <p className="text-xs uppercase tracking-wide opacity-70 mb-1">
                   Your
@@ -52,7 +52,7 @@ const arrowBase =
 
             {/* Step 2 */}
             <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden}`}
+              className={`${stepBase} ${visible ? stepVisible : stepHidden}w-max`}
               style={{ transitionDelay: "400ms" }}
             >
               <div className="px-6 py-4 bg-accent border border-border rounded-lg shadow-sm">
@@ -73,7 +73,7 @@ const arrowBase =
 
             {/* Step 3 */}
             <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden}`}
+              className={`${stepBase} ${visible ? stepVisible : stepHidden}w-max`}
               style={{ transitionDelay: "600ms" }}
             >
               <div className="px-6 py-4 bg-accent border border-border rounded-lg">
@@ -94,7 +94,7 @@ const arrowBase =
 
             {/* Step 4 */}
             <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden}`}
+              className={`${stepBase} ${visible ? stepVisible : stepHidden}w-max`}
               style={{ transitionDelay: "800ms" }}
             >
               <div className="px-6 py-4 bg-accent border border-border rounded-lg">
@@ -115,8 +115,8 @@ const arrowBase =
 
             {/* Step 5 */}
             <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden}`}
-              style={{ transitionDelay: "1000ms" }}
+              className={`${stepBase} ${visible ? stepVisible : stepHidden}w-max`}
+              style={{ transitionDelay: "1050ms" }}
             >
               <div className="px-6 py-4 bg-accent border border-border rounded-lg">
                 <p className="text-xs uppercase tracking-wide text-text-tertiary mb-1">
@@ -132,7 +132,7 @@ const arrowBase =
             className={`${stepBase} mt-8 pt-6 border-t border-divider ${
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
-            style={{ transitionDelay: "1050ms" }}
+            style={{ transitionDelay: "1150ms" }}
           >
 <p className="text-text-secondary mx-auto text-center leading-relaxed">
   Every task, document, and deadline is tied to a specific client and financial year.
