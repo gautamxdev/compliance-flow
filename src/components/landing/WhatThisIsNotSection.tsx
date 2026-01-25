@@ -1,4 +1,5 @@
 import { X } from "lucide-react";
+import { useInView } from "@/hooks/useInView";
 
 const notThings = [
   {
@@ -20,18 +21,39 @@ const notThings = [
 ];
 
 const WhatThisIsNotSection = () => {
+  const { ref, visible } = useInView();
+
+  const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
+
   return (
     <section className="py-20 md:py-28 border-t border-divider">
       <div className="container mx-auto px-6">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center">
+        <div 
+          ref={ref}
+          className="max-w-3xl mx-auto"
+        >
+          <h2 
+            className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center ${baseTransition} ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+          >
             This is not another Drive folder or Excel tracker
           </h2>
-          <p className="text-text-secondary text-lg text-center mb-12">
+          <p 
+            className={`text-text-secondary text-lg text-center mb-12 ${baseTransition} ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+            style={{ transitionDelay: "80ms" }}
+          >
             It's an operations system built specifically for CA firm compliance work.
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div 
+            className={`grid sm:grid-cols-2 gap-4 ${baseTransition} ${
+              visible ? "opacity-100" : "opacity-0"
+            }`}
+            style={{ transitionDelay: "200ms" }}
+          >
             {notThings.map((item, index) => (
               <div
                 key={index}

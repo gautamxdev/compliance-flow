@@ -1,4 +1,5 @@
 import { User, FileText, CheckCircle, Upload } from "lucide-react";
+import { useInView } from "@/hooks/useInView";
 
 const activities = [
   {
@@ -36,48 +37,72 @@ const activities = [
 ];
 
 const AccountabilitySection = () => {
+  const { ref, visible } = useInView();
+
+  const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
+
   return (
     <section className="py-20 md:py-28 bg-muted/30 border-t border-divider">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div 
+          ref={ref}
+          className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+        >
+          {/* Text Content */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+            <h2 
+              className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+              }`}
+            >
               Know exactly who did what — always
             </h2>
-            <p className="text-text-secondary text-lg mb-8">
+            <p 
+              className={`text-text-secondary text-lg mb-8 ${baseTransition} ${
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+              }`}
+              style={{ transitionDelay: "100ms" }}
+            >
               Every upload, edit, and filing is logged. See which employee handled which task. Stop dependency on memory or verbal updates.
             </p>
             
             <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                </div>
-                <span className="text-text-secondary">Complete audit trail for every action</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                </div>
-                <span className="text-text-secondary">Employee-wise work attribution</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-primary"></div>
-                </div>
-                <span className="text-text-secondary">Historical records accessible anytime</span>
-              </li>
+              {["Complete audit trail for every action", "Employee-wise work attribution", "Historical records accessible anytime"].map((item, index) => (
+                <li 
+                  key={index}
+                  className={`flex items-start gap-3 ${baseTransition} ${
+                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                  }`}
+                  style={{ transitionDelay: `${200 + index * 80}ms` }}
+                >
+                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  </div>
+                  <span className="text-text-secondary">{item}</span>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Activity Log Mockup */}
-          <div className="bg-card rounded-xl border border-border overflow-hidden">
+          <div 
+            className={`bg-card rounded-xl border border-border overflow-hidden ${baseTransition} ${
+              visible ? "opacity-100" : "opacity-0"
+            }`}
+            style={{ transitionDelay: "300ms" }}
+          >
             <div className="px-5 py-4 border-b border-divider bg-muted/30">
               <h3 className="font-medium text-sm">Recent Activity</h3>
             </div>
             <div className="divide-y divide-divider">
               {activities.map((activity, index) => (
-                <div key={index} className="px-5 py-4 flex items-start gap-4">
+                <div 
+                  key={index} 
+                  className={`px-5 py-4 flex items-start gap-4 ${baseTransition} ${
+                    visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.98]"
+                  }`}
+                  style={{ transitionDelay: `${450 + index * 100}ms` }}
+                >
                   <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
                     <activity.icon className="w-4 h-4 text-text-secondary" />
                   </div>
