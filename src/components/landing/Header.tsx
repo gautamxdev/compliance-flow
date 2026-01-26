@@ -22,9 +22,6 @@ const Header = () => {
           <a href="#problem" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
             The Problem
           </a>
-          <a href="#how-it-works" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
-            How It Works
-          </a>
           <a href="#who-its-for" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
             Who It's For
           </a>
