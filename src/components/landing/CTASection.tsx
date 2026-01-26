@@ -10,34 +10,37 @@ const CTASection = () => {
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
       
       {/* Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/5 blur-[120px] rounded-full animate-pulse duration-[8s]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/5 blur-[120px] rounded-full animate-pulse duration-[10s]" />
 
       <div 
         ref={ref}
         className="container relative z-10 mx-auto px-6 text-center"
       >
-        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6">
+        <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-6 text-slate-100">
           Ready to structure your firm?
         </h2>
-        <p className="text-gray-400 text-xl mb-12 max-w-xl mx-auto">
+        <p className="text-slate-400 text-xl mb-12 max-w-xl mx-auto">
           Join the select CA firms building high-trust operations.
         </p>
         
-        <div className="flex justify-center">
+        <div className="flex justify-center relative">
+          {/* Ambient Glow behind button */}
+          <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity" />
+          
           <Button 
             size="lg" 
             className="group relative h-14 px-10 text-lg bg-primary hover:bg-primary/90 text-primary-foreground overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_20px_rgba(var(--primary),0.3)]"
           >
             <span className="relative z-10">Request a demo</span>
-            {/* Continuous White Shimmer Sweep */}
-            <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_4s_infinite]" />
+            {/* Continuous White Shimmer Sweep - Slower */}
+            <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_10s_infinite] group-hover:animate-none" />
           </Button>
         </div>
       </div>
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes shimmer-sweep {
           0% { left: -100%; }
-          30% { left: 150%; }
+          15% { left: 150%; }
           100% { left: 150%; }
         }
       `}} />

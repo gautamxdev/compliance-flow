@@ -1,6 +1,5 @@
 import { MoreHorizontal } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
-import { useState } from "react";
 
 const activities = [
   {
@@ -43,13 +42,20 @@ const activities = [
 
 const AccountabilitySection = () => {
   const { ref, visible } = useInView();
-  const [expandedId, setExpandedId] = useState<number | null>(null);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "filed": return "bg-[#22C55E]";
-      case "pending": return "bg-[#F59E0B]";
-      default: return "bg-[#94A3B8]";
+      case "filed": return "bg-green-500";
+      case "pending": return "bg-amber-500";
+      default: return "bg-slate-400";
+    }
+  };
+
+  const getRowBorderColor = (status: string) => {
+    switch (status) {
+      case "filed": return "border-green-500";
+      case "pending": return "border-amber-500";
+      default: return "border-slate-400";
     }
   };
 
@@ -81,24 +87,20 @@ const AccountabilitySection = () => {
               {activities.map((activity, index) => (
                 <div 
                   key={activity.id} 
-                  className={`group relative px-5 py-4 flex items-start gap-4 transition-all duration-700 ease-out ${
-                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-                  }`}
-                  style={{ transitionDelay: `${index * 120}ms` }}
+                  className={`group relative px-5 py-4 flex items-start gap-4 transition-all duration-[600ms] ease-out ${
+                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                  } hover:bg-muted/30`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  {/* Background Highlight Panel */}
-                  <div className={`absolute inset-0 bg-muted/50 transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100 -z-10`} />
+                  {/* Hover Left Border */}
+                  <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${getRowBorderColor(activity.status)} opacity-0 group-hover:opacity-100 transition-opacity`} />
                   
-                  {/* Emphasis Panel for 3-dots */}
-                  <div className={`absolute inset-0 bg-primary/5 transition-opacity duration-300 -z-10 ${expandedId === activity.id ? "opacity-100" : "opacity-0"}`} />
-
-                  {/* Status Dot */}
-                  <div className="pt-1.5 flex-shrink-0">
+                  {/* Status Indicator */}
+                  <div className="pt-1.5 flex-shrink-0 relative group/status">
                     <div 
-                      className={`w-2.5 h-2.5 rounded-full ${getStatusColor(activity.status)} shadow-[0_0_8px_rgba(0,0,0,0.1)] transition-transform duration-300 group-hover:scale-125 ${
-                        visible ? "animate-[pulse-once_1.5s_ease-in-out_1]" : ""
-                      }`}
+                      className={`w-2.5 h-2.5 rounded-full ${getStatusColor(activity.status)} transition-all duration-300 group-hover:scale-110`}
                     />
+                    <div className={`absolute inset-0 -m-1 rounded-full ${getStatusColor(activity.status)} opacity-0 group-hover:opacity-20 transition-all scale-50 group-hover:scale-100`} />
                   </div>
 
                   <div className="flex-1 min-w-0">
@@ -111,27 +113,12 @@ const AccountabilitySection = () => {
                       {activity.client} · {activity.time}
                     </p>
                   </div>
-
-                  {/* 3 dots control */}
-                  <button 
-                    onClick={() => setExpandedId(expandedId === activity.id ? null : activity.id)}
-                    className="p-1 rounded-md hover:bg-muted text-text-tertiary transition-colors"
-                  >
-                    <MoreHorizontal className="w-4 h-4" />
-                  </button>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes pulse-once {
-          0% { transform: scale(1); opacity: 0.6; }
-          50% { transform: scale(1.3); opacity: 1; }
-          100% { transform: scale(1); opacity: 0.6; }
-        }
-      `}} />
     </section>
   );
 };

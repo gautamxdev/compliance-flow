@@ -5,32 +5,23 @@ const roles = [
   {
     id: "partners",
     label: "Partners",
-    outcomes: [
-      "See firm risk before deadlines hit",
-      "Zero status meetings",
-      "Complete audit visibility",
-    ],
-    mockText: "Firm Risk & Health Dashboard",
+    stat: "42",
+    insight: "Filings due this week across firm",
+    highlight: "Overdue Filings View",
   },
   {
     id: "managers",
     label: "Managers",
-    outcomes: [
-      "Balance workload visually",
-      "Reassign tasks without chaos",
-      "Spot bottlenecks instantly",
-    ],
-    mockText: "Resource & Workload Management",
+    stat: "85%",
+    insight: "Current resource capacity utilization",
+    highlight: "Workload Balance View",
   },
   {
     id: "staff",
     label: "Staff",
-    outcomes: [
-      "Clear ownership",
-      "Clear priorities",
-      "No ambiguity on what's next",
-    ],
-    mockText: "Task Clarity & Ownership",
+    stat: "3",
+    insight: "Urgent tasks assigned to you",
+    highlight: "Clear Next Task View",
   },
 ];
 
@@ -47,73 +38,59 @@ const VisibilitySection = () => {
         </h2>
         
         <div ref={ref} className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Dashboard Mockup */}
-          <div className="order-2 lg:order-1">
-            <div className="bg-[#F8FAFC] rounded-2xl border border-border p-8 h-[400px] flex flex-col shadow-inner">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-3 rounded-full bg-slate-200" />
-                <div className="w-8 h-3 rounded-full bg-slate-200" />
-                <div className="w-20 h-3 rounded-full bg-slate-200 ml-auto" />
-              </div>
-              
-              <div className="flex-1 flex flex-col justify-center items-center text-center">
-                <div className="relative w-full max-w-sm">
-                  <div key={activeRoleId} className="animate-[fade-in_0.3s_ease-out]">
-                    <div className="h-4 w-48 bg-primary/10 rounded-full mx-auto mb-4" />
-                    <div className="text-xl font-medium text-slate-800 mb-2">{activeRole.mockText}</div>
-                    <div className="h-2 w-full bg-slate-100 rounded-full" />
-                    <div className="grid grid-cols-3 gap-2 mt-8">
-                      {[1, 2, 3].map(i => (
-                        <div key={i} className="h-16 rounded-lg bg-white border border-slate-100 shadow-sm flex items-center justify-center">
-                          <div className={`w-8 h-8 rounded-full ${i === 1 ? "bg-green-100" : "bg-slate-50"}`} />
-                        </div>
-                      ))}
-                    </div>
+          {/* Role Switcher Tabs */}
+          <div className="order-1 lg:order-1 flex flex-col gap-4">
+            {roles.map((role) => (
+              <button
+                key={role.id}
+                onClick={() => setActiveRoleId(role.id)}
+                className={`w-full text-left p-6 rounded-2xl border transition-all ${
+                  activeRoleId === role.id 
+                  ? "bg-card border-slate-200 shadow-sm ring-1 ring-slate-100" 
+                  : "bg-transparent border-transparent text-text-secondary hover:bg-muted/50"
+                }`}
+              >
+                <div className="text-sm font-semibold uppercase tracking-wider mb-1">{role.label}</div>
+                <div className={`text-lg transition-colors ${activeRoleId === role.id ? "text-text-primary" : "text-text-secondary"}`}>
+                  {role.insight}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Dashboard Preview Card */}
+          <div className="order-2 lg:order-2">
+            <div className="bg-[#F8FAFC] rounded-2xl border border-slate-200 p-8 h-[440px] flex flex-col shadow-inner relative overflow-hidden">
+              <div key={activeRoleId} className="animate-[role-switch_0.3s_ease-out] flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-8">
+                  <div className="h-6 w-32 bg-slate-200/50 rounded-full" />
+                  <div className="h-4 w-20 bg-primary/10 rounded-full" />
+                </div>
+                
+                <div className="flex-1 flex flex-col justify-center text-center">
+                  <div className="text-6xl font-bold text-primary mb-4">{activeRole.stat}</div>
+                  <div className="text-slate-500 font-medium mb-8 uppercase tracking-widest text-xs">
+                    {activeRole.highlight}
+                  </div>
+                  
+                  <div className="space-y-3 max-w-xs mx-auto w-full">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className={`h-12 rounded-lg bg-white border border-slate-100 shadow-sm flex items-center px-4 gap-3 ${i === 1 ? "ring-1 ring-primary/20" : ""}`}>
+                        <div className={`w-2 h-2 rounded-full ${i === 1 ? "bg-primary" : "bg-slate-200"}`} />
+                        <div className={`h-2 rounded-full bg-slate-100 ${i === 1 ? "w-24" : i === 2 ? "w-32" : "w-20"}`} />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Role Explanation */}
-          <div className="order-1 lg:order-2">
-            <div className="flex gap-1 p-1 bg-muted rounded-xl mb-8 w-fit">
-              {roles.map((role) => (
-                <button
-                  key={role.id}
-                  onClick={() => setActiveRoleId(role.id)}
-                  className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-                    activeRoleId === role.id 
-                    ? "bg-card text-text-primary shadow-sm" 
-                    : "text-text-secondary hover:text-text-primary"
-                  }`}
-                >
-                  {role.label}
-                </button>
-              ))}
-            </div>
-
-            <div key={activeRoleId} className="animate-[crossfade_0.2s_ease-out] space-y-6">
-              <ul className="space-y-4">
-                {activeRole.outcomes.map((outcome, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                    <span className="text-text-secondary text-lg">{outcome}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
       <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes crossfade {
-          from { opacity: 0; transform: translateX(8px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
+        @keyframes role-switch {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}} />
     </section>

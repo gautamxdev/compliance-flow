@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const Header = () => {
   return (
@@ -25,13 +26,22 @@ const Header = () => {
           <a href="#who-its-for" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
             Who It's For
           </a>
+          <Button variant="outline" size="sm" className="h-8 text-xs gap-2 group border-divider hover:bg-muted/50 transition-all">
+            View sample dashboard
+            <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+          </Button>
         </nav>
 
         {/* CTA */}
-        <Button size="sm" className="relative h-9 overflow-hidden group">
-          <span className="relative z-10">Request Early Access</span>
-          <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_4s_infinite]" />
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="sm" className="hidden lg:flex text-text-secondary hover:text-text-primary">
+            See how it works
+          </Button>
+          <Button size="sm" className="relative h-9 overflow-hidden group px-6">
+            <span className="relative z-10">Request early access</span>
+            <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_6s_infinite] group-hover:animate-none" />
+          </Button>
+        </div>
       </div>
     </header>
   );

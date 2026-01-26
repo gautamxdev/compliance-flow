@@ -21,15 +21,10 @@ const contrasts = [
 ];
 
 const WhatThisIsNotSection = () => {
-  const { ref, visible } = useInView();
-
   return (
     <section className="py-20 md:py-28 border-t border-divider overflow-hidden">
       <div className="container mx-auto px-6">
-        <div 
-          ref={ref}
-          className="max-w-3xl mx-auto"
-        >
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center">
             This is not another Drive folder or Excel tracker
           </h2>
@@ -37,27 +32,30 @@ const WhatThisIsNotSection = () => {
             Reframe your firm's clarity. An operational system built for structure.
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid sm:grid-cols-2 gap-6">
             {contrasts.map((item, index) => (
               <div
                 key={index}
-                className="group p-6 rounded-xl border border-border bg-card transition-all duration-300 hover:border-primary"
+                className="group p-8 rounded-2xl border border-divider bg-card transition-all duration-500 hover:rotate-1 hover:border-slate-300 relative overflow-hidden"
               >
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0 group-hover:bg-transparent">
-                    <X className="w-4 h-4 text-[#EF4444] transition-colors group-hover:text-primary" />
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-center gap-4 transition-opacity duration-500 group-hover:opacity-40">
+                    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
+                      <X className="w-4 h-4 text-red-500" />
+                    </div>
+                    <span className="text-slate-400 font-medium line-through decoration-red-200">
+                      {item.bad}
+                    </span>
                   </div>
-                  <span className="text-text-secondary line-through group-hover:no-underline group-hover:text-primary/50 transition-all">
-                    {item.bad}
-                  </span>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 rounded-full bg-primary/5 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-4 h-4 text-primary" />
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110">
+                      <Check className="w-4 h-4 text-green-500" />
+                    </div>
+                    <span className="font-semibold text-text-primary text-lg">
+                      {item.good}
+                    </span>
                   </div>
-                  <span className="font-medium text-text-primary">
-                    {item.good}
-                  </span>
                 </div>
               </div>
             ))}

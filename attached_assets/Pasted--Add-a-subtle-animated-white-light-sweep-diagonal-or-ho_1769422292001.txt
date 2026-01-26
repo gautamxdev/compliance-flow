@@ -1,0 +1,129 @@
+	•	Add a subtle animated white “light sweep” (diagonal or horizontal) only on the “Request early access” button beside “See how it works”.
+	•	The sweep should:
+	•	Loop every 6–8 seconds
+	•	Be soft (low opacity, blurred edges)
+	•	Stop on hover
+	•	Do not add this effect to any other button on the site.
+
+Also:
+	•	The navigation area (“The Problem”, “Who it’s for”) feels empty.
+	•	Add a secondary outline-style button in the header (right side), same height as nav items:
+	•	Label: “View sample dashboard”
+	•	On hover: slight background tint + right arrow slide (2–4px)
+
+⸻
+
+🔹 “Where compliance work quietly breaks”
+	•	Keep layout exactly the same.
+	•	Add hover elevation to the four problem cards:
+	•	On hover:
+	•	Card moves up 6–8px
+	•	Shadow becomes softer but deeper
+	•	Border slightly darkens
+	•	Transition should feel heavy and deliberate (≈300ms ease-out)
+	•	Icons:
+	•	Tint icons subtly using muted dashboard colors (grey-blue, amber, red).
+	•	Do NOT make them colorful by default.
+	•	On hover, increase saturation slightly.
+
+No scroll animations here. This section should feel stable but uncomfortable.
+
+⸻
+
+🔹 “Know exactly who did what — always” (Recent Activity section)
+
+This is the most important interactive section.
+
+Activity card changes:
+	•	Match colors with dashboard:
+	•	Upload → muted blue
+	•	Filed → soft green
+	•	Assigned → neutral grey
+	•	Replace static left dots with interactive status indicators:
+	•	Small filled circle
+	•	On hover:
+	•	Circle expands into a soft halo
+	•	Row background subtly lifts
+	•	Add entry animation for activity rows:
+	•	Rows fade + slide up one by one
+	•	Delay: 80–120ms stagger
+	•	Trigger once on scroll into view
+
+Micro-interaction:
+	•	Hovering an activity row:
+	•	Slight left border appears (2px)
+	•	Border color matches activity type
+	•	Icon background softly pulses once
+
+Do not animate the left text content.
+
+⸻
+
+🔹 “Firm-wide clarity, tailored by role”
+
+Merge this with “Built for every role in your firm”.
+
+Structure:
+	•	Left: role switcher tabs
+	•	Partners / Managers / Staff
+	•	Right: single dashboard preview card
+
+Interaction:
+	•	Switching roles:
+	•	Dashboard updates content (not layout)
+	•	Use crossfade + slight vertical shift (≤10px)
+	•	Each role shows:
+	•	One bold stat
+	•	One short insight sentence
+	•	One highlighted UI element (e.g. overdue filings, workload, assignments)
+
+Keep it calm. This is authority, not excitement.
+
+⸻
+
+🔹 “This is not another Drive folder or Excel tracker”
+
+Keep the section but reframe visually.
+
+Design change:
+	•	Split each card into:
+	•	❌ What breaks (muted red)
+	•	✅ What FirmOps does instead (soft green)
+
+Interaction:
+	•	On hover:
+	•	Red fades slightly
+	•	Green becomes clearer
+	•	Card tilts by 1–2 degrees max
+	•	Icons:
+	•	Animate a quick cross → check morph on hover
+
+This section should feel like clarity cutting through noise.
+
+⸻
+
+🔹 Final CTA: “Ready to structure your firm?”
+	•	Improve background gradient:
+	•	Dark navy → charcoal
+	•	Text:
+	•	Make “Ready to structure your firm?” slightly brighter than subtext
+	•	Button:
+	•	Reuse the white light sweep animation
+	•	Slower loop here (≈10 seconds)
+	•	Add subtle ambient motion:
+	•	Very slow radial glow behind button (barely visible)
+
+This should feel calm, confident, inevitable.
+
+⸻
+
+🔹 Global rules (important)
+	•	No confetti.
+	•	No bounce animations.
+	•	No constant motion.
+	•	Motion only on:
+	•	Hover
+	•	First appearance
+	•	Intentful interaction
+
+Everything should feel like a serious operations system, not a SaaS toy.
