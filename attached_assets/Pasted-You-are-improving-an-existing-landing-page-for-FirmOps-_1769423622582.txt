@@ -1,0 +1,168 @@
+You are improving an existing landing page for FirmOps, a compliance operating system for CA firms in India.
+The structure already exists. Do not redesign from scratch. Make targeted, high-quality UX + animation upgrades only where specified below.
+
+⸻
+
+1️⃣ HERO SECTION (TOP OF PAGE)
+
+Keep layout and copy. Do not move sections.
+
+Request Early Access button
+	•	Add a subtle, looping white light sweep (shimmer) animation inside the button
+	•	Animation style: soft diagonal light pass, every 4–5 seconds
+	•	Keep it premium, not flashy
+	•	This shimmer should exist ONLY here (hero CTA), nowhere else
+
+Remove
+	•	White splash / shimmer from all other buttons (header, footer, demo, etc.)
+
+⸻
+
+2️⃣ HEADER NAV (The Problem / Who It’s For)
+	•	The header currently feels empty
+	•	Add one subtle secondary action button (outline style, low emphasis)
+	•	Example: “See product overview” or “View workflow”
+	•	No animation here
+	•	Keep spacing clean and professional
+
+⸻
+
+3️⃣ “WHERE COMPLIANCE WORK QUIETLY BREAKS”
+
+Cards behavior
+	•	Keep the same 4 cards and content
+	•	On hover:
+	•	Card lifts slightly (translateY(-4px))
+	•	Shadow deepens softly
+	•	Border color subtly darkens
+	•	No text animation
+	•	No icon movement
+
+Add a quiet motion element
+	•	Very subtle ambient background gradient shift across the section (slow, 20–30s loop)
+	•	Almost imperceptible — just enough to avoid dead flatness
+
+⸻
+
+4️⃣ “KNOW EXACTLY WHO DID WHAT — ALWAYS”
+
+This section is important. Enhance, don’t clutter.
+
+Recent Activity Card
+	•	Keep structure exactly the same
+	•	Make it feel like a live system
+
+Add on the left of each activity row
+	•	Three small vertical dots (like activity indicator, not menu)
+	•	Dots pulse gently:
+	•	Opacity shift OR scale 0.9 → 1
+	•	Very slow, staggered
+	•	Dots animate only when the row is visible
+
+Icons
+	•	Use dashboard-style colors, subtle and professional:
+	•	Upload → muted blue
+	•	Filed → soft green
+	•	Assigned → neutral slate
+	•	No bright colors
+	•	No icon bounce
+
+Row interaction
+	•	Hover: row background slightly tints + shadow appears
+	•	No movement on text
+
+⸻
+
+5️⃣ “FIRM-WIDE CLARITY, TAILORED BY ROLE”
+
+This section currently feels flat.
+
+Dashboard card
+	•	Make it visually richer:
+	•	Add soft inner glow
+	•	Add subtle depth (layered cards / panels)
+	•	Add micro-interaction:
+	•	When switching roles (Partners / Managers / Staff), dashboard content crossfades
+	•	Small stat numbers count up (very fast, subtle)
+
+Do not
+	•	Add charts with loud colors
+	•	Add complex graphs
+	•	This is about clarity, not analytics porn
+
+⸻
+
+6️⃣ “BUILT FOR EVERY ROLE IN YOUR FIRM”
+
+This section feels boring. Improve information density, not size.
+
+Keep the 3 cards
+	•	CA Partners
+	•	Managers
+	•	Articles & Staff
+
+Enhance content
+	•	Add one concrete, practical line per card that feels real:
+	•	Example:
+	•	“See overdue filings before clients call”
+	•	“Know exactly who is overloaded”
+	•	“No guessing what to work on next”
+
+Interaction
+	•	On hover:
+	•	Card lifts
+	•	Icon background color softly intensifies
+	•	No animation on page load
+
+⸻
+
+7️⃣ “THIS IS NOT ANOTHER DRIVE FOLDER OR EXCEL TRACKER”
+
+Do NOT remove this section. Reframe it.
+
+Current issue: looks negative and dead.
+
+Fix
+	•	Convert it into a contrast section:
+	•	Left side: “What firms struggle with today”
+	•	Right side: “How FirmOps behaves instead”
+	•	Replace red ❌ tone with neutral clarity
+	•	Icons should be calm, not warning-style
+
+Add
+	•	Subtle divider animation between old vs new (wipe or fade)
+
+⸻
+
+8️⃣ FINAL CTA — “READY TO STRUCTURE YOUR FIRM?”
+
+This section currently feels weak.
+
+Background
+	•	Keep dark theme
+	•	Add slow radial gradient movement (very subtle)
+
+Text
+	•	Make “Ready to structure your firm?” slightly brighter than body text
+	•	Keep it understated, confident
+
+Request a Demo button
+	•	Clean button
+	•	No shimmer
+	•	Slight hover glow only
+
+⸻
+
+9️⃣ GLOBAL RULES (IMPORTANT)
+	•	No flashy animations
+	•	No bouncing text
+	•	No overuse of color
+	•	Everything should feel:
+	•	Calm
+	•	Trustworthy
+	•	Operational
+	•	Built for professionals, not startups chasing hype
+
+If something feels decorative but not informative — remove it.
+Apply ONLY to dashboard-style cards
+(e.g. FirmOps client dashboard mock, firm-wide visibility dashboard, health overview cards)
