@@ -1,5 +1,4 @@
 import { FolderOpen, HelpCircle, Users, Clock } from "lucide-react";
-import { useInView } from "@/hooks/useInView";
 
 const problems = [
   {
@@ -24,34 +23,18 @@ const problems = [
   },
 ];
 
-// Vertical offsets for asymmetry
-const cardOffsets = ["md:translate-y-0", "md:translate-y-4", "md:translate-y-2", "md:translate-y-6"];
+// Asymmetric vertical offsets for premium feel
+const cardOffsets = ["md:translate-y-0", "md:translate-y-3", "md:-translate-y-2", "md:translate-y-4"];
 
 const ProblemSection = () => {
-  const { ref, visible } = useInView();
-
-  const baseTransition = "transition-all duration-[800ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
-
   return (
     <section className="py-20 md:py-28 border-t border-divider">
       <div className="container mx-auto px-6">
-        <div 
-          ref={ref}
-          className="max-w-2xl mb-12"
-        >
-          <h2 
-            className={`text-3xl md:text-4xl font-semibold tracking-tight mb-5 ${baseTransition} ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-            }`}
-          >
+        <div className="max-w-2xl mb-12">
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-5">
             Where compliance work quietly breaks
           </h2>
-          <p 
-            className={`text-text-secondary text-base leading-relaxed ${baseTransition} ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-            }`}
-            style={{ transitionDelay: "80ms" }}
-          >
+          <p className="text-text-secondary text-base leading-relaxed">
             The day-to-day reality at most CA firms.
           </p>
         </div>
@@ -61,17 +44,15 @@ const ProblemSection = () => {
             <div
               key={index}
               className={`
-                group p-7 rounded-xl border border-border bg-card
+                group p-6 rounded-xl border border-border bg-card shadow-sm
                 ${cardOffsets[index]}
-                ${baseTransition}
-                ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
+                transition-all duration-200
                 hover:-translate-y-1 hover:shadow-md hover:border-border/80
               `}
-              style={{ transitionDelay: `${150 + index * 100}ms` }}
             >
-              {/* Icon */}
-              <div className="w-9 h-9 rounded-md bg-muted flex items-center justify-center mb-4">
-                <problem.icon className="w-4.5 h-4.5 text-text-tertiary group-hover:text-text-secondary transition-colors duration-300" />
+              {/* Icon with dashboard color */}
+              <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center mb-4">
+                <problem.icon className="w-5 h-5 text-text-tertiary group-hover:text-warning transition-colors duration-200" />
               </div>
 
               {/* Title */}

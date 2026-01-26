@@ -1,5 +1,4 @@
 import { X } from "lucide-react";
-import { useInView } from "@/hooks/useInView";
 
 const notThings = [
   {
@@ -20,51 +19,33 @@ const notThings = [
   },
 ];
 
+// Asymmetric vertical offsets
+const cardOffsets = ["sm:translate-y-0", "sm:translate-y-3", "sm:-translate-y-2", "sm:translate-y-1"];
+
 const WhatThisIsNotSection = () => {
-  const { ref, visible } = useInView();
-
-  const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
-
   return (
-    <section className="py-20 md:py-28 border-t border-divider">
+    <section className="py-16 md:py-20 border-t border-divider">
       <div className="container mx-auto px-6">
-        <div 
-          ref={ref}
-          className="max-w-3xl mx-auto"
-        >
-          <h2 
-            className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center ${baseTransition} ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-            }`}
-          >
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-3 text-center">
             This is not another Drive folder or Excel tracker
           </h2>
-          <p 
-            className={`text-text-secondary text-lg text-center mb-12 ${baseTransition} ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-            }`}
-            style={{ transitionDelay: "80ms" }}
-          >
+          <p className="text-text-secondary text-base text-center mb-10">
             It's an operations system built specifically for CA firm compliance work.
           </p>
 
-          <div 
-            className={`grid sm:grid-cols-2 gap-4 ${baseTransition} ${
-              visible ? "opacity-100" : "opacity-0"
-            }`}
-            style={{ transitionDelay: "200ms" }}
-          >
+          <div className="grid sm:grid-cols-2 gap-5">
             {notThings.map((item, index) => (
               <div
                 key={index}
-                className="flex items-start gap-4 p-5 rounded-xl border border-border bg-card"
+                className={`flex items-start gap-3 p-4 rounded-lg border border-border/60 bg-card/50 ${cardOffsets[index]}`}
               >
-                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                  <X className="w-4 h-4 text-text-tertiary" />
+                <div className="w-7 h-7 rounded-full bg-muted/80 flex items-center justify-center flex-shrink-0">
+                  <X className="w-3.5 h-3.5 text-text-tertiary" />
                 </div>
                 <div>
-                  <h3 className="font-medium mb-1">{item.title}</h3>
-                  <p className="text-sm text-text-secondary">{item.description}</p>
+                  <h3 className="font-medium text-sm mb-0.5">{item.title}</h3>
+                  <p className="text-xs text-text-secondary">{item.description}</p>
                 </div>
               </div>
             ))}
