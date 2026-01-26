@@ -31,10 +31,13 @@ const personas = [
   },
 ];
 
+// Vertical offsets for asymmetry
+const cardOffsets = ["md:translate-y-0", "md:translate-y-5", "md:translate-y-2"];
+
 const WhoItsForSection = () => {
   const { ref, visible } = useInView();
 
-  const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
+  const baseTransition = "transition-all duration-[800ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
 
   return (
     <section id="who-its-for" className="py-20 md:py-28 bg-muted/30 border-t border-divider">
@@ -45,14 +48,14 @@ const WhoItsForSection = () => {
         >
           <h2 
             className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
           >
             Built for every role in your firm
           </h2>
           <p 
             className={`text-text-secondary text-lg ${baseTransition} ${
-              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
             style={{ transitionDelay: "80ms" }}
           >
@@ -64,16 +67,16 @@ const WhoItsForSection = () => {
           {personas.map((persona, index) => (
             <div
               key={index}
-              className={`p-6 rounded-xl border border-border bg-card ${baseTransition} ${
-                visible ? "opacity-100" : "opacity-0"
+              className={`p-6 rounded-xl border border-border bg-card ${cardOffsets[index]} ${baseTransition} ${
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
-              style={{ transitionDelay: "200ms" }}
+              style={{ transitionDelay: `${200 + index * 100}ms` }}
             >
               <div 
                 className={`w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-5 ${baseTransition} ${
                   visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
                 }`}
-                style={{ transitionDelay: `${350 + index * 80}ms` }}
+                style={{ transitionDelay: `${400 + index * 100}ms` }}
               >
                 <persona.icon className="w-6 h-6 text-primary" />
               </div>
