@@ -42,20 +42,24 @@ const HeroSection = () => {
     <section className="pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6 animate-fade-in">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6">
             A compliance operating system for CA firms.
           </h1>
           
-          <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-10 max-w-2xl">
             Clients, financial years, filings, and documents — all connected logically.
             <br />
             Structure replaces chaos. Clarity replaces guesswork.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <Button size="lg" className="h-12 px-8 text-base">
-              Request early access
-              <ArrowRight className="ml-2 h-4 w-4" />
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button size="lg" className="group relative h-12 px-8 text-base overflow-hidden">
+              <span className="relative z-10 flex items-center">
+                Request early access
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </span>
+              {/* Moving light sweep */}
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[2000ms] ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent" />
             </Button>
             <Button variant="outline" size="lg" className="h-12 px-8 text-base">
               See how it works
@@ -65,39 +69,36 @@ const HeroSection = () => {
 
 {/* Interface Mockup */}
 <div
-  className="mt-16 md:mt-20 animate-fade-in"
-  style={{ animationDelay: "0.3s", perspective: "900px" }}
+  className="mt-20 md:mt-24"
+  style={{ perspective: "900px" }}
 >
+  {/* Background tint behind mockup */}
+  <div className="absolute inset-0 -z-10 bg-gradient-to-b from-muted/50 to-transparent rounded-3xl scale-105 blur-xl" />
+  
   {/* OUTER WRAPPER = BORDER */}
   <div
     ref={cardRef}
     onMouseMove={handleMouseMove}
     onMouseLeave={handleMouseLeave}
     onMouseEnter={handleMouseEnter}
-    className="relative rounded-xl"
-   style={{
-  transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
-  transition: "transform 120ms ease-out",
-  padding: "4px",
-background: isHovering
-  ? `
-radial-gradient(
-  120% 120% at ${bgPos.x}% ${bgPos.y}%,
-  hsl(210 100% 98%),
-  hsl(230 90% 82%),
-  hsl(260 85% 65%)
-)
-  `
-  : "hsl(220 13% 90%)",
-}}
+    className="relative rounded-2xl"
+    style={{
+      transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(1.15)`,
+      transformOrigin: "center center",
+      transition: "transform 120ms ease-out",
+      padding: "4px",
+      background: isHovering
+        ? `radial-gradient(120% 120% at ${bgPos.x}% ${bgPos.y}%, hsl(210 100% 98%), hsl(230 90% 82%), hsl(260 85% 65%))`
+        : "hsl(220 13% 90%)",
+    }}
   >
     {/* REAL CARD */}
     <div
-      className="bg-card rounded-[11px] shadow-sm overflow-hidden"
+      className="bg-card rounded-[14px] overflow-hidden"
       style={{
         boxShadow: isHovering
-          ? "0 8px 28px -8px hsl(220 15% 20% / 0.14)"
-          : "0 1px 3px 0 hsl(220 15% 20% / 0.04)",
+          ? "0 20px 50px -12px hsl(220 15% 20% / 0.25), 0 8px 20px -8px hsl(220 15% 20% / 0.15)"
+          : "0 8px 30px -8px hsl(220 15% 20% / 0.12), 0 4px 12px -4px hsl(220 15% 20% / 0.08)",
         transition: "box-shadow 160ms ease-out",
       }}
     >

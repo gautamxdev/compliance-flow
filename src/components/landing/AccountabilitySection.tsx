@@ -9,6 +9,7 @@ const activities = [
     target: "Balance Sheet - FY 2024-25",
     time: "2 hours ago",
     client: "Sharma Enterprises",
+    status: "neutral",
   },
   {
     icon: CheckCircle,
@@ -17,6 +18,7 @@ const activities = [
     target: "GST R1 - October",
     time: "Yesterday",
     client: "Patel Industries",
+    status: "success",
   },
   {
     icon: FileText,
@@ -25,6 +27,7 @@ const activities = [
     target: "ITR Filing - FY 2024-25",
     time: "2 days ago",
     client: "Kumar & Sons",
+    status: "pending",
   },
   {
     icon: User,
@@ -33,13 +36,19 @@ const activities = [
     target: "Tax Audit Review",
     time: "3 days ago",
     client: "Sharma Enterprises",
+    status: "neutral",
   },
 ];
+
+const statusColors = {
+  success: "bg-success/10 text-success",
+  pending: "bg-warning/10 text-warning",
+  neutral: "bg-muted text-text-secondary",
+};
 
 const AccountabilitySection = () => {
   const { ref, visible } = useInView();
 
-  const baseTransition = "transition-all duration-[800ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
   const rowTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
 
   return (
@@ -49,21 +58,12 @@ const AccountabilitySection = () => {
           ref={ref}
           className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
         >
-          {/* Text Content */}
+          {/* Text Content - No animations on text */}
           <div>
-            <h2 
-              className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-              }`}
-            >
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
               Know exactly who did what
             </h2>
-            <p 
-              className={`text-text-secondary text-lg mb-8 ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-              }`}
-              style={{ transitionDelay: "100ms" }}
-            >
+            <p className="text-text-secondary text-lg mb-8">
               Every upload, edit, and filing is logged. Complete audit trail without dependency on memory.
             </p>
             
@@ -71,13 +71,10 @@ const AccountabilitySection = () => {
               {["Complete audit trail for every action", "Employee-wise work attribution", "Historical records accessible anytime"].map((item, index) => (
                 <li 
                   key={index}
-                  className={`flex items-start gap-3 ${baseTransition} ${
-                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                  }`}
-                  style={{ transitionDelay: `${200 + index * 80}ms` }}
+                  className="flex items-start gap-3"
                 >
-                  <div className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center mt-0.5">
-                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                  <div className="w-5 h-5 rounded-full bg-success/10 flex items-center justify-center mt-0.5">
+                    <div className="w-2 h-2 rounded-full bg-success"></div>
                   </div>
                   <span className="text-text-secondary">{item}</span>
                 </li>
@@ -85,27 +82,26 @@ const AccountabilitySection = () => {
             </ul>
           </div>
 
-          {/* Activity Log Mockup */}
-          <div 
-            className={`bg-card rounded-xl border border-border overflow-hidden ${baseTransition} ${
-              visible ? "opacity-100" : "opacity-0"
-            }`}
-            style={{ transitionDelay: "200ms" }}
-          >
+          {/* Activity Log Mockup - Primary animation zone */}
+          <div className="bg-card rounded-xl border border-border overflow-hidden shadow-sm">
             <div className="px-5 py-4 border-b border-divider bg-muted/30">
-              <h3 className="font-medium text-sm">Recent Activity</h3>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <h3 className="font-medium text-sm">Recent Activity</h3>
+              </div>
             </div>
             <div className="divide-y divide-divider">
               {activities.map((activity, index) => (
                 <div 
                   key={index} 
                   className={`px-5 py-4 flex items-start gap-4 hover:bg-muted/30 cursor-default ${rowTransition} ${
-                    visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
                   }`}
-                  style={{ transitionDelay: `${400 + index * 100}ms` }}
+                  style={{ transitionDelay: `${300 + index * 100}ms` }}
                 >
-                  <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                    <activity.icon className="w-4 h-4 text-text-secondary" />
+                  {/* Icon with subtle pulse effect */}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${statusColors[activity.status as keyof typeof statusColors]}`}>
+                    <activity.icon className="w-4 h-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm">

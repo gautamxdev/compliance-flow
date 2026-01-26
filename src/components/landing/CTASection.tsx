@@ -1,55 +1,51 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useInView } from "@/hooks/useInView";
 
 const CTASection = () => {
-  const { ref, visible } = useInView();
-
-  const baseTransition = "transition-all duration-[900ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
-
   return (
     <section className="py-20 md:py-28 bg-primary text-primary-foreground">
-      <div 
-        ref={ref}
-        className="container mx-auto px-6 text-center"
-      >
-        <h2 
-          className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`}
-        >
+      <div className="container mx-auto px-6 text-center">
+        <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
           Built for firms that take compliance seriously
         </h2>
-        <p 
-          className={`text-primary-foreground/70 text-lg mb-10 max-w-xl mx-auto ${baseTransition} ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`}
-          style={{ transitionDelay: "120ms" }}
-        >
+        <p className="text-primary-foreground/70 text-lg mb-10 max-w-xl mx-auto">
           Structure your work. Track accountability. Run your practice with clarity.
         </p>
         
         <Button 
           size="lg" 
           variant="secondary"
-          className={`h-12 px-8 text-base bg-white text-primary hover:bg-white/90 ${baseTransition} ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-          }`}
-          style={{ transitionDelay: "280ms" }}
+          className="group relative h-12 px-8 text-base bg-white text-primary hover:bg-white/90 overflow-hidden"
         >
-          Request early access
-          <ArrowRight className="ml-2 h-4 w-4" />
+          <span className="relative z-10 flex items-center">
+            Request early access
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </span>
+          {/* Moving light sweep - loops slowly */}
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent"
+            style={{
+              animation: "lightSweep 4s ease-in-out infinite",
+            }}
+          />
         </Button>
 
-        <p 
-          className={`mt-6 text-sm text-primary-foreground/50 ${baseTransition} ${
-            visible ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ transitionDelay: "400ms" }}
-        >
+        <p className="mt-6 text-sm text-primary-foreground/50">
           Currently onboarding select CA firms
         </p>
       </div>
+      
+      {/* Add keyframes for light sweep animation */}
+      <style>{`
+        @keyframes lightSweep {
+          0%, 100% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </section>
   );
 };
