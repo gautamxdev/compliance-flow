@@ -43,13 +43,13 @@ const HeroSection = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.1] tracking-tight mb-6 animate-fade-in">
-            A compliance operating system for CA firms.
+            A structured workspace for CA firms to run compliance work without chaos.
           </h1>
           
           <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-10 max-w-2xl animate-fade-in" style={{ animationDelay: "0.1s" }}>
             Clients, financial years, filings, and documents — all connected logically.
             <br />
-            Structure replaces chaos. Clarity replaces guesswork.
+            No folders. No Excel trackers. No guesswork.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>

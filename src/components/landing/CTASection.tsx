@@ -5,7 +5,7 @@ import { useInView } from "@/hooks/useInView";
 const CTASection = () => {
   const { ref, visible } = useInView();
 
-  const baseTransition = "transition-all duration-[900ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
+  const baseTransition = "transition-all duration-[700ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
 
   return (
     <section className="py-20 md:py-28 bg-primary text-primary-foreground">
@@ -15,14 +15,14 @@ const CTASection = () => {
       >
         <h2 
           className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
           }`}
         >
           Built for firms that take compliance seriously
         </h2>
         <p 
           className={`text-primary-foreground/70 text-lg mb-10 max-w-xl mx-auto ${baseTransition} ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
           }`}
           style={{ transitionDelay: "120ms" }}
         >
@@ -33,9 +33,9 @@ const CTASection = () => {
           size="lg" 
           variant="secondary"
           className={`h-12 px-8 text-base bg-white text-primary hover:bg-white/90 ${baseTransition} ${
-            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
           }`}
-          style={{ transitionDelay: "280ms" }}
+          style={{ transitionDelay: "240ms" }}
         >
           Request early access
           <ArrowRight className="ml-2 h-4 w-4" />
@@ -45,7 +45,7 @@ const CTASection = () => {
           className={`mt-6 text-sm text-primary-foreground/50 ${baseTransition} ${
             visible ? "opacity-100" : "opacity-0"
           }`}
-          style={{ transitionDelay: "400ms" }}
+          style={{ transitionDelay: "360ms" }}
         >
           Currently onboarding select CA firms
         </p>
