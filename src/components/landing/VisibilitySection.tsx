@@ -10,10 +10,13 @@ const filters = [
   "Completed filings this month",
 ];
 
+// Randomized delays for organic feel
+const filterDelays = [280, 350, 300, 420, 380, 320];
+
 const VisibilitySection = () => {
   const { ref, visible } = useInView();
 
-  const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
+  const baseTransition = "transition-all duration-[800ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
 
   return (
     <section className="py-20 md:py-28 border-t border-divider">
@@ -38,10 +41,12 @@ const VisibilitySection = () => {
                 {filters.map((filter, index) => (
                   <button
                     key={index}
-                    className={`px-3 py-2 text-sm bg-muted hover:bg-accent text-text-secondary hover:text-text-primary rounded-lg border border-transparent hover:border-border transition-colors text-left ${baseTransition} ${
+                    className={`px-3 py-2 text-sm bg-muted text-text-secondary rounded-lg border border-transparent 
+                      hover:bg-accent hover:text-text-primary hover:border-border hover:-translate-y-0.5 hover:shadow-sm
+                      transition-all duration-200 text-left ${baseTransition} ${
                       visible ? "opacity-100" : "opacity-0"
                     }`}
-                    style={{ transitionDelay: `${300 + index * 60}ms` }}
+                    style={{ transitionDelay: `${filterDelays[index]}ms` }}
                   >
                     {filter}
                   </button>
@@ -54,26 +59,26 @@ const VisibilitySection = () => {
           <div className="order-1 lg:order-2">
             <h2 
               className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               }`}
             >
               Firm-wide visibility without micromanagement
             </h2>
             <p 
               className={`text-text-secondary text-lg mb-6 ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               }`}
               style={{ transitionDelay: "100ms" }}
             >
-              Get instant answers to operational questions. These are views, not folders — dynamic filters into your firm's work. No extra reporting work. No chasing staff.
+              These are views, not folders — dynamic filters into your firm's work. No extra reporting. No chasing staff.
             </p>
             <p 
               className={`text-text-secondary ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               }`}
               style={{ transitionDelay: "180ms" }}
             >
-              Partners can see the complete picture. Managers can track workload. Staff know exactly what's assigned to them. All without constant check-ins.
+              Partners see the complete picture. Managers track workload. Staff know exactly what's assigned. All without constant check-ins.
             </p>
           </div>
         </div>

@@ -39,7 +39,8 @@ const activities = [
 const AccountabilitySection = () => {
   const { ref, visible } = useInView();
 
-  const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
+  const baseTransition = "transition-all duration-[800ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
+  const rowTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
 
   return (
     <section className="py-20 md:py-28 bg-muted/30 border-t border-divider">
@@ -52,18 +53,18 @@ const AccountabilitySection = () => {
           <div>
             <h2 
               className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               }`}
             >
-              Know exactly who did what — always
+              Know exactly who did what
             </h2>
             <p 
               className={`text-text-secondary text-lg mb-8 ${baseTransition} ${
-                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
               }`}
               style={{ transitionDelay: "100ms" }}
             >
-              Every upload, edit, and filing is logged. See which employee handled which task. Stop dependency on memory or verbal updates.
+              Every upload, edit, and filing is logged. Complete audit trail without dependency on memory.
             </p>
             
             <ul className="space-y-4">
@@ -71,7 +72,7 @@ const AccountabilitySection = () => {
                 <li 
                   key={index}
                   className={`flex items-start gap-3 ${baseTransition} ${
-                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                   }`}
                   style={{ transitionDelay: `${200 + index * 80}ms` }}
                 >
@@ -89,7 +90,7 @@ const AccountabilitySection = () => {
             className={`bg-card rounded-xl border border-border overflow-hidden ${baseTransition} ${
               visible ? "opacity-100" : "opacity-0"
             }`}
-            style={{ transitionDelay: "300ms" }}
+            style={{ transitionDelay: "200ms" }}
           >
             <div className="px-5 py-4 border-b border-divider bg-muted/30">
               <h3 className="font-medium text-sm">Recent Activity</h3>
@@ -98,10 +99,10 @@ const AccountabilitySection = () => {
               {activities.map((activity, index) => (
                 <div 
                   key={index} 
-                  className={`px-5 py-4 flex items-start gap-4 ${baseTransition} ${
-                    visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.98]"
+                  className={`px-5 py-4 flex items-start gap-4 hover:bg-muted/30 cursor-default ${rowTransition} ${
+                    visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
                   }`}
-                  style={{ transitionDelay: `${450 + index * 100}ms` }}
+                  style={{ transitionDelay: `${400 + index * 100}ms` }}
                 >
                   <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
                     <activity.icon className="w-4 h-4 text-text-secondary" />
