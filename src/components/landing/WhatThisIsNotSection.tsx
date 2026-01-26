@@ -1,4 +1,3 @@
-import { X, Check } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 
 const contrasts = [
@@ -26,32 +25,32 @@ const WhatThisIsNotSection = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center">
-            This is not another Drive folder or Excel tracker
+            Why firms outgrow folders and trackers
           </h2>
           <p className="text-text-secondary text-lg text-center mb-12">
-            Reframe your firm's clarity. An operational system built for structure.
+            FirmOps fits into how your firm already works — it just removes ambiguity.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-6">
             {contrasts.map((item, index) => (
               <div
                 key={index}
-                className="group p-8 rounded-2xl border border-divider bg-card transition-all duration-500 hover:rotate-1 hover:border-slate-300 relative overflow-hidden"
+                className="group p-8 rounded-2xl border border-divider bg-card transition-colors duration-300 hover:border-text-tertiary relative overflow-hidden"
               >
                 <div className="flex flex-col gap-6">
                   <div className="flex items-center gap-4 transition-opacity duration-500 group-hover:opacity-40">
-                    <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0">
-                      <X className="w-4 h-4 text-red-500" />
-                    </div>
-                    <span className="text-slate-400 font-medium line-through decoration-red-200">
+                    <span className="text-xs uppercase tracking-wide text-text-tertiary">
+                      Before
+                    </span>
+                    <span className="text-text-tertiary font-medium">
                       {item.bad}
                     </span>
                   </div>
                   
                   <div className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110">
-                      <Check className="w-4 h-4 text-green-500" />
-                    </div>
+                    <span className="text-xs uppercase tracking-wide text-primary">
+                      After
+                    </span>
                     <span className="font-semibold text-text-primary text-lg">
                       {item.good}
                     </span>

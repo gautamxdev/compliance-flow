@@ -2,7 +2,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 
-const HeroSection = () => {
+
+  const HeroSection = () => {
+  const dashboardRef = useRef<HTMLDivElement>(null); // ← MOVE HERE
+
   const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
@@ -38,6 +41,14 @@ const HeroSection = () => {
     setIsHovering(true);
   }, []);
 
+  // Shine animation keyframes for moving light on CTA button
+  <style>{`
+    @keyframes hero-shine {
+      0% { transform: translateX(-120%); }
+      30% { transform: translateX(120%); }
+      100% { transform: translateX(120%); }
+    }
+  `}</style>
   return (
     <section className="pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="container mx-auto px-6">
@@ -53,20 +64,47 @@ const HeroSection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <Button size="lg" className="h-12 px-8 text-base">
-              Request early access
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Button
+  size="lg"
+  className="
+    relative overflow-hidden
+    h-12 px-8 text-base
+    bg-primary text-primary-foreground
+    shadow-[0_0_0_0_hsl(260_90%_70%/0.0)]
+    hover:shadow-[0_0_24px_-4px_hsl(260_90%_70%/0.45)]
+    transition-shadow duration-300
+  "
+>
+  <span className="relative z-10 flex items-center">
+    Request early access
+    <ArrowRight className="ml-2 h-4 w-4" />
+  </span>
+
+  {/* moving light */}
+  <span
+  className="
+    pointer-events-none
+    absolute inset-0
+    bg-gradient-to-r
+    from-transparent
+    via-white/60
+    to-transparent
+    -translate-x-full
+    animate-hero-shine
+  "
+/>
+</Button>
             <Button variant="outline" size="lg" className="h-12 px-8 text-base">
               See how it works
             </Button>
           </div>
         </div>
 
-{/* Interface Mockup */}
 <div
-  className="mt-16 md:mt-20 animate-fade-in"
-  style={{ animationDelay: "0.3s", perspective: "900px" }}
+  ref={dashboardRef}
+  id="sample-dashboard"
+  className="mt-16 md:mt-20 scroll-mt-32"
+  style={{ perspective: "900px" }}
 >
   {/* OUTER WRAPPER = BORDER */}
   <div
@@ -111,6 +149,7 @@ radial-gradient(
               </div>
               <div className="flex-1 text-center">
                 <span className="text-xs text-text-tertiary">FirmOps— Client Dashboard</span>
+        
               </div>
             </div>
             

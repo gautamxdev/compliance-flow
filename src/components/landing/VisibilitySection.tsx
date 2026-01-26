@@ -44,11 +44,18 @@ const VisibilitySection = () => {
               <button
                 key={role.id}
                 onClick={() => setActiveRoleId(role.id)}
-                className={`w-full text-left p-6 rounded-2xl border transition-all ${
-                  activeRoleId === role.id 
-                  ? "bg-card border-slate-200 shadow-sm ring-1 ring-slate-100" 
-                  : "bg-transparent border-transparent text-text-secondary hover:bg-muted/50"
+                className={`w-full text-left p-6 rounded-2xl border transition-colors duration-300 relative overflow-hidden ${
+                  activeRoleId === role.id
+                    ? "bg-card border-transparent shadow-sm"
+                    : "bg-transparent border-transparent text-text-secondary hover:bg-muted/50"
                 }`}
+                style={
+                  activeRoleId === role.id
+                    ? {
+                        boxShadow: "0 0 0 1px rgba(15,23,42,0.06), 0 8px 24px rgba(15,23,42,0.06)",
+                      }
+                    : { boxShadow: "none" }
+                }
               >
                 <div className="text-sm font-semibold uppercase tracking-wider mb-1">{role.label}</div>
                 <div className={`text-lg transition-colors ${activeRoleId === role.id ? "text-text-primary" : "text-text-secondary"}`}>
@@ -60,23 +67,54 @@ const VisibilitySection = () => {
 
           {/* Dashboard Preview Card */}
           <div className="order-2 lg:order-2">
-            <div className="bg-[#F8FAFC] rounded-2xl border border-slate-200 p-8 h-[440px] flex flex-col shadow-inner relative overflow-hidden">
-              <div key={activeRoleId} className="animate-[role-switch_0.3s_ease-out] flex-1 flex flex-col">
+            <div
+              className="bg-[#F8FAFC] rounded-2xl p-8 h-[440px] flex flex-col relative overflow-hidden transition-shadow duration-300"
+              style={{
+                boxShadow: "0 0 0 1px rgba(15,23,42,0.08), 0 24px 64px rgba(15,23,42,0.08)",
+              }}
+            >
+              <div
+                key={activeRoleId}
+                className={`flex-1 flex flex-col transition-opacity transition-transform duration-200 ${
+                  activeRoleId === activeRole.id ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"
+                }`}
+              >
                 <div className="flex items-center justify-between mb-8">
-                  <div className="h-6 w-32 bg-slate-200/50 rounded-full" />
-                  <div className="h-4 w-20 bg-primary/10 rounded-full" />
+                  <div className="h-6 w-32 rounded-full bg-slate-100 ring-1 ring-slate-300/50" />
+                  <div className="h-4 w-20 rounded-full bg-indigo-100 ring-1 ring-indigo-300/40" />
                 </div>
                 
                 <div className="flex-1 flex flex-col justify-center text-center">
-                  <div className="text-6xl font-bold text-primary mb-4">{activeRole.stat}</div>
+                  <div className="text-6xl font-bold mb-4 text-slate-900">
+                    {activeRole.stat}
+                  </div>
                   <div className="text-slate-500 font-medium mb-8 uppercase tracking-widest text-xs">
                     {activeRole.highlight}
                   </div>
                   
                   <div className="space-y-3 max-w-xs mx-auto w-full">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className={`h-12 rounded-lg bg-white border border-slate-100 shadow-sm flex items-center px-4 gap-3 ${i === 1 ? "ring-1 ring-primary/20" : ""}`}>
-                        <div className={`w-2 h-2 rounded-full ${i === 1 ? "bg-primary" : "bg-slate-200"}`} />
+                      <div
+                        key={i}
+                        className={`h-12 rounded-lg border shadow-sm flex items-center px-4 gap-3 transition-colors duration-300 ${
+                          i === 1
+                            ? "bg-white border-slate-200"
+                            : i === 2
+                            ? "bg-slate-50/90 border-slate-200/60"
+                            : "bg-indigo-50/60 border-indigo-200/40"
+                        } hover:shadow-md hover:-translate-y-[1px]`}
+                      >
+                        <div
+                          className="w-2 h-2 rounded-full"
+                          style={{
+                            background:
+                              i === 1
+                                ? "rgb(15,23,42)"
+                                : i === 2
+                                ? "rgb(71,85,105)"
+                                : "rgb(99,102,241)",
+                          }}
+                        />
                         <div className={`h-2 rounded-full bg-slate-100 ${i === 1 ? "w-24" : i === 2 ? "w-32" : "w-20"}`} />
                       </div>
                     ))}
@@ -87,12 +125,6 @@ const VisibilitySection = () => {
           </div>
         </div>
       </div>
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes role-switch {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}} />
     </section>
   );
 };

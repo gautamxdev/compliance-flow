@@ -69,13 +69,19 @@ const WhoItsForSection = () => {
               }`}
               style={{ transitionDelay: "200ms" }}
             >
-              <div 
-                className={`w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-5 ${baseTransition} ${
+              <div
+                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${baseTransition} ${
                   visible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                } ${
+                  index === 0
+                    ? "bg-indigo-500/10 text-indigo-600"
+                    : index === 1
+                    ? "bg-emerald-500/10 text-emerald-600"
+                    : "bg-amber-500/10 text-amber-600"
                 }`}
                 style={{ transitionDelay: `${350 + index * 80}ms` }}
               >
-                <persona.icon className="w-6 h-6 text-primary" />
+                <persona.icon className="w-6 h-6" />
               </div>
               <h3 className="font-semibold text-xl mb-4">{persona.title}</h3>
               <ul className="space-y-3">

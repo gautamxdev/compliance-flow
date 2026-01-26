@@ -5,13 +5,13 @@ const problems = [
     icon: FolderOpen,
     title: "Scattered files", 
     description: "Files scattered across Drive, desktop, and WhatsApp groups with no central source of truth.",
-    color: "text-slate-500",
+    color: "text-yellow-500",
   },
   {
     icon: HelpCircle,
     title: "No clarity on status",
     description: "No clarity on which financial year, what filing status, or what's actually been completed.",
-    color: "text-amber-500",
+    color: "text-violet-500",
   },
   {
     icon: Users,

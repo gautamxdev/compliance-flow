@@ -4,11 +4,15 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-7 h-7 bg-primary rounded-md flex items-center justify-center">
-                <span className="text-primary-foreground font-semibold text-xs">CW</span>
-              </div>
-              <span className="font-semibold text-text-primary">ComplianceWork</span>
+            <div className="flex items-center gap-1 mb-2">
+              <img
+                src="/logo/firmops.svg"
+                alt="FirmOps"
+                className="h-6 w-auto"
+              />
+              <span className="font-semibold text-text-primary text-lg tracking-tight">
+                FirmOps
+              </span>
             </div>
             <p className="text-sm text-text-secondary">
               A structured workspace for CA firms

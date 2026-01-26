@@ -26,10 +26,35 @@ const Header = () => {
           <a href="#who-its-for" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
             Who It's For
           </a>
-          <Button variant="outline" size="sm" className="h-8 text-xs gap-2 group border-divider hover:bg-muted/50 transition-all">
-            View sample dashboard
-            <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
-          </Button>
+<Button
+  variant="outline"
+  size="sm"
+  className="
+  relative h-9 px-4 text-sm gap-2 group
+  border-transparent
+  bg-background
+  rounded-lg
+  before:absolute before:inset-0 before:rounded-lg
+  before:p-[1px]
+  before:bg-[linear-gradient(120deg,rgba(99,102,241,0.9),rgba(59,130,246,0.9),rgba(99,102,241,0.9))]
+  before:opacity-70
+  before:content-['']
+  after:absolute after:inset-[1px] after:rounded-[8px]
+  after:bg-background after:content-['']
+  hover:before:opacity-100
+  hover:shadow-[0_0_18px_rgba(99,102,241,0.45)]
+  transition-all duration-300
+"
+  onClick={() => {
+    const el = document.getElementById("sample-dashboard");
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }}
+>
+  <span className="relative z-10 flex items-center gap-2">
+    View sample dashboard
+    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+  </span>
+</Button>
         </nav>
 
         {/* CTA */}

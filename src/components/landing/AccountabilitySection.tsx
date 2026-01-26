@@ -1,4 +1,4 @@
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Upload, CheckCircle2, Clock, UserPlus } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 
 const activities = [
@@ -43,19 +43,26 @@ const activities = [
 const AccountabilitySection = () => {
   const { ref, visible } = useInView();
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "filed": return "bg-green-500";
-      case "pending": return "bg-amber-500";
-      default: return "bg-slate-400";
-    }
-  };
-
   const getRowBorderColor = (status: string) => {
     switch (status) {
       case "filed": return "border-green-500";
       case "pending": return "border-amber-500";
       default: return "border-slate-400";
+    }
+  };
+
+  const getActionIcon = (action: string) => {
+    switch (action) {
+      case "uploaded":
+        return <Upload className="w-4 h-4 text-yellow-500" />;
+      case "marked as filed":
+        return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+      case "created task":
+        return <Clock className="w-4 h-4 text-indigo-500" />;
+      case "assigned to":
+        return <UserPlus className="w-4 h-4 text-purple-500" />;
+      default:
+        return <MoreHorizontal className="w-4 h-4 text-slate-400" />;
     }
   };
 
@@ -74,6 +81,37 @@ const AccountabilitySection = () => {
             <p className="text-text-secondary text-lg mb-8">
               Every upload, edit, and filing is logged. See which employee handled which task. Stop dependency on memory or verbal updates.
             </p>
+            <ul className="space-y-4 mt-6">
+              <li className="flex items-start gap-3">
+                <span className="relative flex h-2 w-2 mt-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+                </span>
+                <span className="text-text-secondary">
+                  Complete audit trail for every action
+                </span>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <span className="relative flex h-2 w-2 mt-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+                </span>
+                <span className="text-text-secondary">
+                  Employee-wise work attribution
+                </span>
+              </li>
+
+              <li className="flex items-start gap-3">
+                <span className="relative flex h-2 w-2 mt-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+                </span>
+                <span className="text-text-secondary">
+                  Historical records accessible anytime
+                </span>
+              </li>
+            </ul>
           </div>
 
           {/* Activity Log Mockup */}
@@ -87,31 +125,26 @@ const AccountabilitySection = () => {
               {activities.map((activity, index) => (
                 <div 
                   key={activity.id} 
-                  className={`group relative px-5 py-4 flex items-start gap-4 transition-all duration-[600ms] ease-out ${
-                    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  } hover:bg-muted/30`}
+                  className="group relative px-5 py-4 flex items-start gap-4 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-muted/40 hover:-translate-y-[2px] hover:shadow-md"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
                   {/* Hover Left Border */}
                   <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${getRowBorderColor(activity.status)} opacity-0 group-hover:opacity-100 transition-opacity`} />
                   
-                  {/* Status Indicator */}
-                  <div className="pt-1.5 flex-shrink-0 relative group/status">
-                    <div 
-                      className={`w-2.5 h-2.5 rounded-full ${getStatusColor(activity.status)} transition-all duration-300 group-hover:scale-110`}
-                    />
-                    <div className={`absolute inset-0 -m-1 rounded-full ${getStatusColor(activity.status)} opacity-0 group-hover:opacity-20 transition-all scale-50 group-hover:scale-100`} />
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm">
-                      <span className="font-medium">{activity.user}</span>{" "}
-                      <span className="text-text-secondary">{activity.action}</span>{" "}
-                      <span className="font-medium">{activity.target}</span>
-                    </p>
-                    <p className="text-xs text-text-tertiary mt-1">
-                      {activity.client} · {activity.time}
-                    </p>
+                  <div className="flex-1 min-w-0 flex gap-3">
+                    <div className="mt-0.5 flex-shrink-0 transition-transform duration-300 group-hover:scale-110">
+                      {getActionIcon(activity.action)}
+                    </div>
+                    <div>
+                      <p className="text-sm transition-colors duration-300 group-hover:text-foreground">
+                        <span className="font-medium">{activity.user}</span>{" "}
+                        <span className="text-text-secondary">{activity.action}</span>{" "}
+                        <span className="font-medium">{activity.target}</span>
+                      </p>
+                      <p className="text-xs text-text-tertiary mt-1">
+                        {activity.client} · {activity.time}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
