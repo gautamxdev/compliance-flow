@@ -1,0 +1,159 @@
+Context:
+This is a high-trust B2B SaaS landing page for Indian CA firms.
+Tone: calm, confident, modern, system-oriented.
+Avoid playful or gimmicky animations.
+Motion should suggest a live operating system.
+
+⸻
+
+1. REMOVE SECTION
+	•	Completely remove the “How it works” section and all related navigation references.
+	•	Do not replace it with another step-by-step explanation.
+
+⸻
+
+2. WHERE COMPLIANCE WORK QUIETLY BREAKS (Problem section)
+
+Layout changes
+	•	Keep the 2x2 card grid.
+	•	Add subtle vertical stagger:
+	•	top-left normal
+	•	top-right +12px
+	•	bottom-left +24px
+	•	bottom-right +36px
+
+Animation
+	•	On scroll into view:
+	•	cards fade in with slight upward motion (8–12px)
+	•	stagger by 120ms
+	•	Inside each card:
+	•	icon softly pulses once (opacity 0.6 → 1 → 0.6) and then stops
+	•	Add a very faint animated gradient line along the card border that moves once and freezes (suggesting “stress points”).
+
+No hover effects. This section should feel quietly broken, not loud.
+
+⸻
+
+3. KNOW EXACTLY WHO DID WHAT — ALWAYS (Activity section)
+
+Very important: animate ONLY the activity feed, NOT the text.
+
+Visual updates
+	•	Match the activity card colors to the FirmOps dashboard:
+	•	subtle tinted backgrounds per activity type
+	•	upload → light blue tint
+	•	filed → light green
+	•	assigned → neutral gray
+	•	Replace the static left icons with:
+	•	soft animated status dots:
+	•	pulse once on load
+	•	then remain static
+
+Animation behavior
+	•	When section enters viewport:
+	•	activity rows appear one-by-one, top to bottom
+	•	each row slides in from right (16px) + fade
+	•	150ms stagger
+	•	Every ~6 seconds:
+	•	simulate a new activity appearing at the top
+	•	older entries shift down slightly (like a real feed)
+	•	Text content never animates.
+	•	No looping shimmer. This must feel “live”, not decorative.
+
+⸻
+
+4. MERGED SECTION
+
+Firm-wide visibility without micromanagement
+	•	Built for every role in your firm
+
+New structure
+	•	Title stays: Firm-wide visibility without micromanagement
+	•	Subtitle explains roles implicitly, not explicitly.
+
+Replace 3 boring role cards with:
+	•	One interactive system panel:
+	•	Left: compact filter-style UI (Partners / Managers / Staff)
+	•	Right: content changes based on selected role
+
+Interaction
+	•	Clicking each role:
+	•	smoothly swaps content (no page reload)
+	•	subtle crossfade + slide (8px)
+	•	Each role shows:
+	•	one sharp insight
+	•	one concrete outcome
+	•	one visual cue (badge, counter, or status)
+
+Example (do NOT show as text-heavy lists):
+	•	Partner → “Firm health overview”
+	•	Manager → “Workload balance”
+	•	Staff → “Clear next task”
+
+This section should feel like using the product, not reading about it.
+
+⸻
+
+5. THIS IS NOT ANOTHER DRIVE FOLDER OR EXCEL TRACKER
+
+Yes, keep it — but elevate it.
+
+Changes
+	•	Convert the 4 cards into interactive contrast cards.
+	•	On hover (desktop) or tap (mobile):
+	•	card flips or slides to reveal:
+	•	“What most firms do” vs “What FirmOps does”
+	•	Add subtle red → green contrast accents:
+	•	red = chaos
+	•	green = structure
+
+Animation
+	•	On scroll:
+	•	cards rise slightly from background (depth effect)
+	•	Icons animate once:
+	•	X icon draws itself
+	•	then stops forever
+
+This section should feel like myths being dismantled, not disclaimers.
+
+⸻
+
+6. FINAL CTA SECTION (REBUILD COMPLETELY)
+
+Replace “Built for firms that take compliance seriously” section
+
+New vibe
+	•	Dark background stays
+	•	Add a soft animated gradient mesh (very slow, 20–30s loop)
+
+Text
+	•	Keep it minimal.
+	•	One strong line.
+	•	One supporting line.
+
+Primary CTA: “Request a demo”
+
+Button animation (IMPORTANT)
+	•	Add a moving light sweep across the button:
+	•	diagonal or horizontal
+	•	runs every 4–5 seconds
+	•	subtle white highlight
+	•	On hover:
+	•	button slightly lifts (2px)
+	•	glow intensifies briefly
+
+This should feel premium, not salesy.
+
+⸻
+
+7. GLOBAL MOTION RULES (STRICT)
+	•	No global fade-ins
+	•	No bouncing
+	•	No continuous looping except:
+	•	activity feed simulation
+	•	CTA light sweep
+	•	background mesh (very slow)
+
+Motion should imply:
+
+“This system is already running — you’re just joining.”
