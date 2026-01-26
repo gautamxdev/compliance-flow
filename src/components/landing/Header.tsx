@@ -28,8 +28,9 @@ const Header = () => {
         </nav>
 
         {/* CTA */}
-        <Button size="sm" className="h-9">
-          Request Early Access
+        <Button size="sm" className="relative h-9 overflow-hidden group">
+          <span className="relative z-10">Request Early Access</span>
+          <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_4s_infinite]" />
         </Button>
       </div>
     </header>
