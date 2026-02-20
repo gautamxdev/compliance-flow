@@ -9,16 +9,16 @@ const activities = [
     target: "Balance Sheet - FY 2024-25",
     time: "2 hours ago",
     client: "Sharma Enterprises",
-    status: "filed", // green
+    status: "filed", 
   },
   {
     id: 2,
-    user: "Priya K.",
+    user: "Priya K.", 
     action: "marked as filed",
     target: "GST R1 - October",
     time: "Yesterday",
     client: "Patel Industries",
-    status: "pending", // amber
+    status: "pending", 
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const activities = [
     target: "ITR Filing - FY 2024-25",
     time: "2 days ago",
     client: "Kumar & Sons",
-    status: "neutral", // gray
+    status: "neutral", 
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ const activities = [
     target: "Tax Audit Review",
     time: "3 days ago",
     client: "Sharma Enterprises",
-    status: "neutral", // gray
+    status: "neutral", 
   },
 ];
 
