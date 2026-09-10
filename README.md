@@ -1,8 +1,24 @@
-## What technologies are used for this project?
-This project is built with:
+# Compliance Flow
+
+A structured workspace for CA firms to run compliance work without chaos.
+
+## Stack
+
 - Vite
 - TypeScript
 - React
-- shadcn-ui
-- Tailwind CSSpublic repo activity
-next day activity
+- shadcn/ui
+- Tailwind CSS
+
+## Develop
+
+```bash
+npm install
+npm run dev
+```
+
+## Test
+
+```bash
+npm test
+```

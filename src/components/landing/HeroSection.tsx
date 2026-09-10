@@ -41,14 +41,7 @@ import { useState, useRef, useCallback } from "react";
     setIsHovering(true);
   }, []);
 
-  // Shine animation keyframes for moving light on CTA button
-  <style>{`
-    @keyframes hero-shine {
-      0% { transform: translateX(-120%); }
-      30% { transform: translateX(120%); }
-      100% { transform: translateX(120%); }
-    }
-  `}</style>
+  // Shine keyframes live in src/index.css (.animate-hero-shine)
   return (
     <section className="pt-32 pb-20 md:pt-40 md:pb-28">
       <div className="container mx-auto px-6">
