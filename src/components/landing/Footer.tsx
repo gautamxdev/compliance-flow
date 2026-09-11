@@ -34,7 +34,7 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-divider">
           <p className="text-xs text-text-tertiary text-center">
-            Made for CA firms in India
+            © {new Date().getFullYear()} FirmOps · Made for CA firms in India
           </p>
         </div>
       </div>

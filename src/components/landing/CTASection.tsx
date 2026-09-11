@@ -5,7 +5,7 @@ const CTASection = () => {
   const { ref, visible } = useInView();
 
   return (
-    <section className="relative py-32 md:py-40 text-white overflow-hidden rounded-2xl">
+    <section id="cta" className="relative py-32 md:py-40 text-white overflow-hidden rounded-2xl">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] to-[#0A0A0B] rounded-2xl z-0" />
 

@@ -14,7 +14,7 @@ const arrowBase =
   "transition-all duration-[750ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
 
   return (
-    <section className="py-20 md:py-28 bg-muted/30 border-t border-divider">
+    <section id="core-idea" className="py-20 md:py-28 bg-muted/30 border-t border-divider">
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mb-14">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
