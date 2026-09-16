@@ -184,3 +184,9 @@
 .animate-hero-shine {
   animation: hero-shine 4s ease-in-out infinite;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-shine {
+    animation: none;
+  }
+}

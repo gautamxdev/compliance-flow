@@ -10,16 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ArrowRight, Menu } from "lucide-react";
-
-function scrollToId(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({
-    behavior: prefersReduced ? "auto" : "smooth",
-    block: "center",
-  });
-}
+import { scrollToId } from "@/lib/scrollToId";
 
 const NAV_LINKS = [
   { id: "problem", label: "The Problem" },

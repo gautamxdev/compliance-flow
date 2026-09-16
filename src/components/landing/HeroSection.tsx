@@ -1,43 +1,43 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
+import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 
-
-  const HeroSection = () => {
-  const dashboardRef = useRef<HTMLDivElement>(null); // ← MOVE HERE
+const HeroSection = () => {
+  const dashboardRef = useRef<HTMLDivElement>(null);
 
   const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
-  // It's safe to omit cardRef from the dependency array because refs are stable and do not change between renders.
- const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-  if (!cardRef.current) return;
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current || prefersReducedMotion()) return;
 
-  const rect = cardRef.current.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
-  const rotateY = ((x - centerX) / centerX) * 4;
-  const rotateX = ((centerY - y) / centerY) * 4;
+    const rotateY = ((x - centerX) / centerX) * 4;
+    const rotateX = ((centerY - y) / centerY) * 4;
 
-  // NEW: background position (0–100%)
-  const bgX = (x / rect.width) * 100;
-  const bgY = (y / rect.height) * 100;
+    const bgX = (x / rect.width) * 100;
+    const bgY = (y / rect.height) * 100;
 
-  setTilt({ rotateX, rotateY });
-  setBgPos({ x: bgX, y: bgY });
-}, []);
+    setTilt({ rotateX, rotateY });
+    setBgPos({ x: bgX, y: bgY });
+  }, []);
+
   const handleMouseLeave = useCallback(() => {
     setTilt({ rotateX: 0, rotateY: 0 });
     setIsHovering(false);
   }, []);
 
   const handleMouseEnter = useCallback(() => {
+    if (prefersReducedMotion()) return;
     setIsHovering(true);
   }, []);
 
@@ -58,36 +58,45 @@ import { useState, useRef, useCallback } from "react";
 
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <Button
-  size="lg"
-  className="
-    relative overflow-hidden
-    h-12 px-8 text-base
-    bg-primary text-primary-foreground
-    shadow-[0_0_0_0_hsl(260_90%_70%/0.0)]
-    hover:shadow-[0_0_24px_-4px_hsl(260_90%_70%/0.45)]
-    transition-shadow duration-300
-  "
->
-  <span className="relative z-10 flex items-center">
-    Request early access
-    <ArrowRight className="ml-2 h-4 w-4" />
-  </span>
+              type="button"
+              size="lg"
+              className="
+                relative overflow-hidden
+                h-12 px-8 text-base
+                bg-primary text-primary-foreground
+                shadow-[0_0_0_0_hsl(260_90%_70%/0.0)]
+                hover:shadow-[0_0_24px_-4px_hsl(260_90%_70%/0.45)]
+                transition-shadow duration-300
+              "
+              onClick={() => scrollToId("cta")}
+            >
+              <span className="relative z-10 flex items-center">
+                Request early access
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </span>
 
-  {/* moving light */}
-  <span
-  className="
-    pointer-events-none
-    absolute inset-0
-    bg-gradient-to-r
-    from-transparent
-    via-white/60
-    to-transparent
-    -translate-x-full
-    animate-hero-shine
-  "
-/>
-</Button>
-            <Button variant="outline" size="lg" className="h-12 px-8 text-base">
+              {/* moving light */}
+              <span
+                aria-hidden="true"
+                className="
+                  pointer-events-none
+                  absolute inset-0
+                  bg-gradient-to-r
+                  from-transparent
+                  via-white/60
+                  to-transparent
+                  -translate-x-full
+                  animate-hero-shine
+                "
+              />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="h-12 px-8 text-base"
+              onClick={() => scrollToId("core-idea")}
+            >
               See how it works
             </Button>
           </div>
