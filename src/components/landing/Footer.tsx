@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
     <footer className="py-12 border-t border-divider">
@@ -19,17 +21,29 @@ const Footer = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6 text-sm">
-            <a href="#" className="text-text-secondary hover:text-text-primary transition-colors">
+          <nav
+            className="flex flex-wrap items-center gap-6 text-sm"
+            aria-label="Footer"
+          >
+            <Link
+              to="/privacy"
+              className="text-text-secondary hover:text-text-primary transition-colors"
+            >
               Privacy
-            </a>
-            <a href="#" className="text-text-secondary hover:text-text-primary transition-colors">
+            </Link>
+            <Link
+              to="/terms"
+              className="text-text-secondary hover:text-text-primary transition-colors"
+            >
               Terms
-            </a>
-            <a href="mailto:hello@compliancework.in" className="text-text-secondary hover:text-text-primary transition-colors">
+            </Link>
+            <a
+              href="mailto:hello@compliancework.in"
+              className="text-text-secondary hover:text-text-primary transition-colors"
+            >
               Contact
             </a>
-          </div>
+          </nav>
         </div>
 
         <div className="mt-8 pt-8 border-t border-divider">
