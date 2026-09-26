@@ -1,5 +1,6 @@
 import { MoreHorizontal, Upload, CheckCircle2, Clock, UserPlus } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
+import { prefersReducedMotion } from "@/lib/scrollToId";
 
 const activities = [
   {
@@ -42,6 +43,7 @@ const activities = [
 
 const AccountabilitySection = () => {
   const { ref, visible } = useInView();
+  const reduceMotion = prefersReducedMotion();
 
   const getRowBorderColor = (status: string) => {
     switch (status) {
@@ -84,7 +86,9 @@ const AccountabilitySection = () => {
             <ul className="space-y-4 mt-6">
               <li className="flex items-start gap-3">
                 <span className="relative flex h-2 w-2 mt-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  {!reduceMotion && (
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  )}
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
                 </span>
                 <span className="text-text-secondary">
@@ -94,7 +98,9 @@ const AccountabilitySection = () => {
 
               <li className="flex items-start gap-3">
                 <span className="relative flex h-2 w-2 mt-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  {!reduceMotion && (
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  )}
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
                 </span>
                 <span className="text-text-secondary">
@@ -104,7 +110,9 @@ const AccountabilitySection = () => {
 
               <li className="flex items-start gap-3">
                 <span className="relative flex h-2 w-2 mt-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  {!reduceMotion && (
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
+                  )}
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
                 </span>
                 <span className="text-text-secondary">
@@ -116,7 +124,9 @@ const AccountabilitySection = () => {
 
           {/* Activity Log Mockup */}
           <div 
-            className="bg-card rounded-xl border border-border overflow-hidden shadow-sm"
+            className={`bg-card rounded-xl border border-border overflow-hidden shadow-sm transition-all duration-500 ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
           >
             <div className="px-5 py-4 border-b border-divider bg-muted/30">
               <h3 className="font-medium text-sm">Recent Activity</h3>
