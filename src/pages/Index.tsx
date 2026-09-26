@@ -6,6 +6,7 @@ import AccountabilitySection from "@/components/landing/AccountabilitySection";
 import VisibilitySection from "@/components/landing/VisibilitySection";
 import WhoItsForSection from "@/components/landing/WhoItsForSection";
 import WhatThisIsNotSection from "@/components/landing/WhatThisIsNotSection";
+import FaqSection from "@/components/landing/FaqSection";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
 
@@ -27,6 +28,7 @@ const Index = () => {
         <VisibilitySection />
         <WhoItsForSection />
         <WhatThisIsNotSection />
+        <FaqSection />
         <CTASection />
       </main>
       <Footer />
