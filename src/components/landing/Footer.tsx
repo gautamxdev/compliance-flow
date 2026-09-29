@@ -1,18 +1,29 @@
 import { Link } from "react-router-dom";
+import { ArrowUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { prefersReducedMotion } from "@/lib/scrollToId";
 
 const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+  };
+
   return (
-    <footer className="py-12 border-t border-divider">
+    <footer className="border-t border-divider py-12">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <div>
-            <div className="flex items-center gap-1 mb-2">
+            <div className="mb-2 flex items-center gap-1">
               <img
                 src="/logo/firmops.svg"
                 alt="FirmOps"
                 className="h-6 w-auto"
               />
-              <span className="font-semibold text-text-primary text-lg tracking-tight">
+              <span className="text-lg font-semibold tracking-tight text-text-primary">
                 FirmOps
               </span>
             </div>
@@ -27,27 +38,37 @@ const Footer = () => {
           >
             <Link
               to="/privacy"
-              className="text-text-secondary hover:text-text-primary transition-colors"
+              className="text-text-secondary transition-colors hover:text-text-primary"
             >
               Privacy
             </Link>
             <Link
               to="/terms"
-              className="text-text-secondary hover:text-text-primary transition-colors"
+              className="text-text-secondary transition-colors hover:text-text-primary"
             >
               Terms
             </Link>
             <a
               href="mailto:hello@compliancework.in"
-              className="text-text-secondary hover:text-text-primary transition-colors"
+              className="text-text-secondary transition-colors hover:text-text-primary"
             >
               Contact
             </a>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="h-8 gap-1.5 text-text-secondary"
+              onClick={scrollToTop}
+            >
+              <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" />
+              Back to top
+            </Button>
           </nav>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-divider">
-          <p className="text-xs text-text-tertiary text-center">
+        <div className="mt-8 border-t border-divider pt-8">
+          <p className="text-center text-xs text-text-tertiary">
             © {new Date().getFullYear()} FirmOps · Made for CA firms in India
           </p>
         </div>
