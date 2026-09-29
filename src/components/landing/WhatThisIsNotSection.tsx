@@ -21,7 +21,7 @@ const contrasts = [
 
 const WhatThisIsNotSection = () => {
   return (
-    <section className="py-20 md:py-28 border-t border-divider overflow-hidden">
+    <section id="what-this-is-not" className="scroll-mt-24 py-20 md:py-28 border-t border-divider overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center">

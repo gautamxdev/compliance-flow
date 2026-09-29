@@ -31,7 +31,7 @@ const VisibilitySection = () => {
   const activeRole = roles.find(r => r.id === activeRoleId)!;
 
   return (
-    <section className="py-20 md:py-28 border-t border-divider overflow-hidden">
+    <section id="visibility" className="scroll-mt-24 py-20 md:py-28 border-t border-divider overflow-hidden">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-12 text-center">
           Firm-wide clarity, tailored by role

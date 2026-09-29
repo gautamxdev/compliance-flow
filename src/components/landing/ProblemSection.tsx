@@ -29,7 +29,7 @@ const problems = [
 
 const ProblemSection = () => {
   return (
-    <section id="problem" className="py-16 md:py-20 border-t border-divider">
+    <section id="problem" className="scroll-mt-24 py-16 md:py-20 border-t border-divider">
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mb-10">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-5">

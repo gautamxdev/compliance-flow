@@ -37,7 +37,7 @@ const WhoItsForSection = () => {
   const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
 
   return (
-    <section id="who-its-for" className="py-20 md:py-28 bg-muted/30 border-t border-divider">
+    <section id="who-its-for" className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider">
       <div className="container mx-auto px-6">
         <div 
           ref={ref}
