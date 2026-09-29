@@ -15,6 +15,7 @@ import { scrollToId } from "@/lib/scrollToId";
 const NAV_LINKS = [
   { id: "problem", label: "The Problem" },
   { id: "who-its-for", label: "Who It's For" },
+  { id: "faq", label: "FAQ" },
   { id: "core-idea", label: "See how it works" },
 ] as const;
 
@@ -55,6 +56,16 @@ const Header = () => {
             }}
           >
             Who It's For
+          </a>
+          <a
+            href="#faq"
+            className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToId("faq");
+            }}
+          >
+            FAQ
           </a>
           <Button
             type="button"
