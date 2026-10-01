@@ -5,8 +5,14 @@ export function scrollToId(id: string) {
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   el.scrollIntoView({
     behavior: prefersReduced ? "auto" : "smooth",
-    block: "center",
+    block: "start",
   });
+
+  // Ensure keyboard/screen-reader focus follows the scroll destination.
+  if (!el.hasAttribute("tabindex")) {
+    el.setAttribute("tabindex", "-1");
+  }
+  el.focus({ preventScroll: true });
 }
 
 export function prefersReducedMotion(): boolean {

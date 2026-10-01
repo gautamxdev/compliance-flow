@@ -11,19 +11,36 @@ describe("scrollToId", () => {
     expect(() => scrollToId("missing")).not.toThrow();
   });
 
-  it("scrolls smoothly unless reduced motion is preferred", () => {
+  it("scrolls to the start and focuses the target", () => {
     const el = document.createElement("div");
     el.id = "cta";
     el.scrollIntoView = vi.fn();
+    el.focus = vi.fn();
     document.body.appendChild(el);
 
     window.matchMedia = vi.fn().mockReturnValue({ matches: false }) as unknown as typeof window.matchMedia;
     scrollToId("cta");
-    expect(el.scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "center" });
+    expect(el.scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
+    expect(el.getAttribute("tabindex")).toBe("-1");
+    expect(el.focus).toHaveBeenCalledWith({ preventScroll: true });
 
     window.matchMedia = vi.fn().mockReturnValue({ matches: true }) as unknown as typeof window.matchMedia;
     scrollToId("cta");
-    expect(el.scrollIntoView).toHaveBeenLastCalledWith({ behavior: "auto", block: "center" });
+    expect(el.scrollIntoView).toHaveBeenLastCalledWith({ behavior: "auto", block: "start" });
+  });
+
+  it("does not overwrite an existing tabindex", () => {
+    const el = document.createElement("div");
+    el.id = "faq";
+    el.setAttribute("tabindex", "0");
+    el.scrollIntoView = vi.fn();
+    el.focus = vi.fn();
+    document.body.appendChild(el);
+
+    window.matchMedia = vi.fn().mockReturnValue({ matches: true }) as unknown as typeof window.matchMedia;
+    scrollToId("faq");
+    expect(el.getAttribute("tabindex")).toBe("0");
+    expect(el.focus).toHaveBeenCalledWith({ preventScroll: true });
   });
 
   it("reports prefers-reduced-motion from matchMedia", () => {
