@@ -10,6 +10,12 @@ const Footer = () => {
       left: 0,
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     });
+
+    // Move keyboard focus to the site header so SR/keyboard users aren't left at the footer.
+    const header = document.getElementById("site-header");
+    if (header) {
+      header.focus({ preventScroll: true });
+    }
   };
 
   return (

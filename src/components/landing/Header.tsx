@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-divider">
+    <header id="site-header" tabIndex={-1} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-divider outline-none">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
           <img src="/logo/firmops.svg" alt="FirmOps" className="h-12 w-14" />

@@ -15,4 +15,20 @@ describe("footer back to top", () => {
     expect(footer).toContain('to="/privacy"');
     expect(footer).toContain('to="/terms"');
   });
+
+  it("moves focus to the site header after scrolling up", () => {
+    const footer = readFileSync(
+      resolve(__dirname, "../components/landing/Footer.tsx"),
+      "utf8",
+    );
+    const header = readFileSync(
+      resolve(__dirname, "../components/landing/Header.tsx"),
+      "utf8",
+    );
+
+    expect(footer).toContain('getElementById("site-header")');
+    expect(footer).toContain("focus({ preventScroll: true })");
+    expect(header).toContain('id="site-header"');
+    expect(header).toContain("tabIndex={-1}");
+  });
 });
