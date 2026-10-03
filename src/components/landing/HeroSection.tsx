@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
+import { getIndianFinancialYear } from "@/lib/indianFy";
 
 const HeroSection = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
@@ -10,6 +11,7 @@ const HeroSection = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const currentFy = getIndianFinancialYear().label;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || prefersReducedMotion()) return;
@@ -161,7 +163,7 @@ radial-gradient(
               <div className="w-56 border-r border-divider bg-muted/20 p-4 hidden md:block">
                 <div className="space-y-1">
                   <div className="px-3 py-2 bg-accent rounded-md text-sm font-medium">All Clients</div>
-                  <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">FY 2024-25</div>
+                  <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">{currentFy}</div>
                   <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">Pending Filings</div>
                   <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">Notices</div>
                 </div>
@@ -178,7 +180,7 @@ radial-gradient(
               {/* Main Content - Table */}
               <div className="flex-1 p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-medium">Sharma Enterprises — FY 2024-25</h3>
+                  <h3 className="font-medium">Sharma Enterprises — {currentFy}</h3>
                   <span className="text-xs text-text-tertiary">4 tasks</span>
                 </div>
                 
