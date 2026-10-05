@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/sheet";
 import { ArrowRight, Menu } from "lucide-react";
 import { scrollToId } from "@/lib/scrollToId";
+import { useActiveSection } from "@/hooks/useActiveSection";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { id: "problem", label: "The Problem" },
@@ -19,8 +21,18 @@ const NAV_LINKS = [
   { id: "core-idea", label: "See how it works" },
 ] as const;
 
+const DESKTOP_LINK_IDS = ["problem", "who-its-for", "faq"] as const;
+const TRACKED_SECTION_IDS = NAV_LINKS.map((item) => item.id);
+
+const desktopLinkClass = (active: boolean) =>
+  cn(
+    "text-sm transition-colors",
+    active ? "text-text-primary font-medium" : "text-text-secondary hover:text-text-primary",
+  );
+
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activeSection = useActiveSection(TRACKED_SECTION_IDS);
 
   const goTo = (id: string) => {
     setMobileOpen(false);
@@ -37,36 +49,25 @@ const Header = () => {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8" aria-label="Primary">
-          <a
-            href="#problem"
-            className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToId("problem");
-            }}
-          >
-            The Problem
-          </a>
-          <a
-            href="#who-its-for"
-            className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToId("who-its-for");
-            }}
-          >
-            Who It's For
-          </a>
-          <a
-            href="#faq"
-            className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToId("faq");
-            }}
-          >
-            FAQ
-          </a>
+          {NAV_LINKS.filter((item) =>
+            (DESKTOP_LINK_IDS as readonly string[]).includes(item.id),
+          ).map((item) => {
+            const active = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                aria-current={active ? "location" : undefined}
+                className={desktopLinkClass(active)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToId(item.id);
+                }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
           <Button
             type="button"
             variant="outline"
@@ -130,16 +131,23 @@ const Header = () => {
                 </SheetDescription>
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4 py-4" aria-label="Mobile">
-                {NAV_LINKS.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="rounded-lg px-3 py-3 text-left text-sm text-text-secondary transition-colors hover:bg-muted hover:text-text-primary"
-                    onClick={() => goTo(item.id)}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+                {NAV_LINKS.map((item) => {
+                  const active = activeSection === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      aria-current={active ? "location" : undefined}
+                      className={cn(
+                        "rounded-lg px-3 py-3 text-left text-sm transition-colors hover:bg-muted hover:text-text-primary",
+                        active ? "bg-muted font-medium text-text-primary" : "text-text-secondary",
+                      )}
+                      onClick={() => goTo(item.id)}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
                 <button
                   type="button"
                   className="rounded-lg px-3 py-3 text-left text-sm text-text-secondary transition-colors hover:bg-muted hover:text-text-primary"

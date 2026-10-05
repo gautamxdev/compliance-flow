@@ -10,7 +10,8 @@ describe("header FAQ navigation", () => {
     );
 
     expect(header).toContain('{ id: "faq", label: "FAQ" }');
-    expect(header).toContain('href="#faq"');
-    expect(header).toContain('scrollToId("faq")');
+    expect(header).toMatch(/DESKTOP_LINK_IDS = \[[^\]]*"faq"/);
+    expect(header).toContain("href={`#${item.id}`}");
+    expect(header).toContain("scrollToId(item.id)");
   });
 });
