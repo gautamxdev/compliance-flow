@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ArrowRight, Menu } from "lucide-react";
-import { scrollToId } from "@/lib/scrollToId";
+import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +33,20 @@ const desktopLinkClass = (active: boolean) =>
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const activeSection = useActiveSection(TRACKED_SECTION_IDS);
+  const { pathname, hash } = useLocation();
+
+  const goHome = () => {
+    setMobileOpen(false);
+    // Already on the landing page without a hash: the route doesn't change, so
+    // RouteEffects won't reset the scroll. Take the visitor back to the top.
+    if (pathname === "/" && !hash) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
+    }
+  };
 
   const goTo = (id: string) => {
     setMobileOpen(false);
@@ -43,7 +57,7 @@ const Header = () => {
   return (
     <header id="site-header" tabIndex={-1} className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-sm border-b border-divider outline-none">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center" onClick={() => setMobileOpen(false)}>
+        <Link to="/" className="flex items-center" onClick={goHome}>
           <img src="/logo/firmops.svg" alt="" className="h-12 w-14" />
           <span className="font-semibold text-xl text-text-primary">FirmOps</span>
         </Link>
