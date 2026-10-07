@@ -3,6 +3,18 @@ import { ArrowRight } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
+import {
+  formatDueDate,
+  getSampleDashboardTasks,
+  toIsoDate,
+  type SampleTaskStatus,
+} from "@/lib/sampleDashboard";
+
+const STATUS_BADGE_CLASS: Record<SampleTaskStatus, string> = {
+  Filed: "bg-success/10 text-success",
+  Pending: "bg-warning/10 text-warning",
+  "In Progress": "bg-muted text-text-secondary",
+};
 
 const HeroSection = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
@@ -12,6 +24,7 @@ const HeroSection = () => {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const currentFy = getIndianFinancialYear().label;
+  const tasks = getSampleDashboardTasks();
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || prefersReducedMotion()) return;
@@ -181,7 +194,7 @@ radial-gradient(
               <div className="flex-1 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-medium">Sharma Enterprises — {currentFy}</h3>
-                  <span className="text-xs text-text-tertiary">4 tasks</span>
+                  <span className="text-xs text-text-tertiary">{tasks.length} tasks</span>
                 </div>
                 
                 <div className="border border-border rounded-lg overflow-hidden">
@@ -195,38 +208,18 @@ radial-gradient(
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-t border-divider">
-                        <td className="px-4 py-3">GST R1 - October</td>
-                        <td className="px-4 py-3 hidden sm:table-cell">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-success/10 text-success">Filed</span>
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary hidden md:table-cell">Rahul M.</td>
-                        <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">11 Nov 2024</td>
-                      </tr>
-                      <tr className="border-t border-divider">
-                        <td className="px-4 py-3">GST R1 - November</td>
-                        <td className="px-4 py-3 hidden sm:table-cell">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-warning/10 text-warning">Pending</span>
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary hidden md:table-cell">Priya K.</td>
-                        <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">11 Dec 2024</td>
-                      </tr>
-                      <tr className="border-t border-divider">
-                        <td className="px-4 py-3">ITR Filing</td>
-                        <td className="px-4 py-3 hidden sm:table-cell">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-success/10 text-success">Filed</span>
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary hidden md:table-cell">Amit S.</td>
-                        <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">31 Jul 2024</td>
-                      </tr>
-                      <tr className="border-t border-divider">
-                        <td className="px-4 py-3">Tax Audit</td>
-                        <td className="px-4 py-3 hidden sm:table-cell">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-muted text-text-secondary">In Progress</span>
-                        </td>
-                        <td className="px-4 py-3 text-text-secondary hidden md:table-cell">Rahul M.</td>
-                        <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">30 Sep 2024</td>
-                      </tr>
+                      {tasks.map((row) => (
+                        <tr key={row.task} className="border-t border-divider">
+                          <td className="px-4 py-3">{row.task}</td>
+                          <td className="px-4 py-3 hidden sm:table-cell">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_BADGE_CLASS[row.status]}`}>{row.status}</span>
+                          </td>
+                          <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{row.assignee}</td>
+                          <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">
+                            <time dateTime={toIsoDate(row.due)}>{formatDueDate(row.due)}</time>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
