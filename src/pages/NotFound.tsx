@@ -6,7 +6,7 @@ const NotFound = () => {
       <header className="border-b border-divider">
         <div className="container mx-auto flex h-16 items-center px-6">
           <Link to="/" className="flex items-center gap-1">
-            <img src="/logo/firmops.svg" alt="FirmOps" className="h-10 w-12" />
+            <img src="/logo/firmops.svg" alt="" className="h-10 w-12" />
             <span className="text-xl font-semibold text-text-primary">FirmOps</span>
           </Link>
         </div>

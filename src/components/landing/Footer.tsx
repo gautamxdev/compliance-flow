@@ -26,7 +26,7 @@ const Footer = () => {
             <div className="mb-2 flex items-center gap-1">
               <img
                 src="/logo/firmops.svg"
-                alt="FirmOps"
+                alt=""
                 className="h-6 w-auto"
               />
               <span className="text-lg font-semibold tracking-tight text-text-primary">
