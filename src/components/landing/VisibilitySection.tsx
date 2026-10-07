@@ -25,6 +25,27 @@ const roles = [
   },
 ];
 
+/**
+ * Roving focus for the vertical role tablist (WAI-ARIA tabs pattern):
+ * Up/Down (and Left/Right) wrap around, Home/End jump to the first/last tab.
+ */
+function getNextTabIndex(key: string, current: number, count: number): number | null {
+  switch (key) {
+    case "ArrowDown":
+    case "ArrowRight":
+      return (current + 1) % count;
+    case "ArrowUp":
+    case "ArrowLeft":
+      return (current - 1 + count) % count;
+    case "Home":
+      return 0;
+    case "End":
+      return count - 1;
+    default:
+      return null;
+  }
+}
+
 const VisibilitySection = () => {
   const { ref, visible } = useInView();
   const [activeRoleId, setActiveRoleId] = useState(roles[0].id);
@@ -55,6 +76,7 @@ const VisibilitySection = () => {
             className="order-1 flex flex-col gap-4 lg:order-1"
             role="tablist"
             aria-label="Role views"
+            aria-orientation="vertical"
           >
             {roles.map((role) => {
               const selected = activeRoleId === role.id;
@@ -69,13 +91,11 @@ const VisibilitySection = () => {
                   tabIndex={selected ? 0 : -1}
                   onClick={() => setActiveRoleId(role.id)}
                   onKeyDown={(e) => {
-                    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
-                    e.preventDefault();
                     const idx = roles.findIndex((r) => r.id === activeRoleId);
-                    const next =
-                      e.key === "ArrowDown"
-                        ? roles[(idx + 1) % roles.length]
-                        : roles[(idx - 1 + roles.length) % roles.length];
+                    const nextIdx = getNextTabIndex(e.key, idx, roles.length);
+                    if (nextIdx === null) return;
+                    e.preventDefault();
+                    const next = roles[nextIdx];
                     setActiveRoleId(next.id);
                     requestAnimationFrame(() => {
                       document
