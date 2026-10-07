@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
 import { prefersReducedMotion } from "@/lib/scrollToId";
@@ -7,15 +7,31 @@ const DEMO_EMAIL = "hello@compliancework.in";
 const DEMO_MAILTO =
   "mailto:hello@compliancework.in?subject=FirmOps%20demo%20request&body=Hi%20FirmOps%20team%2C%0A%0AI%27d%20like%20to%20request%20a%20demo%20for%20our%20CA%20firm.%0A%0AFirm%20name%3A%20%0ACity%3A%20%0A";
 
+const COPIED_RESET_MS = 2000;
+
 const CTASection = () => {
   const reduceMotion = prefersReducedMotion();
   const [copied, setCopied] = useState(false);
+  const resetTimerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (resetTimerRef.current !== null) window.clearTimeout(resetTimerRef.current);
+    },
+    [],
+  );
 
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(DEMO_EMAIL);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
+      // Restart the confirmation window on repeat clicks instead of letting an
+      // earlier timer flip the label back early.
+      if (resetTimerRef.current !== null) window.clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = window.setTimeout(() => {
+        resetTimerRef.current = null;
+        setCopied(false);
+      }, COPIED_RESET_MS);
     } catch {
       // Fallback for environments without clipboard permission
       window.prompt("Copy this email address:", DEMO_EMAIL);
@@ -97,7 +113,6 @@ const CTASection = () => {
             variant="outline"
             className="h-14 border-white/20 bg-transparent px-8 text-lg text-slate-100 hover:bg-white/10 hover:text-white"
             onClick={copyEmail}
-            aria-live="polite"
           >
             {copied ? (
               <>
@@ -113,6 +128,9 @@ const CTASection = () => {
           </Button>
         </div>
         <p className="mt-4 text-sm text-slate-500">{DEMO_EMAIL}</p>
+        <p role="status" className="sr-only">
+          {copied ? `${DEMO_EMAIL} copied to clipboard` : ""}
+        </p>
       </div>
       {!reduceMotion && (
         <style
