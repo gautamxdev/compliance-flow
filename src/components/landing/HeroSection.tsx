@@ -6,6 +6,7 @@ import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   formatDueDate,
   getSampleDashboardTasks,
+  isOverdue,
   toIsoDate,
   type SampleTaskStatus,
 } from "@/lib/sampleDashboard";
@@ -25,6 +26,7 @@ const HeroSection = () => {
   const [isHovering, setIsHovering] = useState(false);
   const currentFy = getIndianFinancialYear().label;
   const tasks = getSampleDashboardTasks();
+  const overdueCount = tasks.filter((task) => isOverdue(task)).length;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || prefersReducedMotion()) return;
@@ -194,7 +196,17 @@ radial-gradient(
               <div className="flex-1 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-medium">Sharma Enterprises — {currentFy}</h3>
-                  <span className="text-xs text-text-tertiary">{tasks.length} tasks</span>
+                  <span className="text-xs text-text-tertiary">
+                    {tasks.length} tasks
+                    {overdueCount > 0 ? (
+                      <>
+                        {" · "}
+                        <span className="font-medium text-destructive">
+                          {overdueCount} overdue
+                        </span>
+                      </>
+                    ) : null}
+                  </span>
                 </div>
                 
                 <div className="border border-border rounded-lg overflow-hidden">
@@ -208,18 +220,33 @@ radial-gradient(
                       </tr>
                     </thead>
                     <tbody>
-                      {tasks.map((row) => (
-                        <tr key={row.task} className="border-t border-divider">
-                          <td className="px-4 py-3">{row.task}</td>
-                          <td className="px-4 py-3 hidden sm:table-cell">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_BADGE_CLASS[row.status]}`}>{row.status}</span>
-                          </td>
-                          <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{row.assignee}</td>
-                          <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">
-                            <time dateTime={toIsoDate(row.due)}>{formatDueDate(row.due)}</time>
-                          </td>
-                        </tr>
-                      ))}
+                      {tasks.map((row) => {
+                        const overdue = isOverdue(row);
+                        return (
+                          <tr key={row.task} className="border-t border-divider">
+                            <td className="px-4 py-3">{row.task}</td>
+                            <td className="px-4 py-3 hidden sm:table-cell">
+                              <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_BADGE_CLASS[row.status]}`}>{row.status}</span>
+                            </td>
+                            <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{row.assignee}</td>
+                            <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">
+                              <span className="inline-flex items-center gap-2">
+                                <time
+                                  dateTime={toIsoDate(row.due)}
+                                  className={overdue ? "font-medium text-destructive" : undefined}
+                                >
+                                  {formatDueDate(row.due)}
+                                </time>
+                                {overdue ? (
+                                  <span className="inline-flex items-center rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-destructive">
+                                    Overdue
+                                  </span>
+                                ) : null}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

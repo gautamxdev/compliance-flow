@@ -24,6 +24,14 @@ export function getSampleDashboardTasks(date: Date = new Date()): SampleTask[] {
   ];
 }
 
+/** Calendar-day compare: open (non-Filed) tasks past their due date. */
+export function isOverdue(task: SampleTask, today: Date = new Date()): boolean {
+  if (task.status === "Filed") return false;
+  const dueDay = new Date(task.due.getFullYear(), task.due.getMonth(), task.due.getDate());
+  const todayDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  return dueDay.getTime() < todayDay.getTime();
+}
+
 /** "11 Nov 2026" — the compact due-date style used across the dashboard. */
 export function formatDueDate(date: Date): string {
   return format(date, "d MMM yyyy");
