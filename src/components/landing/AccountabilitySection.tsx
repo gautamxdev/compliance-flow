@@ -1,49 +1,67 @@
 import { MoreHorizontal, Upload, CheckCircle2, Clock, UserPlus } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 import { prefersReducedMotion } from "@/lib/scrollToId";
+import { getIndianFinancialYear } from "@/lib/indianFy";
 
-const activities = [
-  {
-    id: 1,
-    user: "Rahul M.",
-    action: "uploaded",
-    target: "Balance Sheet - FY 2024-25",
-    time: "2 hours ago",
-    client: "Sharma Enterprises",
-    status: "filed", 
-  },
-  {
-    id: 2,
-    user: "Priya K.", 
-    action: "marked as filed",
-    target: "GST R1 - October",
-    time: "Yesterday",
-    client: "Patel Industries",
-    status: "pending", 
-  },
-  {
-    id: 3,
-    user: "Amit S.",
-    action: "created task",
-    target: "ITR Filing - FY 2024-25",
-    time: "2 days ago",
-    client: "Kumar & Sons",
-    status: "neutral", 
-  },
-  {
-    id: 4,
-    user: "Rahul M.",
-    action: "assigned to",
-    target: "Tax Audit Review",
-    time: "3 days ago",
-    client: "Sharma Enterprises",
-    status: "neutral", 
-  },
-];
+type ActivityStatus = "filed" | "pending" | "neutral";
+
+type Activity = {
+  id: number;
+  user: string;
+  action: string;
+  target: string;
+  time: string;
+  client: string;
+  status: ActivityStatus;
+};
+
+/** Sample audit-trail rows; FY-scoped targets track the current Indian FY. */
+export function getAccountabilityActivities(date: Date = new Date()): Activity[] {
+  const { label: fy } = getIndianFinancialYear(date);
+  return [
+    {
+      id: 1,
+      user: "Rahul M.",
+      action: "uploaded",
+      target: `Balance Sheet - ${fy}`,
+      time: "2 hours ago",
+      client: "Sharma Enterprises",
+      status: "filed",
+    },
+    {
+      id: 2,
+      user: "Priya K.",
+      action: "marked as filed",
+      target: "GST R1 - October",
+      time: "Yesterday",
+      client: "Patel Industries",
+      status: "pending",
+    },
+    {
+      id: 3,
+      user: "Amit S.",
+      action: "created task",
+      target: `ITR Filing - ${fy}`,
+      time: "2 days ago",
+      client: "Kumar & Sons",
+      status: "neutral",
+    },
+    {
+      id: 4,
+      user: "Rahul M.",
+      action: "assigned to",
+      target: "Tax Audit Review",
+      time: "3 days ago",
+      client: "Sharma Enterprises",
+      status: "neutral",
+    },
+  ];
+}
 
 const AccountabilitySection = () => {
   const { ref, visible } = useInView();
   const reduceMotion = prefersReducedMotion();
+  const activities = getAccountabilityActivities();
 
   const getRowBorderColor = (status: string) => {
     switch (status) {
