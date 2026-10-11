@@ -153,8 +153,12 @@ const AccountabilitySection = () => {
               {activities.map((activity, index) => (
                 <div 
                   key={activity.id} 
-                  className="group relative px-5 py-4 flex items-start gap-4 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-muted/40 hover:-translate-y-[2px] hover:shadow-md"
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  className={
+                    reduceMotion
+                      ? "group relative flex items-start gap-4 px-5 py-4 hover:bg-muted/40"
+                      : "group relative flex items-start gap-4 px-5 py-4 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:bg-muted/40 hover:shadow-md"
+                  }
+                  style={reduceMotion ? undefined : { transitionDelay: `${index * 100}ms` }}
                 >
                   {/* Hover Left Border */}
                   <div className={`absolute left-0 top-0 bottom-0 w-[2px] ${getRowBorderColor(activity.status)} opacity-0 group-hover:opacity-100 transition-opacity`} />
