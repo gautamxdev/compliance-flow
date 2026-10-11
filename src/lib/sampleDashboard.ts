@@ -41,3 +41,27 @@ export function formatDueDate(date: Date): string {
 export function toIsoDate(date: Date): string {
   return format(date, "yyyy-MM-dd");
 }
+
+/** Whole calendar days from `from` to `to` (local midnight). Negative means `to` is earlier. */
+export function calendarDaysBetween(from: Date, to: Date): number {
+  const a = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  const b = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+  return Math.round((b.getTime() - a.getTime()) / 86_400_000);
+}
+
+/**
+ * Compact relative due label for open filings:
+ * "3 days late", "due today", "due tomorrow", "in 12 days".
+ * Filed tasks return null — the due date alone is enough.
+ */
+export function dueRelativeLabel(task: SampleTask, today: Date = new Date()): string | null {
+  if (task.status === "Filed") return null;
+  const days = calendarDaysBetween(today, task.due);
+  if (days < 0) {
+    const n = Math.abs(days);
+    return n === 1 ? "1 day late" : `${n} days late`;
+  }
+  if (days === 0) return "due today";
+  if (days === 1) return "due tomorrow";
+  return `in ${days} days`;
+}

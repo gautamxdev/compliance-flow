@@ -2,6 +2,8 @@ import { describe, it, expect, afterEach, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import HeroSection from "@/components/landing/HeroSection";
 import {
+  calendarDaysBetween,
+  dueRelativeLabel,
   formatDueDate,
   getSampleDashboardTasks,
   isOverdue,
@@ -78,8 +80,50 @@ describe("sample dashboard filings", () => {
     const taxDue = within(table).getByText("30 Sep 2026");
     expect(taxDue.tagName).toBe("TIME");
     expect(taxDue).toHaveClass("text-destructive");
-    expect(within(table).getByText("Overdue")).toBeInTheDocument();
+    expect(within(table).getByText("9 days late")).toBeInTheDocument();
+    expect(within(table).getByText("in 63 days")).toBeInTheDocument(); // GST R1 Nov due 11 Dec
 
     expect(within(table).queryByText(/2024/)).toBeNull();
+  });
+
+  it("describes how many days late or left until a due date", () => {
+    const today = new Date(2026, 9, 9);
+    expect(
+      dueRelativeLabel(
+        { task: "A", status: "Pending", assignee: "A", due: new Date(2026, 9, 6) },
+        today,
+      ),
+    ).toBe("3 days late");
+    expect(
+      dueRelativeLabel(
+        { task: "B", status: "In Progress", assignee: "A", due: new Date(2026, 9, 8) },
+        today,
+      ),
+    ).toBe("1 day late");
+    expect(
+      dueRelativeLabel(
+        { task: "C", status: "Pending", assignee: "A", due: new Date(2026, 9, 9) },
+        today,
+      ),
+    ).toBe("due today");
+    expect(
+      dueRelativeLabel(
+        { task: "D", status: "Pending", assignee: "A", due: new Date(2026, 9, 10) },
+        today,
+      ),
+    ).toBe("due tomorrow");
+    expect(
+      dueRelativeLabel(
+        { task: "E", status: "Pending", assignee: "A", due: new Date(2026, 9, 16) },
+        today,
+      ),
+    ).toBe("in 7 days");
+    expect(
+      dueRelativeLabel(
+        { task: "F", status: "Filed", assignee: "A", due: new Date(2026, 9, 1) },
+        today,
+      ),
+    ).toBeNull();
+    expect(calendarDaysBetween(new Date(2026, 9, 9), new Date(2026, 9, 12))).toBe(3);
   });
 });

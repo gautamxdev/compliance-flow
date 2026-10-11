@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
+  dueRelativeLabel,
   formatDueDate,
   getSampleDashboardTasks,
   isOverdue,
@@ -222,6 +223,7 @@ radial-gradient(
                     <tbody>
                       {tasks.map((row) => {
                         const overdue = isOverdue(row);
+                        const relative = dueRelativeLabel(row);
                         return (
                           <tr key={row.task} className="border-t border-divider">
                             <td className="px-4 py-3">{row.task}</td>
@@ -230,16 +232,22 @@ radial-gradient(
                             </td>
                             <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{row.assignee}</td>
                             <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">
-                              <span className="inline-flex items-center gap-2">
+                              <span className="inline-flex flex-col items-start gap-0.5">
                                 <time
                                   dateTime={toIsoDate(row.due)}
                                   className={overdue ? "font-medium text-destructive" : undefined}
                                 >
                                   {formatDueDate(row.due)}
                                 </time>
-                                {overdue ? (
-                                  <span className="inline-flex items-center rounded bg-destructive/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-destructive">
-                                    Overdue
+                                {relative ? (
+                                  <span
+                                    className={
+                                      overdue
+                                        ? "text-[10px] font-medium uppercase tracking-wide text-destructive"
+                                        : "text-[10px] font-medium uppercase tracking-wide text-text-tertiary"
+                                    }
+                                  >
+                                    {relative}
                                   </span>
                                 ) : null}
                               </span>
