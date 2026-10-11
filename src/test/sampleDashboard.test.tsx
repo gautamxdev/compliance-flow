@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import HeroSection from "@/components/landing/HeroSection";
 import {
   calendarDaysBetween,
@@ -125,5 +125,32 @@ describe("sample dashboard filings", () => {
       ),
     ).toBeNull();
     expect(calendarDaysBetween(new Date(2026, 9, 9), new Date(2026, 9, 12))).toBe(3);
+  });
+
+  it("filters the sample table down to open filings", () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date(2026, 9, 9));
+
+    render(<HeroSection />);
+
+    expect(screen.getByText(/4 tasks/)).toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getByText("ITR Filing")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Open only" }));
+
+    expect(screen.getByText(/2 open/)).toBeInTheDocument();
+    const table = screen.getByRole("table");
+    expect(within(table).queryByText("ITR Filing")).toBeNull();
+    expect(within(table).queryByText("GST R1 - October")).toBeNull();
+    expect(within(table).getByText("GST R1 - November")).toBeInTheDocument();
+    expect(within(table).getByText("Tax Audit")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Open only" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "All" }));
+    expect(screen.getByText(/4 tasks/)).toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getByText("ITR Filing")).toBeInTheDocument();
   });
 });

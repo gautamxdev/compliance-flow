@@ -28,6 +28,9 @@ const HeroSection = () => {
   const currentFy = getIndianFinancialYear().label;
   const tasks = getSampleDashboardTasks();
   const overdueCount = tasks.filter((task) => isOverdue(task)).length;
+  const [filingScope, setFilingScope] = useState<"all" | "open">("all");
+  const visibleTasks =
+    filingScope === "open" ? tasks.filter((task) => task.status !== "Filed") : tasks;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || prefersReducedMotion()) return;
@@ -195,19 +198,52 @@ radial-gradient(
 
               {/* Main Content - Table */}
               <div className="flex-1 p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                   <h3 className="font-medium">Sharma Enterprises — {currentFy}</h3>
-                  <span className="text-xs text-text-tertiary">
-                    {tasks.length} tasks
-                    {overdueCount > 0 ? (
-                      <>
-                        {" · "}
-                        <span className="font-medium text-destructive">
-                          {overdueCount} overdue
-                        </span>
-                      </>
-                    ) : null}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div
+                      className="inline-flex rounded-md border border-border bg-muted/40 p-0.5"
+                      role="group"
+                      aria-label="Filter filings"
+                    >
+                      <button
+                        type="button"
+                        aria-pressed={filingScope === "all"}
+                        className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                          filingScope === "all"
+                            ? "bg-background text-text-primary shadow-sm"
+                            : "text-text-secondary hover:text-text-primary"
+                        }`}
+                        onClick={() => setFilingScope("all")}
+                      >
+                        All
+                      </button>
+                      <button
+                        type="button"
+                        aria-pressed={filingScope === "open"}
+                        className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                          filingScope === "open"
+                            ? "bg-background text-text-primary shadow-sm"
+                            : "text-text-secondary hover:text-text-primary"
+                        }`}
+                        onClick={() => setFilingScope("open")}
+                      >
+                        Open only
+                      </button>
+                    </div>
+                    <span className="text-xs text-text-tertiary">
+                      {visibleTasks.length}{" "}
+                      {filingScope === "open" ? "open" : "tasks"}
+                      {overdueCount > 0 ? (
+                        <>
+                          {" · "}
+                          <span className="font-medium text-destructive">
+                            {overdueCount} overdue
+                          </span>
+                        </>
+                      ) : null}
+                    </span>
+                  </div>
                 </div>
                 
                 <div className="border border-border rounded-lg overflow-hidden">
@@ -221,7 +257,7 @@ radial-gradient(
                       </tr>
                     </thead>
                     <tbody>
-                      {tasks.map((row) => {
+                      {visibleTasks.map((row) => {
                         const overdue = isOverdue(row);
                         const relative = dueRelativeLabel(row);
                         return (
