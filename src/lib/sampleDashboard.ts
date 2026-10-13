@@ -65,3 +65,22 @@ export function dueRelativeLabel(task: SampleTask, today: Date = new Date()): st
   if (days === 1) return "due tomorrow";
   return `in ${days} days`;
 }
+
+export type DueSort = "none" | "asc" | "desc";
+
+/** Header click cycle for the Due column: default order → earliest first → latest first → default. */
+export function nextDueSort(current: DueSort): DueSort {
+  if (current === "none") return "asc";
+  if (current === "asc") return "desc";
+  return "none";
+}
+
+/**
+ * Order tasks by due date without mutating the input. "none" keeps the
+ * original order; ties keep their original relative order (stable sort).
+ */
+export function sortTasksByDue(tasks: SampleTask[], sort: DueSort): SampleTask[] {
+  if (sort === "none") return tasks;
+  const dir = sort === "asc" ? 1 : -1;
+  return [...tasks].sort((a, b) => dir * (a.due.getTime() - b.due.getTime()));
+}

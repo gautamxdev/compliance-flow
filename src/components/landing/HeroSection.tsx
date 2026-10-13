@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
@@ -8,7 +8,10 @@ import {
   formatDueDate,
   getSampleDashboardTasks,
   isOverdue,
+  nextDueSort,
+  sortTasksByDue,
   toIsoDate,
+  type DueSort,
   type SampleTaskStatus,
 } from "@/lib/sampleDashboard";
 
@@ -29,8 +32,12 @@ const HeroSection = () => {
   const tasks = getSampleDashboardTasks();
   const overdueCount = tasks.filter((task) => isOverdue(task)).length;
   const [filingScope, setFilingScope] = useState<"all" | "open">("all");
-  const visibleTasks =
-    filingScope === "open" ? tasks.filter((task) => task.status !== "Filed") : tasks;
+  const [dueSort, setDueSort] = useState<DueSort>("none");
+  const visibleTasks = sortTasksByDue(
+    filingScope === "open" ? tasks.filter((task) => task.status !== "Filed") : tasks,
+    dueSort,
+  );
+  const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || prefersReducedMotion()) return;
@@ -250,10 +257,25 @@ radial-gradient(
                   <table className="w-full text-sm">
                     <thead className="bg-muted/50">
                       <tr>
-                        <th className="text-left px-4 py-2.5 font-medium text-text-secondary">Task</th>
-                        <th className="text-left px-4 py-2.5 font-medium text-text-secondary hidden sm:table-cell">Status</th>
-                        <th className="text-left px-4 py-2.5 font-medium text-text-secondary hidden md:table-cell">Assigned</th>
-                        <th className="text-left px-4 py-2.5 font-medium text-text-secondary hidden lg:table-cell">Due</th>
+                        <th scope="col" className="text-left px-4 py-2.5 font-medium text-text-secondary">Task</th>
+                        <th scope="col" className="text-left px-4 py-2.5 font-medium text-text-secondary hidden sm:table-cell">Status</th>
+                        <th scope="col" className="text-left px-4 py-2.5 font-medium text-text-secondary hidden md:table-cell">Assigned</th>
+                        <th
+                          scope="col"
+                          aria-sort={
+                            dueSort === "asc" ? "ascending" : dueSort === "desc" ? "descending" : "none"
+                          }
+                          className="text-left px-4 py-2.5 font-medium text-text-secondary hidden lg:table-cell"
+                        >
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 rounded hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            onClick={() => setDueSort(nextDueSort)}
+                          >
+                            Due
+                            <DueSortIcon aria-hidden="true" className="h-3.5 w-3.5" />
+                          </button>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
