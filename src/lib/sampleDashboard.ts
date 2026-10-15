@@ -84,3 +84,16 @@ export function sortTasksByDue(tasks: SampleTask[], sort: DueSort): SampleTask[]
   const dir = sort === "asc" ? 1 : -1;
   return [...tasks].sort((a, b) => dir * (a.due.getTime() - b.due.getTime()));
 }
+
+export type FilingScope = "all" | "open" | "overdue";
+
+/** Narrow the sample filings to the chosen scope: everything, open (not Filed), or overdue open ones. */
+export function filterTasksByScope(
+  tasks: SampleTask[],
+  scope: FilingScope,
+  today: Date = new Date(),
+): SampleTask[] {
+  if (scope === "open") return tasks.filter((task) => task.status !== "Filed");
+  if (scope === "overdue") return tasks.filter((task) => isOverdue(task, today));
+  return tasks;
+}

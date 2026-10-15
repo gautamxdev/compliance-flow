@@ -5,6 +5,7 @@ import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   dueRelativeLabel,
+  filterTasksByScope,
   formatDueDate,
   getSampleDashboardTasks,
   isOverdue,
@@ -12,6 +13,7 @@ import {
   sortTasksByDue,
   toIsoDate,
   type DueSort,
+  type FilingScope,
   type SampleTaskStatus,
 } from "@/lib/sampleDashboard";
 
@@ -19,6 +21,24 @@ const STATUS_BADGE_CLASS: Record<SampleTaskStatus, string> = {
   Filed: "bg-success/10 text-success",
   Pending: "bg-warning/10 text-warning",
   "In Progress": "bg-muted text-text-secondary",
+};
+
+const FILING_SCOPES: { value: FilingScope; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "open", label: "Open only" },
+  { value: "overdue", label: "Overdue" },
+];
+
+const SCOPE_COUNT_NOUN: Record<FilingScope, string> = {
+  all: "tasks",
+  open: "open",
+  overdue: "overdue",
+};
+
+const EMPTY_SCOPE_MESSAGE: Record<FilingScope, string> = {
+  all: "No filings yet.",
+  open: "Every filing is done.",
+  overdue: "Nothing overdue. Every open filing is on schedule.",
 };
 
 const HeroSection = () => {
@@ -31,12 +51,9 @@ const HeroSection = () => {
   const currentFy = getIndianFinancialYear().label;
   const tasks = getSampleDashboardTasks();
   const overdueCount = tasks.filter((task) => isOverdue(task)).length;
-  const [filingScope, setFilingScope] = useState<"all" | "open">("all");
+  const [filingScope, setFilingScope] = useState<FilingScope>("all");
   const [dueSort, setDueSort] = useState<DueSort>("none");
-  const visibleTasks = sortTasksByDue(
-    filingScope === "open" ? tasks.filter((task) => task.status !== "Filed") : tasks,
-    dueSort,
-  );
+  const visibleTasks = sortTasksByDue(filterTasksByScope(tasks, filingScope), dueSort);
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -213,35 +230,26 @@ radial-gradient(
                       role="group"
                       aria-label="Filter filings"
                     >
-                      <button
-                        type="button"
-                        aria-pressed={filingScope === "all"}
-                        className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
-                          filingScope === "all"
-                            ? "bg-background text-text-primary shadow-sm"
-                            : "text-text-secondary hover:text-text-primary"
-                        }`}
-                        onClick={() => setFilingScope("all")}
-                      >
-                        All
-                      </button>
-                      <button
-                        type="button"
-                        aria-pressed={filingScope === "open"}
-                        className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
-                          filingScope === "open"
-                            ? "bg-background text-text-primary shadow-sm"
-                            : "text-text-secondary hover:text-text-primary"
-                        }`}
-                        onClick={() => setFilingScope("open")}
-                      >
-                        Open only
-                      </button>
+                      {FILING_SCOPES.map(({ value, label }) => (
+                        <button
+                          key={value}
+                          type="button"
+                          aria-pressed={filingScope === value}
+                          className={`rounded px-2.5 py-1 text-xs font-medium transition-colors ${
+                            filingScope === value
+                              ? "bg-background text-text-primary shadow-sm"
+                              : "text-text-secondary hover:text-text-primary"
+                          }`}
+                          onClick={() => setFilingScope(value)}
+                        >
+                          {label}
+                        </button>
+                      ))}
                     </div>
-                    <span className="text-xs text-text-tertiary">
+                    <span className="text-xs text-text-tertiary" aria-live="polite">
                       {visibleTasks.length}{" "}
-                      {filingScope === "open" ? "open" : "tasks"}
-                      {overdueCount > 0 ? (
+                      {SCOPE_COUNT_NOUN[filingScope]}
+                      {overdueCount > 0 && filingScope !== "overdue" ? (
                         <>
                           {" · "}
                           <span className="font-medium text-destructive">
@@ -279,6 +287,13 @@ radial-gradient(
                       </tr>
                     </thead>
                     <tbody>
+                      {visibleTasks.length === 0 ? (
+                        <tr className="border-t border-divider">
+                          <td colSpan={4} className="px-4 py-6 text-center text-sm text-text-secondary">
+                            {EMPTY_SCOPE_MESSAGE[filingScope]}
+                          </td>
+                        </tr>
+                      ) : null}
                       {visibleTasks.map((row) => {
                         const overdue = isOverdue(row);
                         const relative = dueRelativeLabel(row);
