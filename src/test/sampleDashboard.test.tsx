@@ -72,18 +72,45 @@ describe("sample dashboard filings", () => {
     const table = screen.getByRole("table");
     expect(within(table).getAllByRole("row")).toHaveLength(5);
 
-    const gstDue = within(table).getByText("11 Nov 2026");
+    const dueCell = (task: string) =>
+      within(within(table).getByText(task).closest("tr")!).getAllByRole("cell")[3];
+
+    const gstDue = within(dueCell("GST R1 - October")).getByText("11 Nov 2026");
     expect(gstDue.tagName).toBe("TIME");
     expect(gstDue).toHaveAttribute("datetime", "2026-11-11");
     expect(gstDue).not.toHaveClass("text-destructive");
 
-    const taxDue = within(table).getByText("30 Sep 2026");
+    const taxDue = within(dueCell("Tax Audit")).getByText("30 Sep 2026");
     expect(taxDue.tagName).toBe("TIME");
     expect(taxDue).toHaveClass("text-destructive");
-    expect(within(table).getByText("9 days late")).toBeInTheDocument();
-    expect(within(table).getByText("in 63 days")).toBeInTheDocument(); // GST R1 Nov due 11 Dec
+    expect(within(dueCell("Tax Audit")).getByText("9 days late")).toBeInTheDocument();
+    // GST R1 Nov due 11 Dec
+    expect(within(dueCell("GST R1 - November")).getByText("in 63 days")).toBeInTheDocument();
 
     expect(within(table).queryByText(/2024/)).toBeNull();
+  });
+
+  it("repeats the due date and late/left hint under each task for narrow screens", () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date(2026, 9, 9));
+
+    render(<HeroSection />);
+
+    const compact = screen.getAllByTestId("task-due-compact");
+    expect(compact).toHaveLength(4);
+    expect(compact.every((el) => el.classList.contains("lg:hidden"))).toBe(true);
+
+    const taxRow = within(screen.getByRole("table")).getByText("Tax Audit").closest("tr")!;
+    const taxCompact = within(taxRow).getByTestId("task-due-compact");
+    expect(taxCompact).toHaveTextContent("Due 30 Sep 2026 · 9 days late");
+    const taxTime = within(taxCompact).getByText("30 Sep 2026");
+    expect(taxTime.tagName).toBe("TIME");
+    expect(taxTime).toHaveAttribute("datetime", "2026-09-30");
+    expect(taxTime).toHaveClass("text-destructive");
+
+    // Filed rows show only the date, no relative hint.
+    const itrRow = within(screen.getByRole("table")).getByText("ITR Filing").closest("tr")!;
+    expect(within(itrRow).getByTestId("task-due-compact")).toHaveTextContent(/^Due 31 Jul 2026$/);
   });
 
   it("describes how many days late or left until a due date", () => {

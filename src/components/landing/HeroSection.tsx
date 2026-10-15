@@ -284,7 +284,28 @@ radial-gradient(
                         const relative = dueRelativeLabel(row);
                         return (
                           <tr key={row.task} className="border-t border-divider">
-                            <td className="px-4 py-3">{row.task}</td>
+                            <td className="px-4 py-3">
+                              <span className="block" data-testid="task-name">{row.task}</span>
+                              {/* Due column is hidden below lg; keep the date and late/left hint visible here. */}
+                              <span
+                                className="mt-0.5 block text-xs text-text-tertiary lg:hidden"
+                                data-testid="task-due-compact"
+                              >
+                                Due{" "}
+                                <time
+                                  dateTime={toIsoDate(row.due)}
+                                  className={overdue ? "font-medium text-destructive" : undefined}
+                                >
+                                  {formatDueDate(row.due)}
+                                </time>
+                                {relative ? (
+                                  <span className={overdue ? "font-medium text-destructive" : undefined}>
+                                    {" · "}
+                                    {relative}
+                                  </span>
+                                ) : null}
+                              </span>
+                            </td>
                             <td className="px-4 py-3 hidden sm:table-cell">
                               <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_BADGE_CLASS[row.status]}`}>{row.status}</span>
                             </td>

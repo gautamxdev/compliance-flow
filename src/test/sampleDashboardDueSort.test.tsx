@@ -11,7 +11,7 @@ const taskNames = () =>
   within(screen.getByRole("table"))
     .getAllByRole("row")
     .slice(1)
-    .map((row) => within(row).getAllByRole("cell")[0].textContent);
+    .map((row) => within(row).getByTestId("task-name").textContent);
 
 describe("sample dashboard due-date sort", () => {
   afterEach(() => {
