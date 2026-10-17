@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
+  countOpenTasks,
   dueRelativeLabel,
   filterTasksByScope,
   formatDueDate,
@@ -51,6 +52,7 @@ const HeroSection = () => {
   const currentFy = getIndianFinancialYear().label;
   const tasks = getSampleDashboardTasks();
   const overdueCount = tasks.filter((task) => isOverdue(task)).length;
+  const openCount = countOpenTasks(tasks);
   const [filingScope, setFilingScope] = useState<FilingScope>("all");
   const [dueSort, setDueSort] = useState<DueSort>("none");
   const visibleTasks = sortTasksByDue(filterTasksByScope(tasks, filingScope), dueSort);
@@ -207,7 +209,24 @@ radial-gradient(
                 <div className="space-y-1">
                   <div className="px-3 py-2 bg-accent rounded-md text-sm font-medium">All Clients</div>
                   <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">{currentFy}</div>
-                  <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">Pending Filings</div>
+                  <button
+                    type="button"
+                    aria-pressed={filingScope === "open"}
+                    aria-label={`Pending Filings, ${openCount} open`}
+                    className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition-colors hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                      filingScope === "open" ? "bg-accent/60 font-medium text-text-primary" : "text-text-secondary"
+                    }`}
+                    onClick={() => setFilingScope(filingScope === "open" ? "all" : "open")}
+                  >
+                    Pending Filings
+                    <span
+                      aria-hidden="true"
+                      className="ml-2 inline-flex min-w-5 justify-center rounded-full bg-warning/10 px-1.5 text-xs font-medium text-warning"
+                      data-testid="pending-filings-count"
+                    >
+                      {openCount}
+                    </span>
+                  </button>
                   <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">Notices</div>
                 </div>
                 <div className="mt-6 pt-4 border-t border-divider">

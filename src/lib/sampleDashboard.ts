@@ -97,3 +97,8 @@ export function filterTasksByScope(
   if (scope === "overdue") return tasks.filter((task) => isOverdue(task, today));
   return tasks;
 }
+
+/** How many sample filings are still open (anything not Filed). */
+export function countOpenTasks(tasks: SampleTask[]): number {
+  return tasks.reduce((n, task) => (task.status === "Filed" ? n : n + 1), 0);
+}
