@@ -319,7 +319,17 @@ radial-gradient(
                         return (
                           <tr key={row.task} className="border-t border-divider">
                             <td className="px-4 py-3">
-                              <span className="block" data-testid="task-name">{row.task}</span>
+                              <span className="flex flex-wrap items-baseline gap-x-2">
+                                <span data-testid="task-name">{row.task}</span>
+                                {/* Assigned column is hidden below md; keep who owns the filing visible. */}
+                                <span
+                                  className="text-xs text-text-secondary md:hidden"
+                                  data-testid="task-assignee-compact"
+                                >
+                                  <span className="sr-only">Assigned to </span>
+                                  {row.assignee}
+                                </span>
+                              </span>
                               {/* Due column is hidden below lg; keep the date and late/left hint visible here. */}
                               <span
                                 className="mt-0.5 block text-xs text-text-tertiary lg:hidden"
