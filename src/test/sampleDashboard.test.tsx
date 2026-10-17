@@ -110,7 +110,8 @@ describe("sample dashboard filings", () => {
 
     // Filed rows show only the date, no relative hint.
     const itrRow = within(screen.getByRole("table")).getByText("ITR Filing").closest("tr")!;
-    expect(within(itrRow).getByTestId("task-due-compact")).toHaveTextContent(/^Due 31 Jul 2026$/);
+    // The line leads with the status badge (shown below sm), then the date only.
+    expect(within(itrRow).getByTestId("task-due-compact")).toHaveTextContent(/^Filed\s*Due 31 Jul 2026$/);
   });
 
   it("describes how many days late or left until a due date", () => {

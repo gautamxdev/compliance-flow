@@ -306,6 +306,13 @@ radial-gradient(
                                 className="mt-0.5 block text-xs text-text-tertiary lg:hidden"
                                 data-testid="task-due-compact"
                               >
+                                {/* Status column is hidden below sm; lead the line with the filing status there. */}
+                                <span
+                                  className={`mr-1.5 inline-flex items-center rounded px-1.5 py-px text-[10px] font-medium sm:hidden ${STATUS_BADGE_CLASS[row.status]}`}
+                                  data-testid="task-status-compact"
+                                >
+                                  {row.status}
+                                </span>
                                 Due{" "}
                                 <time
                                   dateTime={toIsoDate(row.due)}
