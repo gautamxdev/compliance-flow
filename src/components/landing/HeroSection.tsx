@@ -302,9 +302,15 @@ radial-gradient(
                       {overdueCount > 0 && filingScope !== "overdue" ? (
                         <>
                           {" · "}
-                          <span className="font-medium text-destructive">
+                          {/* Shortcut to the Overdue view from the summary line. */}
+                          <button
+                            type="button"
+                            className="rounded font-medium text-destructive underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            aria-label={`Show ${overdueCount} overdue ${overdueCount === 1 ? "filing" : "filings"}`}
+                            onClick={() => setFilingScope("overdue")}
+                          >
                             {overdueCount} overdue
-                          </span>
+                          </button>
                         </>
                       ) : null}
                     </span>
