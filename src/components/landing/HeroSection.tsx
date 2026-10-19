@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown } from "lucide-react";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
@@ -45,43 +45,74 @@ const EMPTY_SCOPE_MESSAGE: Record<FilingScope, string> = {
 const HeroSection = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
 
-  const [bgPos, setBgPos] = useState({ x: 50, y: 50 });
   const cardRef = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  // Tilt and glow position move together, so keep them in one state update.
+  const [pointer, setPointer] = useState({ rotateX: 0, rotateY: 0, bgX: 50, bgY: 50 });
+  const tilt = pointer;
+  const bgPos = { x: pointer.bgX, y: pointer.bgY };
   const [isHovering, setIsHovering] = useState(false);
+  const frameRef = useRef<number | null>(null);
+  const lastPointerRef = useRef<{ clientX: number; clientY: number } | null>(null);
   const currentFy = getIndianFinancialYear().label;
-  const tasks = getSampleDashboardTasks();
-  const overdueCount = tasks.filter((task) => isOverdue(task)).length;
-  const openCount = countOpenTasks(tasks);
+  // The sample data only changes with the day, not on every pointer-driven re-render.
+  const todayKey = new Date().toDateString();
+  const tasks = useMemo(() => getSampleDashboardTasks(new Date(todayKey)), [todayKey]);
+  const overdueCount = useMemo(() => tasks.filter((task) => isOverdue(task)).length, [tasks]);
+  const openCount = useMemo(() => countOpenTasks(tasks), [tasks]);
   const [filingScope, setFilingScope] = useState<FilingScope>("all");
   const [dueSort, setDueSort] = useState<DueSort>("none");
-  const visibleTasks = sortTasksByDue(filterTasksByScope(tasks, filingScope), dueSort);
+  const visibleTasks = useMemo(
+    () => sortTasksByDue(filterTasksByScope(tasks, filingScope), dueSort),
+    [tasks, filingScope, dueSort],
+  );
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
+
+  const cancelPendingFrame = useCallback(() => {
+    if (frameRef.current !== null) {
+      window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => cancelPendingFrame, [cancelPendingFrame]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current || prefersReducedMotion()) return;
 
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    lastPointerRef.current = { clientX: e.clientX, clientY: e.clientY };
+    // Mouse events can fire several times per frame; render at most once per frame.
+    if (frameRef.current !== null) return;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    frameRef.current = window.requestAnimationFrame(() => {
+      frameRef.current = null;
+      const card = cardRef.current;
+      const last = lastPointerRef.current;
+      if (!card || !last) return;
 
-    const rotateY = ((x - centerX) / centerX) * 4;
-    const rotateX = ((centerY - y) / centerY) * 4;
+      const rect = card.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const x = last.clientX - rect.left;
+      const y = last.clientY - rect.top;
 
-    const bgX = (x / rect.width) * 100;
-    const bgY = (y / rect.height) * 100;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
 
-    setTilt({ rotateX, rotateY });
-    setBgPos({ x: bgX, y: bgY });
+      setPointer({
+        rotateY: ((x - centerX) / centerX) * 4,
+        rotateX: ((centerY - y) / centerY) * 4,
+        bgX: (x / rect.width) * 100,
+        bgY: (y / rect.height) * 100,
+      });
+    });
   }, []);
 
   const handleMouseLeave = useCallback(() => {
-    setTilt({ rotateX: 0, rotateY: 0 });
+    // Drop any queued frame so a late update can't re-tilt the card after leave.
+    cancelPendingFrame();
+    lastPointerRef.current = null;
+    setPointer((prev) => ({ ...prev, rotateX: 0, rotateY: 0 }));
     setIsHovering(false);
-  }, []);
+  }, [cancelPendingFrame]);
 
   const handleMouseEnter = useCallback(() => {
     if (prefersReducedMotion()) return;
