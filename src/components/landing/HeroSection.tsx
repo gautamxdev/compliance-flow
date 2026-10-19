@@ -36,6 +36,18 @@ const SCOPE_COUNT_NOUN: Record<FilingScope, string> = {
   overdue: "overdue",
 };
 
+const SCOPE_CAPTION: Record<FilingScope, string> = {
+  all: "all filings",
+  open: "open filings only",
+  overdue: "overdue filings only",
+};
+
+const SORT_CAPTION: Record<DueSort, string> = {
+  none: "in default order",
+  asc: "sorted by due date, earliest first",
+  desc: "sorted by due date, latest first",
+};
+
 const EMPTY_SCOPE_MESSAGE: Record<FilingScope, string> = {
   all: "No filings yet.",
   open: "Every filing is done.",
@@ -319,6 +331,11 @@ radial-gradient(
                 
                 <div className="border border-border rounded-lg overflow-hidden">
                   <table className="w-full text-sm">
+                    {/* Tell screen reader users which client, year, filter and order they are hearing. */}
+                    <caption className="sr-only" data-testid="sample-dashboard-caption">
+                      Sharma Enterprises filings for {currentFy}: {SCOPE_CAPTION[filingScope]},{" "}
+                      {SORT_CAPTION[dueSort]}.
+                    </caption>
                     <thead className="bg-muted/50">
                       <tr>
                         <th scope="col" className="text-left px-4 py-2.5 font-medium text-text-secondary">Task</th>
