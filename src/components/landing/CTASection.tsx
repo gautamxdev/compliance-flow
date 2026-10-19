@@ -132,23 +132,6 @@ const CTASection = () => {
           {copied ? `${DEMO_EMAIL} copied to clipboard` : ""}
         </p>
       </div>
-      {!reduceMotion && (
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-        @keyframes shimmer-sweep {
-          0% { left: -100%; }
-          15% { left: 150%; }
-          100% { left: 150%; }
-        }
-        @keyframes border-spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `,
-          }}
-        />
-      )}
     </section>
   );
 };

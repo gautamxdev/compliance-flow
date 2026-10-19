@@ -149,6 +149,20 @@
   }
 }
 
+/* Button shimmer used by the header and CTA. Lives here so the header no
+   longer depends on keyframes injected by the CTA section. */
+@keyframes shimmer-sweep {
+  0% {
+    left: -100%;
+  }
+  15% {
+    left: 150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
 .animate-border-spin {
   animation: border-spin 6s linear infinite;
 }

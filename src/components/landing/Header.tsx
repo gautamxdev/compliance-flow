@@ -122,7 +122,10 @@ const Header = () => {
             onClick={() => scrollToId("cta")}
           >
             <span className="relative z-10">Request early access</span>
-            <div className="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_6s_infinite] group-hover:animate-none" />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] animate-[shimmer-sweep_6s_infinite] group-hover:animate-none motion-reduce:hidden"
+            />
           </Button>
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
