@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, RotateCcw } from "lucide-react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
@@ -77,6 +77,11 @@ const HeroSection = () => {
     () => sortTasksByDue(filterTasksByScope(tasks, filingScope), dueSort),
     [tasks, filingScope, dueSort],
   );
+  const isCustomView = filingScope !== "all" || dueSort !== "none";
+  const resetView = () => {
+    setFilingScope("all");
+    setDueSort("none");
+  };
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
   const cancelPendingFrame = useCallback(() => {
@@ -326,6 +331,16 @@ radial-gradient(
                         </>
                       ) : null}
                     </span>
+                    {isCustomView ? (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 rounded text-xs text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        onClick={resetView}
+                      >
+                        <RotateCcw aria-hidden="true" className="h-3 w-3" />
+                        Reset view
+                      </button>
+                    ) : null}
                   </div>
                 </div>
                 
