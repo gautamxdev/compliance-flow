@@ -49,8 +49,6 @@ function getNextTabIndex(key: string, current: number, count: number): number | 
 const VisibilitySection = () => {
   const { ref, visible } = useInView();
   const [activeRoleId, setActiveRoleId] = useState(roles[0].id);
-  const activeRole = roles.find((r) => r.id === activeRoleId)!;
-  const panelId = `visibility-panel-${activeRole.id}`;
 
   return (
     <section
@@ -87,7 +85,7 @@ const VisibilitySection = () => {
                   role="tab"
                   id={`visibility-tab-${role.id}`}
                   aria-selected={selected}
-                  aria-controls={panelId}
+                  aria-controls={`visibility-panel-${role.id}`}
                   tabIndex={selected ? 0 : -1}
                   onClick={() => setActiveRoleId(role.id)}
                   onKeyDown={(e) => {
@@ -133,67 +131,74 @@ const VisibilitySection = () => {
           </div>
 
           <div className="order-2 lg:order-2">
-            <div
-              role="tabpanel"
-              id={panelId}
-              aria-labelledby={`visibility-tab-${activeRole.id}`}
-              className="relative flex h-[440px] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] p-8 transition-shadow duration-300"
-              style={{
-                boxShadow:
-                  "0 0 0 1px rgba(15,23,42,0.08), 0 24px 64px rgba(15,23,42,0.08)",
-              }}
-            >
-              <div
-                key={activeRoleId}
-                className="flex flex-1 flex-col opacity-100 transition-opacity duration-200"
-              >
-                <div className="mb-8 flex items-center justify-between">
-                  <div className="h-6 w-32 rounded-full bg-slate-100 ring-1 ring-slate-300/50" />
-                  <div className="h-4 w-20 rounded-full bg-indigo-100 ring-1 ring-indigo-300/40" />
-                </div>
+            {roles.map((role) => {
+              const selected = activeRoleId === role.id;
+              return (
+                <div
+                  key={role.id}
+                  role="tabpanel"
+                  id={`visibility-panel-${role.id}`}
+                  aria-labelledby={`visibility-tab-${role.id}`}
+                  hidden={!selected}
+                  tabIndex={0}
+                  className={`relative h-[440px] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] p-8 transition-shadow duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                    selected ? "flex" : "hidden"
+                  }`}
+                  style={{
+                    boxShadow:
+                      "0 0 0 1px rgba(15,23,42,0.08), 0 24px 64px rgba(15,23,42,0.08)",
+                  }}
+                >
+                  <div className="flex flex-1 flex-col opacity-100 transition-opacity duration-200">
+                    <div className="mb-8 flex items-center justify-between">
+                      <div className="h-6 w-32 rounded-full bg-slate-100 ring-1 ring-slate-300/50" />
+                      <div className="h-4 w-20 rounded-full bg-indigo-100 ring-1 ring-indigo-300/40" />
+                    </div>
 
-                <div className="flex flex-1 flex-col justify-center text-center">
-                  <div className="mb-4 text-6xl font-bold text-slate-900">
-                    {activeRole.stat}
-                  </div>
-                  <div className="mb-8 text-xs font-medium uppercase tracking-widest text-slate-500">
-                    {activeRole.highlight}
-                  </div>
-
-                  <div className="mx-auto w-full max-w-xs space-y-3">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className={`flex h-12 items-center gap-3 rounded-lg border px-4 shadow-sm transition-colors duration-300 ${
-                          i === 1
-                            ? "border-slate-200 bg-white"
-                            : i === 2
-                              ? "border-slate-200/60 bg-slate-50/90"
-                              : "border-indigo-200/40 bg-indigo-50/60"
-                        } hover:-translate-y-[1px] hover:shadow-md`}
-                      >
-                        <div
-                          className="h-2 w-2 rounded-full"
-                          style={{
-                            background:
-                              i === 1
-                                ? "rgb(15,23,42)"
-                                : i === 2
-                                  ? "rgb(71,85,105)"
-                                  : "rgb(99,102,241)",
-                          }}
-                        />
-                        <div
-                          className={`h-2 rounded-full bg-slate-100 ${
-                            i === 1 ? "w-24" : i === 2 ? "w-32" : "w-20"
-                          }`}
-                        />
+                    <div className="flex flex-1 flex-col justify-center text-center">
+                      <div className="mb-4 text-6xl font-bold text-slate-900">
+                        {role.stat}
                       </div>
-                    ))}
+                      <div className="mb-8 text-xs font-medium uppercase tracking-widest text-slate-500">
+                        {role.highlight}
+                      </div>
+
+                      <div className="mx-auto w-full max-w-xs space-y-3">
+                        {[1, 2, 3].map((i) => (
+                          <div
+                            key={i}
+                            className={`flex h-12 items-center gap-3 rounded-lg border px-4 shadow-sm transition-colors duration-300 ${
+                              i === 1
+                                ? "border-slate-200 bg-white"
+                                : i === 2
+                                  ? "border-slate-200/60 bg-slate-50/90"
+                                  : "border-indigo-200/40 bg-indigo-50/60"
+                            } hover:-translate-y-[1px] hover:shadow-md`}
+                          >
+                            <div
+                              className="h-2 w-2 rounded-full"
+                              style={{
+                                background:
+                                  i === 1
+                                    ? "rgb(15,23,42)"
+                                    : i === 2
+                                      ? "rgb(71,85,105)"
+                                      : "rgb(99,102,241)",
+                              }}
+                            />
+                            <div
+                              className={`h-2 rounded-full bg-slate-100 ${
+                                i === 1 ? "w-24" : i === 2 ? "w-32" : "w-20"
+                              }`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
