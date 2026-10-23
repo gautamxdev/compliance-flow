@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
+import { suggestPage } from "@/lib/suggestRoute";
 
 const NotFound = () => {
   const { pathname } = useLocation();
+  const suggestion = suggestPage(pathname);
 
   return (
     <div className="min-h-screen bg-background">
@@ -31,6 +33,18 @@ const NotFound = () => {
             {pathname}
           </code>
         </p>
+        {suggestion ? (
+          <p className="mb-4 text-sm text-text-secondary" data-testid="route-suggestion">
+            Did you mean{" "}
+            <Link
+              to={suggestion.path}
+              className="font-medium text-text-primary underline underline-offset-2 hover:opacity-80"
+            >
+              {suggestion.label}
+            </Link>
+            ?
+          </p>
+        ) : null}
         <p className="mb-10 text-base leading-relaxed text-text-secondary">
           The link may be broken, or the page may have moved. Head back to the
           FirmOps home page to continue.
