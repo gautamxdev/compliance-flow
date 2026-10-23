@@ -378,7 +378,17 @@ radial-gradient(
                       {visibleTasks.length === 0 ? (
                         <tr className="border-t border-divider">
                           <td colSpan={4} className="px-4 py-6 text-center text-sm text-text-secondary">
-                            {EMPTY_SCOPE_MESSAGE[filingScope]}
+                            <p>{EMPTY_SCOPE_MESSAGE[filingScope]}</p>
+                            {/* A narrowed view with no rows is a dead end; offer the way back. */}
+                            {filingScope !== "all" ? (
+                              <button
+                                type="button"
+                                className="mt-2 rounded text-xs font-medium text-text-primary underline underline-offset-2 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                onClick={() => setFilingScope("all")}
+                              >
+                                Show all filings
+                              </button>
+                            ) : null}
                           </td>
                         </tr>
                       ) : null}
