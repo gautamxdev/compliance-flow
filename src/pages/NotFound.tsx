@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const NotFound = () => {
+  const { pathname } = useLocation();
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-divider">
@@ -19,6 +21,16 @@ const NotFound = () => {
         <h1 className="mb-4 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
           This page doesn&apos;t exist
         </h1>
+        {/* Echo the missing address so a typo in a shared link is easy to spot. */}
+        <p className="mb-4 max-w-full text-sm text-text-secondary">
+          Nothing lives at{" "}
+          <code
+            className="break-all rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-text-primary"
+            data-testid="missing-path"
+          >
+            {pathname}
+          </code>
+        </p>
         <p className="mb-10 text-base leading-relaxed text-text-secondary">
           The link may be broken, or the page may have moved. Head back to the
           FirmOps home page to continue.
