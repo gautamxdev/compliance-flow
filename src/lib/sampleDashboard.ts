@@ -102,3 +102,16 @@ export function filterTasksByScope(
 export function countOpenTasks(tasks: SampleTask[]): number {
   return tasks.reduce((n, task) => (task.status === "Filed" ? n : n + 1), 0);
 }
+
+/**
+ * Case-insensitive match on task name or assignee. Blank queries keep every
+ * task; extra whitespace in the query is ignored.
+ */
+export function filterTasksByQuery(tasks: SampleTask[], query: string): SampleTask[] {
+  const needle = query.trim().replace(/\s+/g, " ").toLowerCase();
+  if (!needle) return tasks;
+  return tasks.filter(
+    (task) =>
+      task.task.toLowerCase().includes(needle) || task.assignee.toLowerCase().includes(needle),
+  );
+}

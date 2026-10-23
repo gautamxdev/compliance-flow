@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, RotateCcw } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, RotateCcw, Search } from "lucide-react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   countOpenTasks,
   dueRelativeLabel,
+  filterTasksByQuery,
   filterTasksByScope,
   formatDueDate,
   getSampleDashboardTasks,
@@ -73,14 +74,17 @@ const HeroSection = () => {
   const openCount = useMemo(() => countOpenTasks(tasks), [tasks]);
   const [filingScope, setFilingScope] = useState<FilingScope>("all");
   const [dueSort, setDueSort] = useState<DueSort>("none");
+  const [query, setQuery] = useState("");
+  const hasQuery = query.trim() !== "";
   const visibleTasks = useMemo(
-    () => sortTasksByDue(filterTasksByScope(tasks, filingScope), dueSort),
-    [tasks, filingScope, dueSort],
+    () => sortTasksByDue(filterTasksByQuery(filterTasksByScope(tasks, filingScope), query), dueSort),
+    [tasks, filingScope, query, dueSort],
   );
-  const isCustomView = filingScope !== "all" || dueSort !== "none";
+  const isCustomView = filingScope !== "all" || dueSort !== "none" || hasQuery;
   const resetView = () => {
     setFilingScope("all");
     setDueSort("none");
+    setQuery("");
   };
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
@@ -292,6 +296,26 @@ radial-gradient(
                 <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
                   <h3 className="font-medium">Sharma Enterprises — {currentFy}</h3>
                   <div className="flex flex-wrap items-center gap-3">
+                    <div className="relative">
+                      <Search
+                        aria-hidden="true"
+                        className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-tertiary"
+                      />
+                      <input
+                        type="search"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Escape" && query) {
+                            e.preventDefault();
+                            setQuery("");
+                          }
+                        }}
+                        placeholder="Search tasks or people"
+                        aria-label="Search filings by task or assignee"
+                        className="h-7 w-44 rounded-md border border-border bg-background pl-7 pr-2 text-xs text-text-primary placeholder:text-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      />
+                    </div>
                     <div
                       className="inline-flex rounded-md border border-border bg-muted/40 p-0.5"
                       role="group"
@@ -349,6 +373,7 @@ radial-gradient(
                     {/* Tell screen reader users which client, year, filter and order they are hearing. */}
                     <caption className="sr-only" data-testid="sample-dashboard-caption">
                       Sharma Enterprises filings for {currentFy}: {SCOPE_CAPTION[filingScope]},{" "}
+                      {hasQuery ? `matching "${query.trim()}", ` : ""}
                       {SORT_CAPTION[dueSort]}.
                     </caption>
                     <thead className="bg-muted/50">
@@ -378,9 +403,22 @@ radial-gradient(
                       {visibleTasks.length === 0 ? (
                         <tr className="border-t border-divider">
                           <td colSpan={4} className="px-4 py-6 text-center text-sm text-text-secondary">
-                            <p>{EMPTY_SCOPE_MESSAGE[filingScope]}</p>
+                            {hasQuery ? (
+                              <>
+                                <p>No filings match &ldquo;{query.trim()}&rdquo;.</p>
+                                <button
+                                  type="button"
+                                  className="mt-2 rounded text-xs font-medium text-text-primary underline underline-offset-2 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                  onClick={() => setQuery("")}
+                                >
+                                  Clear search
+                                </button>
+                              </>
+                            ) : (
+                              <p>{EMPTY_SCOPE_MESSAGE[filingScope]}</p>
+                            )}
                             {/* A narrowed view with no rows is a dead end; offer the way back. */}
-                            {filingScope !== "all" ? (
+                            {!hasQuery && filingScope !== "all" ? (
                               <button
                                 type="button"
                                 className="mt-2 rounded text-xs font-medium text-text-primary underline underline-offset-2 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
