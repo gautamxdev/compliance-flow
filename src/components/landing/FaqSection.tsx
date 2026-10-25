@@ -42,6 +42,14 @@ export function faqIdFromHash(hash: string): FaqId | undefined {
   return faqs.find((faq) => faq.id === id)?.id;
 }
 
+/**
+ * Hash to show in the address bar for the open FAQ item, so the current answer
+ * can be shared as a link. Closing every item falls back to the section itself.
+ */
+export function faqHashFor(openId: string | undefined): string {
+  return openId ? `#${openId}` : "#faq";
+}
+
 const FaqSection = () => {
   const { hash } = useLocation();
   const [openItem, setOpenItem] = useState<string | undefined>(() =>
@@ -76,7 +84,20 @@ const FaqSection = () => {
           type="single"
           collapsible
           value={openItem ?? ""}
-          onValueChange={(value) => setOpenItem(value || undefined)}
+          onValueChange={(value) => {
+            const next = value || undefined;
+            setOpenItem(next);
+            // Keep the URL in step with the open answer without adding history
+            // entries or triggering the router's hash scroll.
+            const hash = faqHashFor(next);
+            if (window.location.hash !== hash) {
+              window.history.replaceState(
+                window.history.state,
+                "",
+                `${window.location.pathname}${window.location.search}${hash}`,
+              );
+            }
+          }}
           className="mx-auto max-w-2xl rounded-xl border border-border bg-card px-6"
         >
           {faqs.map((faq) => (
