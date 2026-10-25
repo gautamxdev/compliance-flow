@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Check, Link2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import {
   Accordion,
@@ -50,8 +51,41 @@ export function faqHashFor(openId: string | undefined): string {
   return openId ? `#${openId}` : "#faq";
 }
 
+/** Absolute link to a single FAQ answer on the current page. */
+export function faqShareUrl(id: FaqId, href: string = window.location.href): string {
+  const url = new URL(href);
+  url.hash = id;
+  return url.toString();
+}
+
+const LINK_COPIED_RESET_MS = 2000;
+
 const FaqSection = () => {
   const { hash } = useLocation();
+  const [copiedId, setCopiedId] = useState<FaqId | null>(null);
+  const copiedTimerRef = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (copiedTimerRef.current !== null) window.clearTimeout(copiedTimerRef.current);
+    },
+    [],
+  );
+
+  const copyLink = async (id: FaqId) => {
+    const url = faqShareUrl(id);
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(id);
+      if (copiedTimerRef.current !== null) window.clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = window.setTimeout(() => {
+        copiedTimerRef.current = null;
+        setCopiedId(null);
+      }, LINK_COPIED_RESET_MS);
+    } catch {
+      window.prompt("Copy this link:", url);
+    }
+  };
   const [openItem, setOpenItem] = useState<string | undefined>(() =>
     faqIdFromHash(hash),
   );
@@ -106,11 +140,27 @@ const FaqSection = () => {
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="text-sm leading-relaxed text-text-secondary">
-                {faq.answer}
+                <p>{faq.answer}</p>
+                <button
+                  type="button"
+                  onClick={() => copyLink(faq.id)}
+                  className="mt-3 inline-flex items-center gap-1.5 rounded text-xs font-medium text-text-tertiary transition-colors hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  aria-label="Copy link to this answer"
+                >
+                  {copiedId === faq.id ? (
+                    <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                  ) : (
+                    <Link2 className="h-3.5 w-3.5" aria-hidden="true" />
+                  )}
+                  {copiedId === faq.id ? "Link copied" : "Copy link"}
+                </button>
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
+        <p role="status" className="sr-only">
+          {copiedId ? "Link to this answer copied to clipboard" : ""}
+        </p>
       </div>
     </section>
   );
