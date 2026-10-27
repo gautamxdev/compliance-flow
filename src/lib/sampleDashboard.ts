@@ -125,3 +125,27 @@ export function visibleCountLabel(count: number, scope: FilingScope): string {
   if (scope === "overdue") return `${count} overdue`;
   return count === 1 ? "1 task" : `${count} tasks`;
 }
+
+export type MatchSegment = { text: string; match: boolean };
+
+/**
+ * Split `text` into plain and matching pieces for the search query, using the
+ * same normalisation as filterTasksByQuery (trimmed, collapsed whitespace,
+ * case-insensitive). A blank query returns the whole text as one plain piece.
+ */
+export function splitByQuery(text: string, query: string): MatchSegment[] {
+  const needle = query.trim().replace(/\s+/g, " ").toLowerCase();
+  if (!needle) return [{ text, match: false }];
+  const haystack = text.toLowerCase();
+  const segments: MatchSegment[] = [];
+  let from = 0;
+  let at = haystack.indexOf(needle, from);
+  while (at !== -1) {
+    if (at > from) segments.push({ text: text.slice(from, at), match: false });
+    segments.push({ text: text.slice(at, at + needle.length), match: true });
+    from = at + needle.length;
+    at = haystack.indexOf(needle, from);
+  }
+  if (from < text.length) segments.push({ text: text.slice(from), match: false });
+  return segments;
+}

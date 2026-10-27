@@ -13,6 +13,7 @@ import {
   isOverdue,
   nextDueSort,
   sortTasksByDue,
+  splitByQuery,
   toIsoDate,
   visibleCountLabel,
   type DueSort,
@@ -49,6 +50,21 @@ const EMPTY_SCOPE_MESSAGE: Record<FilingScope, string> = {
   open: "Every filing is done.",
   overdue: "Nothing overdue. Every open filing is on schedule.",
 };
+
+/** Wrap the part of a name that matches the dashboard search in <mark>. */
+const Highlighted = ({ text, query }: { text: string; query: string }) => (
+  <>
+    {splitByQuery(text, query).map((segment, i) =>
+      segment.match ? (
+        <mark key={i} className="rounded-sm bg-warning/20 px-px text-inherit">
+          {segment.text}
+        </mark>
+      ) : (
+        segment.text
+      ),
+    )}
+  </>
+);
 
 const HeroSection = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
@@ -433,14 +449,14 @@ radial-gradient(
                           <tr key={row.task} className="border-t border-divider">
                             <td className="px-4 py-3">
                               <span className="flex flex-wrap items-baseline gap-x-2">
-                                <span data-testid="task-name">{row.task}</span>
+                                <span data-testid="task-name"><Highlighted text={row.task} query={query} /></span>
                                 {/* Assigned column is hidden below md; keep who owns the filing visible. */}
                                 <span
                                   className="text-xs text-text-secondary md:hidden"
                                   data-testid="task-assignee-compact"
                                 >
                                   <span className="sr-only">Assigned to </span>
-                                  {row.assignee}
+                                  <Highlighted text={row.assignee} query={query} />
                                 </span>
                               </span>
                               {/* Due column is hidden below lg; keep the date and late/left hint visible here. */}
@@ -473,7 +489,9 @@ radial-gradient(
                             <td className="px-4 py-3 hidden sm:table-cell">
                               <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_BADGE_CLASS[row.status]}`}>{row.status}</span>
                             </td>
-                            <td className="px-4 py-3 text-text-secondary hidden md:table-cell">{row.assignee}</td>
+                            <td className="px-4 py-3 text-text-secondary hidden md:table-cell">
+                              <Highlighted text={row.assignee} query={query} />
+                            </td>
                             <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">
                               <span className="inline-flex flex-col items-start gap-0.5">
                                 <time
