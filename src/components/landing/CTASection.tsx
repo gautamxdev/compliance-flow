@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
-import { prefersReducedMotion } from "@/lib/scrollToId";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 const DEMO_EMAIL = "hello@compliancework.in";
 const DEMO_MAILTO =
@@ -10,7 +10,7 @@ const DEMO_MAILTO =
 const COPIED_RESET_MS = 2000;
 
 const CTASection = () => {
-  const reduceMotion = prefersReducedMotion();
+  const reduceMotion = usePrefersReducedMotion();
   const [copied, setCopied] = useState(false);
   const resetTimerRef = useRef<number | null>(null);
 
