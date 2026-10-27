@@ -44,14 +44,24 @@ const Privacy = () => {
             page before any production data processing begins.
           </p>
         </div>
-        <p className="mt-10">
+        <nav
+          aria-label="Legal"
+          className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm"
+        >
           <Link
             to="/"
-            className="text-sm font-medium text-text-primary underline underline-offset-2 hover:opacity-80"
+            className="font-medium text-text-primary underline underline-offset-2 hover:opacity-80"
           >
             Back to home
           </Link>
-        </p>
+          {/* Visitors reading one legal page usually want the other next. */}
+          <Link
+            to="/terms"
+            className="text-text-secondary underline underline-offset-2 hover:text-text-primary"
+          >
+            Read the Terms of Use
+          </Link>
+        </nav>
       </main>
     </div>
   );
