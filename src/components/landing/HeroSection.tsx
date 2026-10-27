@@ -45,6 +45,13 @@ const SORT_CAPTION: Record<DueSort, string> = {
   desc: "sorted by due date, latest first",
 };
 
+/** What the next click on the Due header will do, keyed by the current sort. */
+const DUE_SORT_HINT: Record<DueSort, string> = {
+  none: "Click to sort by due date, earliest first.",
+  asc: "Click to sort by due date, latest first.",
+  desc: "Click to restore the default order.",
+};
+
 const EMPTY_SCOPE_MESSAGE: Record<FilingScope, string> = {
   all: "No filings yet.",
   open: "Every filing is done.",
@@ -403,11 +410,17 @@ radial-gradient(
                           <button
                             type="button"
                             className="inline-flex items-center gap-1 rounded hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                            aria-describedby="due-sort-hint"
+                            title={DUE_SORT_HINT[dueSort]}
                             onClick={() => setDueSort(nextDueSort)}
                           >
                             Due
                             <DueSortIcon aria-hidden="true" className="h-3.5 w-3.5" />
                           </button>
+                          {/* The icon alone doesn't say what the next click does. */}
+                          <span id="due-sort-hint" className="sr-only">
+                            {DUE_SORT_HINT[dueSort]}
+                          </span>
                         </th>
                       </tr>
                     </thead>
