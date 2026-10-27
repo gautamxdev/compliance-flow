@@ -14,6 +14,7 @@ import {
   nextDueSort,
   sortTasksByDue,
   toIsoDate,
+  visibleCountLabel,
   type DueSort,
   type FilingScope,
   type SampleTaskStatus,
@@ -30,12 +31,6 @@ const FILING_SCOPES: { value: FilingScope; label: string }[] = [
   { value: "open", label: "Open only" },
   { value: "overdue", label: "Overdue" },
 ];
-
-const SCOPE_COUNT_NOUN: Record<FilingScope, string> = {
-  all: "tasks",
-  open: "open",
-  overdue: "overdue",
-};
 
 const SCOPE_CAPTION: Record<FilingScope, string> = {
   all: "all filings",
@@ -338,8 +333,9 @@ radial-gradient(
                       ))}
                     </div>
                     <span className="text-xs text-text-tertiary" aria-live="polite">
-                      {visibleTasks.length}{" "}
-                      {SCOPE_COUNT_NOUN[filingScope]}
+                      <span data-testid="visible-count">
+                        {visibleCountLabel(visibleTasks.length, filingScope)}
+                      </span>
                       {overdueCount > 0 && filingScope !== "overdue" ? (
                         <>
                           {" · "}

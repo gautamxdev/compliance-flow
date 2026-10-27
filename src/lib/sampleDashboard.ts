@@ -115,3 +115,13 @@ export function filterTasksByQuery(tasks: SampleTask[], query: string): SampleTa
       task.task.toLowerCase().includes(needle) || task.assignee.toLowerCase().includes(needle),
   );
 }
+
+/**
+ * Summary line for the rows currently shown: "1 task", "4 tasks", "2 open",
+ * "1 overdue". Only the "all" scope uses a noun that needs a plural.
+ */
+export function visibleCountLabel(count: number, scope: FilingScope): string {
+  if (scope === "open") return `${count} open`;
+  if (scope === "overdue") return `${count} overdue`;
+  return count === 1 ? "1 task" : `${count} tasks`;
+}
