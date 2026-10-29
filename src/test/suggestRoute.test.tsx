@@ -14,6 +14,14 @@ describe("404 page suggestions", () => {
     expect(suggestPage("/legal/terms_and_conditions")?.path).toBe("/terms");
   });
 
+  it("sends old FAQ links to the landing page FAQ section", () => {
+    expect(suggestPage("/faq")?.path).toBe("/#faq");
+    expect(suggestPage("/FAQs/")?.path).toBe("/#faq");
+    expect(suggestPage("/help/faq.html")?.path).toBe("/#faq");
+    expect(suggestPage("/fax")?.path).toBe("/#faq");
+    expect(suggestPage("/map")).toBeNull();
+  });
+
   it("stays quiet for unrelated or empty paths", () => {
     expect(suggestPage("/")).toBeNull();
     expect(suggestPage("/pricing")).toBeNull();

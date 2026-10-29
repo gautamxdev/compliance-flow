@@ -1,9 +1,12 @@
-export type KnownPage = { path: string; label: string };
+/** `key` is the URL word that points at the page; it defaults to the path without its leading slash. */
+export type KnownPage = { path: string; label: string; key?: string };
 
 /** Pages a mistyped or outdated link is most likely aiming for. */
 export const KNOWN_PAGES: KnownPage[] = [
   { path: "/privacy", label: "Privacy Policy" },
   { path: "/terms", label: "Terms of Use" },
+  // FAQ lives on the landing page, so old /faq links land on its section.
+  { path: "/#faq", label: "FAQ", key: "faq" },
 ];
 
 /** Classic edit distance; inputs here are short URL segments. */
@@ -33,10 +36,12 @@ export function suggestPage(pathname: string, pages: KnownPage[] = KNOWN_PAGES):
 
   let best: { page: KnownPage; distance: number } | null = null;
   for (const page of pages) {
-    const key = page.path.slice(1);
-    if (candidates.includes(key)) return page;
+    const key = page.key ?? page.path.slice(1);
+    if (candidates.includes(key) || candidates.includes(`${key}s`)) return page;
     const distance = Math.min(...candidates.map((word) => editDistance(word, key)));
-    if (distance <= 2 && (!best || distance < best.distance)) best = { page, distance };
+    // Short keys like "faq" need a tighter limit, or any three-letter word would match.
+    const limit = key.length <= 4 ? 1 : 2;
+    if (distance <= limit && (!best || distance < best.distance)) best = { page, distance };
   }
   return best?.page ?? null;
 }
