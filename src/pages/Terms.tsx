@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LEGAL_LAST_UPDATED, formatLegalDate, legalIsoDate } from "@/lib/legal";
 
 const Terms = () => {
   return (
@@ -18,7 +19,10 @@ const Terms = () => {
           Terms of Use
         </h1>
         <p className="mb-4 text-sm text-text-secondary">
-          Last updated: 20 September 2026
+          Last updated:{" "}
+          <time dateTime={legalIsoDate(LEGAL_LAST_UPDATED)} data-testid="legal-last-updated">
+            {formatLegalDate(LEGAL_LAST_UPDATED)}
+          </time>
         </p>
         <div className="space-y-4 text-base leading-relaxed text-text-secondary">
           <p>
