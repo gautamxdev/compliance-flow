@@ -90,6 +90,12 @@ const HeroSection = () => {
   const tasks = useMemo(() => getSampleDashboardTasks(new Date(todayKey)), [todayKey]);
   const overdueCount = useMemo(() => tasks.filter((task) => isOverdue(task)).length, [tasks]);
   const openCount = useMemo(() => countOpenTasks(tasks), [tasks]);
+  // How many filings each chip would show, before the search narrows it further.
+  const scopeCounts: Record<FilingScope, number> = {
+    all: tasks.length,
+    open: openCount,
+    overdue: overdueCount,
+  };
   const [filingScope, setFilingScope] = useState<FilingScope>("all");
   const [dueSort, setDueSort] = useState<DueSort>("none");
   const [query, setQuery] = useState("");
@@ -349,10 +355,24 @@ radial-gradient(
                               ? "bg-background text-text-primary shadow-sm"
                               : "text-text-secondary hover:text-text-primary"
                           }`}
+                          aria-describedby={`scope-count-${value}`}
                           onClick={() => setFilingScope(value)}
                         >
                           {label}
+                          <span
+                            aria-hidden="true"
+                            className="ml-1 tabular-nums text-text-tertiary"
+                            data-testid={`scope-count-${value}`}
+                          >
+                            {scopeCounts[value]}
+                          </span>
                         </button>
+                      ))}
+                      {/* Keep chip names short for voice control; read each count as a description. */}
+                      {FILING_SCOPES.map(({ value }) => (
+                        <span key={value} id={`scope-count-${value}`} className="sr-only">
+                          {scopeCounts[value] === 1 ? "1 filing" : `${scopeCounts[value]} filings`}
+                        </span>
                       ))}
                     </div>
                     <span className="text-xs text-text-tertiary" aria-live="polite">
