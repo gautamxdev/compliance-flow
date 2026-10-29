@@ -10,12 +10,22 @@ const TITLES: Record<string, string> = {
   "/terms": "Terms of Use · FirmOps",
 };
 
+/**
+ * Title for a pathname. The router matches routes case-insensitively and
+ * ignores a trailing slash, so "/Privacy" and "/terms/" render real pages and
+ * must not get the "Page not found" title.
+ */
+function titleForPath(pathname: string): string {
+  const normalized = pathname.toLowerCase().replace(/\/+$/, "") || "/";
+  return TITLES[normalized] ?? "Page not found · FirmOps";
+}
+
 /** Keep the tab title and scroll position in sync with the active route. */
 export function RouteEffects() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    document.title = TITLES[pathname] ?? "Page not found · FirmOps";
+    document.title = titleForPath(pathname);
 
     const id = hash.replace(/^#/, "");
     if (pathname === "/" && id) {
@@ -30,4 +40,4 @@ export function RouteEffects() {
   return null;
 }
 
-export { DEFAULT_TITLE, TITLES };
+export { DEFAULT_TITLE, TITLES, titleForPath };
