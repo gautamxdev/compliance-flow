@@ -112,6 +112,28 @@ const HeroSection = () => {
   };
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // "/" jumps to the dashboard search, unless the visitor is already typing somewhere.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "/" || e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName))
+      ) {
+        return;
+      }
+      const input = searchRef.current;
+      if (!input) return;
+      e.preventDefault();
+      input.focus();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   const cancelPendingFrame = useCallback(() => {
     if (frameRef.current !== null) {
       window.cancelAnimationFrame(frameRef.current);
@@ -326,7 +348,9 @@ radial-gradient(
                         className="pointer-events-none absolute left-2 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-tertiary"
                       />
                       <input
+                        ref={searchRef}
                         type="search"
+                        aria-keyshortcuts="/"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={(e) => {
@@ -336,6 +360,7 @@ radial-gradient(
                           }
                         }}
                         placeholder="Search tasks or people"
+                        title="Press / to search"
                         aria-label="Search filings by task or assignee"
                         className="h-7 w-44 rounded-md border border-border bg-background pl-7 pr-2 text-xs text-text-primary placeholder:text-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                       />
