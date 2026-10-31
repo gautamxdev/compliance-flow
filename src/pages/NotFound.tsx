@@ -1,9 +1,33 @@
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { suggestPage } from "@/lib/suggestRoute";
+
+/**
+ * The SPA answers every unknown URL with 200, so tell crawlers not to index
+ * the 404 screen while it is showing. Restores any previous robots tag after.
+ */
+function useNoIndex() {
+  useEffect(() => {
+    let meta = document.head.querySelector<HTMLMetaElement>('meta[name="robots"]');
+    const previous = meta?.getAttribute("content") ?? null;
+    const created = !meta;
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "robots";
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", "noindex");
+    return () => {
+      if (created) meta?.remove();
+      else if (previous !== null) meta?.setAttribute("content", previous);
+    };
+  }, []);
+}
 
 const NotFound = () => {
   const { pathname } = useLocation();
   const suggestion = suggestPage(pathname);
+  useNoIndex();
 
   return (
     <div className="min-h-screen bg-background">
