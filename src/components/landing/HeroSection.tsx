@@ -27,6 +27,10 @@ const STATUS_BADGE_CLASS: Record<SampleTaskStatus, string> = {
   "In Progress": "bg-muted text-text-secondary",
 };
 
+const SAMPLE_CLIENTS = ["Sharma Enterprises", "Patel Industries", "Kumar & Sons"] as const;
+/** The client whose filings the sample table shows. */
+const CURRENT_CLIENT: (typeof SAMPLE_CLIENTS)[number] = "Sharma Enterprises";
+
 const FILING_SCOPES: { value: FilingScope; label: string }[] = [
   { value: "all", label: "All" },
   { value: "open", label: "Open only" },
@@ -328,19 +332,31 @@ radial-gradient(
                   <div className="px-3 py-2 text-sm text-text-secondary hover:bg-accent/50 rounded-md">Notices</div>
                 </div>
                 <div className="mt-6 pt-4 border-t border-divider">
-                  <p className="text-xs text-text-tertiary uppercase tracking-wide mb-2 px-3">Clients</p>
-                  <div className="space-y-1">
-                    <div className="px-3 py-1.5 text-sm text-text-secondary">Sharma Enterprises</div>
-                    <div className="px-3 py-1.5 text-sm text-text-secondary">Patel Industries</div>
-                    <div className="px-3 py-1.5 text-sm text-text-secondary">Kumar & Sons</div>
-                  </div>
+                  <p id="sample-clients-label" className="text-xs text-text-tertiary uppercase tracking-wide mb-2 px-3">Clients</p>
+                  {/* Show which client the table belongs to, visually and for screen readers. */}
+                  <ul className="space-y-1" aria-labelledby="sample-clients-label">
+                    {SAMPLE_CLIENTS.map((client) => {
+                      const current = client === CURRENT_CLIENT;
+                      return (
+                        <li
+                          key={client}
+                          aria-current={current ? "true" : undefined}
+                          className={`rounded-md px-3 py-1.5 text-sm ${
+                            current ? "bg-accent/60 font-medium text-text-primary" : "text-text-secondary"
+                          }`}
+                        >
+                          {client}
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               </div>
 
               {/* Main Content - Table */}
               <div className="flex-1 p-6">
                 <div className="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
-                  <h3 className="font-medium">Sharma Enterprises — {currentFy}</h3>
+                  <h3 className="font-medium">{CURRENT_CLIENT} — {currentFy}</h3>
                   <div className="flex flex-wrap items-center gap-3">
                     <div className="relative">
                       <Search
@@ -450,7 +466,7 @@ radial-gradient(
                   <table className="w-full text-sm">
                     {/* Tell screen reader users which client, year, filter and order they are hearing. */}
                     <caption className="sr-only" data-testid="sample-dashboard-caption">
-                      Sharma Enterprises filings for {currentFy}: {SCOPE_CAPTION[filingScope]},{" "}
+                      {CURRENT_CLIENT} filings for {currentFy}: {SCOPE_CAPTION[filingScope]},{" "}
                       {hasQuery ? `matching "${query.trim()}", ` : ""}
                       {SORT_CAPTION[dueSort]}.
                     </caption>
