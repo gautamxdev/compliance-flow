@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,9 @@ const NAV_LINKS = [
   { id: "core-idea", label: "See how it works" },
 ] as const;
 
+/** Matches Tailwind's `md` breakpoint, where the menu button is hidden. */
+const DESKTOP_QUERY = "(min-width: 768px)";
+
 const DESKTOP_LINK_IDS = ["problem", "who-its-for", "faq"] as const;
 const TRACKED_SECTION_IDS = NAV_LINKS.map((item) => item.id);
 
@@ -34,6 +37,22 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const activeSection = useActiveSection(TRACKED_SECTION_IDS);
   const { pathname, hash } = useLocation();
+
+  // The menu trigger is md:hidden, so a sheet left open while the window grows
+  // to desktop width would cover the page with no visible way to close it.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    if (mql.matches) {
+      setMobileOpen(false);
+      return;
+    }
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setMobileOpen(false);
+    };
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, [mobileOpen]);
 
   const goHome = () => {
     setMobileOpen(false);
