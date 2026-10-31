@@ -150,7 +150,7 @@ const VisibilitySection = () => {
                   }}
                 >
                   <div className="flex flex-1 flex-col opacity-100 transition-opacity duration-200">
-                    <div className="mb-8 flex items-center justify-between">
+                    <div className="mb-8 flex items-center justify-between" aria-hidden="true">
                       <div className="h-6 w-32 rounded-full bg-slate-100 ring-1 ring-slate-300/50" />
                       <div className="h-4 w-20 rounded-full bg-indigo-100 ring-1 ring-indigo-300/40" />
                     </div>
@@ -163,7 +163,12 @@ const VisibilitySection = () => {
                         {role.highlight}
                       </div>
 
-                      <div className="mx-auto w-full max-w-xs space-y-3">
+                      {/* Placeholder rows are decoration; keep them out of the panel's reading order. */}
+                      <div
+                        className="mx-auto w-full max-w-xs space-y-3"
+                        aria-hidden="true"
+                        data-testid="visibility-mock-rows"
+                      >
                         {[1, 2, 3].map((i) => (
                           <div
                             key={i}
@@ -173,7 +178,7 @@ const VisibilitySection = () => {
                                 : i === 2
                                   ? "border-slate-200/60 bg-slate-50/90"
                                   : "border-indigo-200/40 bg-indigo-50/60"
-                            } hover:-translate-y-[1px] hover:shadow-md`}
+                            } motion-safe:hover:-translate-y-[1px] hover:shadow-md`}
                           >
                             <div
                               className="h-2 w-2 rounded-full"
