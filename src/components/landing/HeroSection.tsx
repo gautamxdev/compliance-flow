@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, RotateCcw, Search } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, RotateCcw, Search, X } from "lucide-react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
@@ -362,8 +362,22 @@ radial-gradient(
                         placeholder="Search tasks or people"
                         title="Press / to search"
                         aria-label="Search filings by task or assignee"
-                        className="h-7 w-44 rounded-md border border-border bg-background pl-7 pr-2 text-xs text-text-primary placeholder:text-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="h-7 w-44 rounded-md border border-border bg-background pl-7 pr-7 text-xs text-text-primary placeholder:text-text-tertiary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-search-cancel-button]:appearance-none"
                       />
+                      {/* Same clear control in every browser (Firefox has no native one). */}
+                      {query ? (
+                        <button
+                          type="button"
+                          aria-label="Clear search text"
+                          className="absolute right-1 top-1/2 inline-flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded text-text-tertiary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                          onClick={() => {
+                            setQuery("");
+                            searchRef.current?.focus();
+                          }}
+                        >
+                          <X aria-hidden="true" className="h-3 w-3" />
+                        </button>
+                      ) : null}
                     </div>
                     <div
                       className="inline-flex rounded-md border border-border bg-muted/40 p-0.5"
