@@ -95,6 +95,30 @@ const FaqSection = () => {
     if (matched) setOpenItem(matched);
   }, [hash]);
 
+  const changeOpenItem = (value: string) => {
+    const next = value || undefined;
+    setOpenItem(next);
+    // Keep the URL in step with the open answer without adding history
+    // entries or triggering the router's hash scroll.
+    const hash = faqHashFor(next);
+    if (window.location.hash !== hash) {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${window.location.search}${hash}`,
+      );
+    }
+  };
+
+  // Escape folds the open answer away and leaves focus on its question.
+  const onAccordionKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "Escape" || !openItem) return;
+    const trigger = document.getElementById(openItem)?.querySelector<HTMLButtonElement>("h3 button");
+    e.preventDefault();
+    changeOpenItem("");
+    trigger?.focus();
+  };
+
   return (
     <section
       id="faq"
@@ -118,20 +142,8 @@ const FaqSection = () => {
           type="single"
           collapsible
           value={openItem ?? ""}
-          onValueChange={(value) => {
-            const next = value || undefined;
-            setOpenItem(next);
-            // Keep the URL in step with the open answer without adding history
-            // entries or triggering the router's hash scroll.
-            const hash = faqHashFor(next);
-            if (window.location.hash !== hash) {
-              window.history.replaceState(
-                window.history.state,
-                "",
-                `${window.location.pathname}${window.location.search}${hash}`,
-              );
-            }
-          }}
+          onValueChange={changeOpenItem}
+          onKeyDown={onAccordionKeyDown}
           className="mx-auto max-w-2xl rounded-xl border border-border bg-card px-6"
         >
           {faqs.map((faq) => (
