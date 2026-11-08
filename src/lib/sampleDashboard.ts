@@ -235,3 +235,11 @@ export function dashboardViewSearch(view: DashboardView, search: string = ""): s
   const qs = params.toString();
   return qs ? `?${qs}` : "";
 }
+
+/** Absolute link that reopens the dashboard in `view`, scrolled to the sample dashboard. */
+export function dashboardViewUrl(view: DashboardView, href: string = window.location.href): string {
+  const url = new URL(href);
+  url.search = dashboardViewSearch(view, url.search);
+  url.hash = "sample-dashboard";
+  return url.toString();
+}

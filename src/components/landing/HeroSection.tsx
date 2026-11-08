@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, Download, RotateCcw, Search, X } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, Check, Download, Link2, RotateCcw, Search, X } from "lucide-react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   countOpenTasks,
   dashboardViewSearch,
+  dashboardViewUrl,
   dueRelativeLabel,
   filingsCsvFileName,
   filterTasksByQuery,
@@ -85,6 +86,8 @@ const Highlighted = ({ text, query }: { text: string; query: string }) => (
   </>
 );
 
+const LINK_COPIED_RESET_MS = 2000;
+
 const HeroSection = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
 
@@ -143,6 +146,28 @@ const HeroSection = () => {
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
+  };
+  const [linkCopied, setLinkCopied] = useState(false);
+  const copiedTimerRef = useRef<number | null>(null);
+  useEffect(
+    () => () => {
+      if (copiedTimerRef.current !== null) window.clearTimeout(copiedTimerRef.current);
+    },
+    [],
+  );
+  const copyViewLink = async () => {
+    const url = dashboardViewUrl({ scope: filingScope, sort: dueSort, query });
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopied(true);
+      if (copiedTimerRef.current !== null) window.clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = window.setTimeout(() => {
+        copiedTimerRef.current = null;
+        setLinkCopied(false);
+      }, LINK_COPIED_RESET_MS);
+    } catch {
+      window.prompt("Copy this link:", url);
+    }
   };
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
@@ -499,6 +524,22 @@ radial-gradient(
                       <Download aria-hidden="true" className="h-3 w-3" />
                       Export CSV
                     </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 rounded text-xs text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-label="Copy link to this view"
+                      onClick={copyViewLink}
+                    >
+                      {linkCopied ? (
+                        <Check aria-hidden="true" className="h-3 w-3" />
+                      ) : (
+                        <Link2 aria-hidden="true" className="h-3 w-3" />
+                      )}
+                      {linkCopied ? "Link copied" : "Copy link"}
+                    </button>
+                    <span role="status" className="sr-only">
+                      {linkCopied ? "Link to this dashboard view copied to clipboard" : ""}
+                    </span>
                   </div>
                 </div>
                 
