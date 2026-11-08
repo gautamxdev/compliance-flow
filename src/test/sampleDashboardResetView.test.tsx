@@ -16,7 +16,7 @@ describe("sample dashboard reset view", () => {
     render(<HeroSection />);
     expect(screen.queryByRole("button", { name: "Reset view" })).toBeNull();
 
-    fireEvent.click(screen.getByRole("button", { name: /^Due/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Due" }));
     expect(screen.getByRole("button", { name: "Reset view" })).toBeInTheDocument();
   });
 
@@ -28,8 +28,8 @@ describe("sample dashboard reset view", () => {
     const defaultOrder = taskNames();
 
     fireEvent.click(screen.getByRole("button", { name: "Open only" }));
-    fireEvent.click(screen.getByRole("button", { name: /^Due/ }));
-    fireEvent.click(screen.getByRole("button", { name: /^Due/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Due" }));
+    fireEvent.click(screen.getByRole("button", { name: "Due" }));
     expect(taskNames()).not.toEqual(defaultOrder);
 
     fireEvent.click(screen.getByRole("button", { name: "Reset view" }));

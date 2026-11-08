@@ -10,6 +10,7 @@ import {
   filterTasksByScope,
   formatDueDate,
   getSampleDashboardTasks,
+  isDueSoon,
   isOverdue,
   nextDueSort,
   sortTasksByDue,
@@ -34,12 +35,14 @@ const CURRENT_CLIENT: (typeof SAMPLE_CLIENTS)[number] = "Sharma Enterprises";
 const FILING_SCOPES: { value: FilingScope; label: string }[] = [
   { value: "all", label: "All" },
   { value: "open", label: "Open only" },
+  { value: "due-soon", label: "Due soon" },
   { value: "overdue", label: "Overdue" },
 ];
 
 const SCOPE_CAPTION: Record<FilingScope, string> = {
   all: "all filings",
   open: "open filings only",
+  "due-soon": "open filings due in the next 7 days",
   overdue: "overdue filings only",
 };
 
@@ -59,6 +62,7 @@ const DUE_SORT_HINT: Record<DueSort, string> = {
 const EMPTY_SCOPE_MESSAGE: Record<FilingScope, string> = {
   all: "No filings yet.",
   open: "Every filing is done.",
+  "due-soon": "Nothing due in the next 7 days.",
   overdue: "Nothing overdue. Every open filing is on schedule.",
 };
 
@@ -94,10 +98,12 @@ const HeroSection = () => {
   const tasks = useMemo(() => getSampleDashboardTasks(new Date(todayKey)), [todayKey]);
   const overdueCount = useMemo(() => tasks.filter((task) => isOverdue(task)).length, [tasks]);
   const openCount = useMemo(() => countOpenTasks(tasks), [tasks]);
+  const dueSoonCount = useMemo(() => tasks.filter((task) => isDueSoon(task)).length, [tasks]);
   // How many filings each chip would show, before the search narrows it further.
   const scopeCounts: Record<FilingScope, number> = {
     all: tasks.length,
     open: openCount,
+    "due-soon": dueSoonCount,
     overdue: overdueCount,
   };
   const [filingScope, setFilingScope] = useState<FilingScope>("all");

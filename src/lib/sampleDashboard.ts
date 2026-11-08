@@ -32,6 +32,16 @@ export function isOverdue(task: SampleTask, today: Date = new Date()): boolean {
   return dueDay.getTime() < todayDay.getTime();
 }
 
+/** How far ahead the "Due soon" view looks, in calendar days (today included). */
+export const DUE_SOON_DAYS = 7;
+
+/** Open (non-Filed) tasks due today or within the next DUE_SOON_DAYS days. Overdue ones are not "soon". */
+export function isDueSoon(task: SampleTask, today: Date = new Date()): boolean {
+  if (task.status === "Filed") return false;
+  const days = calendarDaysBetween(today, task.due);
+  return days >= 0 && days <= DUE_SOON_DAYS;
+}
+
 /** "11 Nov 2026" — the compact due-date style used across the dashboard. */
 export function formatDueDate(date: Date): string {
   return format(date, "d MMM yyyy");
@@ -85,15 +95,19 @@ export function sortTasksByDue(tasks: SampleTask[], sort: DueSort): SampleTask[]
   return [...tasks].sort((a, b) => dir * (a.due.getTime() - b.due.getTime()));
 }
 
-export type FilingScope = "all" | "open" | "overdue";
+export type FilingScope = "all" | "open" | "due-soon" | "overdue";
 
-/** Narrow the sample filings to the chosen scope: everything, open (not Filed), or overdue open ones. */
+/**
+ * Narrow the sample filings to the chosen scope: everything, open (not Filed),
+ * open ones due within the next week, or overdue open ones.
+ */
 export function filterTasksByScope(
   tasks: SampleTask[],
   scope: FilingScope,
   today: Date = new Date(),
 ): SampleTask[] {
   if (scope === "open") return tasks.filter((task) => task.status !== "Filed");
+  if (scope === "due-soon") return tasks.filter((task) => isDueSoon(task, today));
   if (scope === "overdue") return tasks.filter((task) => isOverdue(task, today));
   return tasks;
 }
@@ -118,10 +132,11 @@ export function filterTasksByQuery(tasks: SampleTask[], query: string): SampleTa
 
 /**
  * Summary line for the rows currently shown: "1 task", "4 tasks", "2 open",
- * "1 overdue". Only the "all" scope uses a noun that needs a plural.
+ * "1 due soon", "1 overdue". Only the "all" scope uses a noun that needs a plural.
  */
 export function visibleCountLabel(count: number, scope: FilingScope): string {
   if (scope === "open") return `${count} open`;
+  if (scope === "due-soon") return `${count} due soon`;
   if (scope === "overdue") return `${count} overdue`;
   return count === 1 ? "1 task" : `${count} tasks`;
 }

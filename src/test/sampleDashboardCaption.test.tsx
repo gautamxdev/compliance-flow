@@ -19,13 +19,13 @@ describe("sample dashboard table caption", () => {
     expect(table).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Open only" }));
-    fireEvent.click(screen.getByRole("button", { name: /^Due/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Due" }));
     expect(screen.getByTestId("sample-dashboard-caption")).toHaveTextContent(
       "Sharma Enterprises filings for FY 2026-27: open filings only, sorted by due date, earliest first.",
     );
 
     fireEvent.click(screen.getByRole("button", { name: "Overdue" }));
-    fireEvent.click(screen.getByRole("button", { name: /^Due/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Due" }));
     expect(screen.getByTestId("sample-dashboard-caption")).toHaveTextContent(
       "overdue filings only, sorted by due date, latest first.",
     );
