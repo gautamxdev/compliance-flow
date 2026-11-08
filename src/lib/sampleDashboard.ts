@@ -164,3 +164,37 @@ export function splitByQuery(text: string, query: string): MatchSegment[] {
   if (from < text.length) segments.push({ text: text.slice(from), match: false });
   return segments;
 }
+
+/** Quote a CSV field when it holds a comma, quote or line break (RFC 4180). */
+function csvField(value: string): string {
+  return /[",\r\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+}
+
+/**
+ * CSV for the filings currently on screen, in the order shown. Dates are
+ * yyyy-mm-dd so spreadsheets sort them correctly; open filings carry their
+ * late/left hint.
+ */
+export function tasksToCsv(tasks: SampleTask[], today: Date = new Date()): string {
+  const rows = [
+    ["Task", "Status", "Assigned", "Due", "Note"],
+    ...tasks.map((task) => [
+      task.task,
+      task.status,
+      task.assignee,
+      toIsoDate(task.due),
+      dueRelativeLabel(task, today) ?? "",
+    ]),
+  ];
+  return rows.map((row) => row.map(csvField).join(",")).join("\r\n") + "\r\n";
+}
+
+/** "sharma-enterprises-fy-2026-27-filings.csv" from the client and FY label. */
+export function filingsCsvFileName(client: string, fyLabel: string): string {
+  const slug = `${client} ${fyLabel}`
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return `${slug}-filings.csv`;
+}

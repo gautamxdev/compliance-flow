@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, RotateCcw, Search, X } from "lucide-react";
+import { ArrowDown, ArrowRight, ArrowUp, ArrowUpDown, Download, RotateCcw, Search, X } from "lucide-react";
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   countOpenTasks,
   dueRelativeLabel,
+  filingsCsvFileName,
   filterTasksByQuery,
   filterTasksByScope,
   formatDueDate,
@@ -15,6 +16,7 @@ import {
   nextDueSort,
   sortTasksByDue,
   splitByQuery,
+  tasksToCsv,
   toIsoDate,
   visibleCountLabel,
   type DueSort,
@@ -119,6 +121,17 @@ const HeroSection = () => {
     setFilingScope("all");
     setDueSort("none");
     setQuery("");
+  };
+  const exportCsv = () => {
+    const blob = new Blob([tasksToCsv(visibleTasks)], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filingsCsvFileName(CURRENT_CLIENT, currentFy);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   };
   const DueSortIcon = dueSort === "asc" ? ArrowUp : dueSort === "desc" ? ArrowDown : ArrowUpDown;
 
@@ -465,6 +478,16 @@ radial-gradient(
                         Reset view
                       </button>
                     ) : null}
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 rounded text-xs text-text-secondary hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                      disabled={visibleTasks.length === 0}
+                      title="Download the filings shown as a CSV file"
+                      onClick={exportCsv}
+                    >
+                      <Download aria-hidden="true" className="h-3 w-3" />
+                      Export CSV
+                    </button>
                   </div>
                 </div>
                 
