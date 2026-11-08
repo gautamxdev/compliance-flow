@@ -198,3 +198,40 @@ export function filingsCsvFileName(client: string, fyLabel: string): string {
     .replace(/^-+|-+$/g, "");
   return `${slug}-filings.csv`;
 }
+
+export type DashboardView = { scope: FilingScope; sort: DueSort; query: string };
+
+export const DEFAULT_DASHBOARD_VIEW: DashboardView = { scope: "all", sort: "none", query: "" };
+
+const VIEW_PARAMS = { scope: "filter", sort: "due", query: "q" } as const;
+const SCOPES: readonly FilingScope[] = ["all", "open", "due-soon", "overdue"];
+const SORTS: readonly DueSort[] = ["none", "asc", "desc"];
+
+/** Read a dashboard view from a URL query string; unknown values fall back to the default view. */
+export function parseDashboardView(search: string): DashboardView {
+  const params = new URLSearchParams(search);
+  const scope = params.get(VIEW_PARAMS.scope) as FilingScope | null;
+  const sort = params.get(VIEW_PARAMS.sort) as DueSort | null;
+  return {
+    scope: scope && SCOPES.includes(scope) ? scope : DEFAULT_DASHBOARD_VIEW.scope,
+    sort: sort && SORTS.includes(sort) ? sort : DEFAULT_DASHBOARD_VIEW.sort,
+    query: params.get(VIEW_PARAMS.query) ?? "",
+  };
+}
+
+/**
+ * Query string ("?filter=open&q=gst", or "" for the default view) that keeps
+ * any unrelated params already in `search`. Default values are left out.
+ */
+export function dashboardViewSearch(view: DashboardView, search: string = ""): string {
+  const params = new URLSearchParams(search);
+  const set = (key: string, value: string, fallback: string) => {
+    if (value === fallback) params.delete(key);
+    else params.set(key, value);
+  };
+  set(VIEW_PARAMS.scope, view.scope, DEFAULT_DASHBOARD_VIEW.scope);
+  set(VIEW_PARAMS.sort, view.sort, DEFAULT_DASHBOARD_VIEW.sort);
+  set(VIEW_PARAMS.query, view.query.trim() === "" ? "" : view.query, "");
+  const qs = params.toString();
+  return qs ? `?${qs}` : "";
+}

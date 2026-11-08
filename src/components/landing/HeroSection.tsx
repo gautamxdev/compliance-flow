@@ -5,6 +5,7 @@ import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   countOpenTasks,
+  dashboardViewSearch,
   dueRelativeLabel,
   filingsCsvFileName,
   filterTasksByQuery,
@@ -14,6 +15,7 @@ import {
   isDueSoon,
   isOverdue,
   nextDueSort,
+  parseDashboardView,
   sortTasksByDue,
   splitByQuery,
   tasksToCsv,
@@ -108,9 +110,18 @@ const HeroSection = () => {
     "due-soon": dueSoonCount,
     overdue: overdueCount,
   };
-  const [filingScope, setFilingScope] = useState<FilingScope>("all");
-  const [dueSort, setDueSort] = useState<DueSort>("none");
-  const [query, setQuery] = useState("");
+  // A shared or refreshed link reopens the same filter, sort and search.
+  const [initialView] = useState(() => parseDashboardView(window.location.search));
+  const [filingScope, setFilingScope] = useState<FilingScope>(initialView.scope);
+  const [dueSort, setDueSort] = useState<DueSort>(initialView.sort);
+  const [query, setQuery] = useState(initialView.query);
+
+  useEffect(() => {
+    const { pathname, search, hash } = window.location;
+    const next = dashboardViewSearch({ scope: filingScope, sort: dueSort, query }, search);
+    if (next === search) return;
+    window.history.replaceState(window.history.state, "", `${pathname}${next}${hash}`);
+  }, [filingScope, dueSort, query]);
   const hasQuery = query.trim() !== "";
   const visibleTasks = useMemo(
     () => sortTasksByDue(filterTasksByQuery(filterTasksByScope(tasks, filingScope), query), dueSort),
