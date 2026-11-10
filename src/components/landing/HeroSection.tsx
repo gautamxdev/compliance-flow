@@ -661,7 +661,16 @@ radial-gradient(
                               <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${STATUS_BADGE_CLASS[row.status]}`}>{row.status}</span>
                             </td>
                             <td className="px-4 py-3 text-text-secondary hidden md:table-cell">
-                              <Highlighted text={row.assignee} query={query} />
+                              {/* Click a name to see everything on that person's plate. */}
+                              <button
+                                type="button"
+                                className="rounded text-left hover:text-text-primary hover:underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                aria-label={`Show filings assigned to ${row.assignee}`}
+                                title={`Show filings assigned to ${row.assignee}`}
+                                onClick={() => setQuery(row.assignee)}
+                              >
+                                <Highlighted text={row.assignee} query={query} />
+                              </button>
                             </td>
                             <td className="px-4 py-3 text-text-tertiary hidden lg:table-cell">
                               <span className="inline-flex flex-col items-start gap-0.5">
