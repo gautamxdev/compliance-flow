@@ -102,10 +102,12 @@ const HeroSection = () => {
   const currentFy = getIndianFinancialYear().label;
   // The sample data only changes with the day, not on every pointer-driven re-render.
   const todayKey = new Date().toDateString();
-  const tasks = useMemo(() => getSampleDashboardTasks(new Date(todayKey)), [todayKey]);
-  const overdueCount = useMemo(() => tasks.filter((task) => isOverdue(task)).length, [tasks]);
+  // One "today" for counts, filters, late/left hints and the CSV, so they never disagree.
+  const today = useMemo(() => new Date(todayKey), [todayKey]);
+  const tasks = useMemo(() => getSampleDashboardTasks(today), [today]);
+  const overdueCount = useMemo(() => tasks.filter((task) => isOverdue(task, today)).length, [tasks, today]);
   const openCount = useMemo(() => countOpenTasks(tasks), [tasks]);
-  const dueSoonCount = useMemo(() => tasks.filter((task) => isDueSoon(task)).length, [tasks]);
+  const dueSoonCount = useMemo(() => tasks.filter((task) => isDueSoon(task, today)).length, [tasks, today]);
   // How many filings each chip would show, before the search narrows it further.
   const scopeCounts: Record<FilingScope, number> = {
     all: tasks.length,
@@ -127,8 +129,8 @@ const HeroSection = () => {
   }, [filingScope, dueSort, query]);
   const hasQuery = query.trim() !== "";
   const visibleTasks = useMemo(
-    () => sortTasksByDue(filterTasksByQuery(filterTasksByScope(tasks, filingScope), query), dueSort),
-    [tasks, filingScope, query, dueSort],
+    () => sortTasksByDue(filterTasksByQuery(filterTasksByScope(tasks, filingScope, today), query), dueSort),
+    [tasks, filingScope, query, dueSort, today],
   );
   const isCustomView = filingScope !== "all" || dueSort !== "none" || hasQuery;
   const resetView = () => {
@@ -137,7 +139,7 @@ const HeroSection = () => {
     setQuery("");
   };
   const exportCsv = () => {
-    const blob = new Blob([tasksToCsv(visibleTasks)], { type: "text/csv;charset=utf-8" });
+    const blob = new Blob([tasksToCsv(visibleTasks, today)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -612,8 +614,8 @@ radial-gradient(
                         </tr>
                       ) : null}
                       {visibleTasks.map((row) => {
-                        const overdue = isOverdue(row);
-                        const relative = dueRelativeLabel(row);
+                        const overdue = isOverdue(row, today);
+                        const relative = dueRelativeLabel(row, today);
                         return (
                           <tr key={row.task} className="border-t border-divider">
                             <td className="px-4 py-3">
