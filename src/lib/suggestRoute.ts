@@ -7,6 +7,9 @@ export const KNOWN_PAGES: KnownPage[] = [
   { path: "/terms", label: "Terms of Use" },
   // FAQ lives on the landing page, so old /faq links land on its section.
   { path: "/#faq", label: "FAQ", key: "faq" },
+  // Demo requests and contact details live in the landing page's closing section.
+  { path: "/#cta", label: "Request a demo", key: "demo" },
+  { path: "/#cta", label: "Contact us", key: "contact" },
 ];
 
 /** Classic edit distance; inputs here are short URL segments. */

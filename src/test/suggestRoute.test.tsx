@@ -22,6 +22,15 @@ describe("404 page suggestions", () => {
     expect(suggestPage("/map")).toBeNull();
   });
 
+  it("sends demo and contact links to the landing page demo section", () => {
+    expect(suggestPage("/demo")?.label).toBe("Request a demo");
+    expect(suggestPage("/request-demo")?.path).toBe("/#cta");
+    expect(suggestPage("/book-a-demo/")?.path).toBe("/#cta");
+    expect(suggestPage("/Contact")?.label).toBe("Contact us");
+    expect(suggestPage("/contact-us")?.path).toBe("/#cta");
+    expect(suggestPage("/contcat")?.path).toBe("/#cta");
+  });
+
   it("stays quiet for unrelated or empty paths", () => {
     expect(suggestPage("/")).toBeNull();
     expect(suggestPage("/pricing")).toBeNull();
