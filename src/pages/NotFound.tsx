@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { suggestPage } from "@/lib/suggestRoute";
 
@@ -27,7 +27,14 @@ function useNoIndex() {
 const NotFound = () => {
   const { pathname } = useLocation();
   const suggestion = suggestPage(pathname);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   useNoIndex();
+
+  // Client-side navigation does not announce a new page, so put focus on the
+  // 404 heading: screen readers read it and Tab continues from the message.
+  useEffect(() => {
+    headingRef.current?.focus({ preventScroll: true });
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,7 +51,11 @@ const NotFound = () => {
         <p className="mb-3 text-sm font-medium uppercase tracking-wider text-text-tertiary">
           Error 404
         </p>
-        <h1 className="mb-4 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="mb-4 text-3xl font-semibold tracking-tight text-text-primary focus:outline-none md:text-4xl"
+        >
           This page doesn&apos;t exist
         </h1>
         {/* Echo the missing address so a typo in a shared link is easy to spot. */}
