@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { prefersReducedMotion } from "@/lib/scrollToId";
+import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { mailtoLink } from "@/lib/contact";
 
 const Footer = () => {
@@ -43,6 +43,16 @@ const Footer = () => {
             className="flex flex-wrap items-center gap-6 text-sm"
             aria-label="Footer"
           >
+            <a
+              href="#faq"
+              className="text-text-secondary transition-colors hover:text-text-primary"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToId("faq");
+              }}
+            >
+              FAQ
+            </a>
             <Link
               to="/privacy"
               className="text-text-secondary transition-colors hover:text-text-primary"
