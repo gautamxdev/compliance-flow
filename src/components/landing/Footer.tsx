@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { prefersReducedMotion } from "@/lib/scrollToId";
+import { mailtoLink } from "@/lib/contact";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -55,7 +56,7 @@ const Footer = () => {
               Terms
             </Link>
             <a
-              href="mailto:hello@compliancework.in"
+              href={mailtoLink()}
               className="text-text-secondary transition-colors hover:text-text-primary"
             >
               Contact

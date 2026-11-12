@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Copy } from "lucide-react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
-
-const DEMO_EMAIL = "hello@compliancework.in";
-const DEMO_MAILTO =
-  "mailto:hello@compliancework.in?subject=FirmOps%20demo%20request&body=Hi%20FirmOps%20team%2C%0A%0AI%27d%20like%20to%20request%20a%20demo%20for%20our%20CA%20firm.%0A%0AFirm%20name%3A%20%0ACity%3A%20%0A";
+import { CONTACT_EMAIL as DEMO_EMAIL, DEMO_MAILTO } from "@/lib/contact";
 
 const COPIED_RESET_MS = 2000;
 

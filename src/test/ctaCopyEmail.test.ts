@@ -11,7 +11,9 @@ describe("CTA copy email", () => {
 
     expect(cta).toContain("Copy email");
     expect(cta).toContain("clipboard.writeText");
-    expect(cta).toContain("hello@compliancework.in");
+    const contact = readFileSync(resolve(__dirname, "../lib/contact.ts"), "utf8");
+    expect(cta).toContain('from "@/lib/contact"');
+    expect(contact).toContain("hello@compliancework.in");
     expect(cta).toContain("DEMO_MAILTO");
   });
 });
