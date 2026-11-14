@@ -10,6 +10,7 @@ import {
   dueRelativeLabel,
   filingsCsvFileName,
   filterTasksByQuery,
+  isQueryForAssignee,
   filterTasksByScope,
   formatDueDate,
   getSampleDashboardTasks,
@@ -616,6 +617,7 @@ radial-gradient(
                       {visibleTasks.map((row) => {
                         const overdue = isOverdue(row, today);
                         const relative = dueRelativeLabel(row, today);
+                        const isAssigneeQuery = isQueryForAssignee(query, row.assignee);
                         return (
                           <tr key={row.task} className="border-t border-divider">
                             <td className="px-4 py-3">
@@ -666,8 +668,14 @@ radial-gradient(
                                 type="button"
                                 className="rounded text-left hover:text-text-primary hover:underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                 aria-label={`Show filings assigned to ${row.assignee}`}
-                                title={`Show filings assigned to ${row.assignee}`}
-                                onClick={() => setQuery(row.assignee)}
+                                aria-pressed={isAssigneeQuery}
+                                title={
+                                  isAssigneeQuery
+                                    ? `Showing ${row.assignee}'s filings — click to show everyone`
+                                    : `Show filings assigned to ${row.assignee}`
+                                }
+                                // A second click on the active person goes back to everyone.
+                                onClick={() => setQuery(isAssigneeQuery ? "" : row.assignee)}
                               >
                                 <Highlighted text={row.assignee} query={query} />
                               </button>

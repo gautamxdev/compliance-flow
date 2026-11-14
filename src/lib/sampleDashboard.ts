@@ -199,6 +199,15 @@ export function filingsCsvFileName(client: string, fyLabel: string): string {
   return `${slug}-filings.csv`;
 }
 
+/**
+ * True when the search box holds exactly this person's name (same
+ * normalisation as filterTasksByQuery), i.e. the table is showing their filings.
+ */
+export function isQueryForAssignee(query: string, assignee: string): boolean {
+  const needle = query.trim().replace(/\s+/g, " ").toLowerCase();
+  return needle !== "" && needle === assignee.trim().replace(/\s+/g, " ").toLowerCase();
+}
+
 export type DashboardView = { scope: FilingScope; sort: DueSort; query: string };
 
 export const DEFAULT_DASHBOARD_VIEW: DashboardView = { scope: "all", sort: "none", query: "" };
