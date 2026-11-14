@@ -29,6 +29,18 @@ describe("tasksToCsv", () => {
     );
     expect(filingsCsvFileName("Kumar & Sons", "FY 2026-27")).toBe("kumar-and-sons-fy-2026-27-filings.csv");
   });
+
+  it("names a narrowed scope in the file name", () => {
+    expect(filingsCsvFileName("Sharma Enterprises", "FY 2026-27", "overdue")).toBe(
+      "sharma-enterprises-fy-2026-27-overdue-filings.csv",
+    );
+    expect(filingsCsvFileName("Sharma Enterprises", "FY 2026-27", "due-soon")).toBe(
+      "sharma-enterprises-fy-2026-27-due-soon-filings.csv",
+    );
+    expect(filingsCsvFileName("Sharma Enterprises", "FY 2026-27", "all")).toBe(
+      "sharma-enterprises-fy-2026-27-filings.csv",
+    );
+  });
 });
 
 describe("sample dashboard CSV export", () => {
@@ -56,7 +68,7 @@ describe("sample dashboard CSV export", () => {
     fireEvent.click(screen.getByRole("button", { name: "Overdue" }));
     fireEvent.click(screen.getByRole("button", { name: "Export CSV" }));
 
-    expect(downloadName).toBe("sharma-enterprises-fy-2026-27-filings.csv");
+    expect(downloadName).toBe("sharma-enterprises-fy-2026-27-overdue-filings.csv");
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:filings");
     const text = await new Promise<string>((resolve) => {
       const reader = new FileReader();

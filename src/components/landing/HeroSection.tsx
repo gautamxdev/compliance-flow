@@ -144,7 +144,7 @@ const HeroSection = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = filingsCsvFileName(CURRENT_CLIENT, currentFy);
+    link.download = filingsCsvFileName(CURRENT_CLIENT, currentFy, filingScope);
     document.body.appendChild(link);
     link.click();
     link.remove();

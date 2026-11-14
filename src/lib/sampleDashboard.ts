@@ -189,9 +189,13 @@ export function tasksToCsv(tasks: SampleTask[], today: Date = new Date()): strin
   return rows.map((row) => row.map(csvField).join(",")).join("\r\n") + "\r\n";
 }
 
-/** "sharma-enterprises-fy-2026-27-filings.csv" from the client and FY label. */
-export function filingsCsvFileName(client: string, fyLabel: string): string {
-  const slug = `${client} ${fyLabel}`
+/**
+ * "sharma-enterprises-fy-2026-27-filings.csv" from the client and FY label.
+ * A narrowed scope is named in the file ("...-overdue-filings.csv") so an
+ * export of only some filings is not mistaken for the full list.
+ */
+export function filingsCsvFileName(client: string, fyLabel: string, scope: FilingScope = "all"): string {
+  const slug = `${client} ${fyLabel} ${scope === "all" ? "" : scope}`
     .toLowerCase()
     .replace(/&/g, "and")
     .replace(/[^a-z0-9]+/g, "-")
