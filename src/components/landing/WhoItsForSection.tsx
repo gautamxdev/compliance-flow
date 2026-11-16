@@ -37,13 +37,14 @@ const WhoItsForSection = () => {
   const baseTransition = "transition-all duration-[600ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
 
   return (
-    <section id="who-its-for" className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider">
+    <section id="who-its-for" aria-labelledby="who-its-for-heading" className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider">
       <div className="container mx-auto px-6">
         <div 
           ref={ref}
           className="max-w-2xl mb-14"
         >
-          <h2 
+          <h2
+            id="who-its-for-heading"
             className={`text-3xl md:text-4xl font-semibold tracking-tight mb-4 ${baseTransition} ${
               visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
@@ -63,7 +64,7 @@ const WhoItsForSection = () => {
         <div className="grid md:grid-cols-3 gap-6">
           {personas.map((persona, index) => (
             <div
-              key={index}
+              key={persona.title}
               className={`p-6 rounded-xl border border-border bg-card ${baseTransition} ${
                 visible ? "opacity-100" : "opacity-0"
               }`}
@@ -81,13 +82,13 @@ const WhoItsForSection = () => {
                 }`}
                 style={{ transitionDelay: `${350 + index * 80}ms` }}
               >
-                <persona.icon className="w-6 h-6" />
+                <persona.icon className="w-6 h-6" aria-hidden="true" />
               </div>
               <h3 className="font-semibold text-xl mb-4">{persona.title}</h3>
               <ul className="space-y-3">
                 {persona.benefits.map((benefit, benefitIndex) => (
                   <li key={benefitIndex} className="flex items-start gap-2 text-sm text-text-secondary">
-                    <span className="text-primary mt-1">—</span>
+                    <span className="text-primary mt-1" aria-hidden="true">—</span>
                     {benefit}
                   </li>
                 ))}
