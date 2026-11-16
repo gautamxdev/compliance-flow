@@ -1,5 +1,3 @@
-import { useInView } from "@/hooks/useInView";
-
 const contrasts = [
   {
     bad: "Files without purpose",
@@ -21,20 +19,20 @@ const contrasts = [
 
 const WhatThisIsNotSection = () => {
   return (
-    <section id="what-this-is-not" className="scroll-mt-24 py-20 md:py-28 border-t border-divider overflow-hidden">
+    <section id="what-this-is-not" aria-labelledby="what-this-is-not-heading" className="scroll-mt-24 py-20 md:py-28 border-t border-divider overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center">
+          <h2 id="what-this-is-not-heading" className="text-3xl md:text-4xl font-semibold tracking-tight mb-4 text-center">
             Why firms outgrow folders and trackers
           </h2>
           <p className="text-text-secondary text-lg text-center mb-12">
             FirmOps fits into how your firm already works — it just removes ambiguity.
           </p>
 
-          <div className="grid sm:grid-cols-2 gap-6">
-            {contrasts.map((item, index) => (
-              <div
-                key={index}
+          <ul className="grid sm:grid-cols-2 gap-6">
+            {contrasts.map((item) => (
+              <li
+                key={item.good}
                 className="group p-8 rounded-2xl border border-divider bg-card transition-colors duration-300 hover:border-text-tertiary relative overflow-hidden"
               >
                 <div className="flex flex-col gap-6">
@@ -56,9 +54,9 @@ const WhatThisIsNotSection = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </section>
