@@ -1,8 +1,15 @@
 import { ArrowRight } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 
-const CoreIdeaSection = () => {
-  const { ref, visible } = useInView();
+const steps = [
+  { kicker: "Your", label: "CA Firm" },
+  { kicker: "Select", label: "Client" },
+  { kicker: "Choose", label: "Financial Year" },
+  { kicker: "Track", label: "Compliance Tasks" },
+  { kicker: "Attach", label: "Documents" },
+] as const;
+
+const STEP_STAGGER_MS = 240;
 
 const stepBase =
   "transition-all duration-[650ms] [transition-timing-function:cubic-bezier(0.25,0.1,0.25,1)]";
@@ -13,11 +20,18 @@ const stepHidden = "opacity-0 translate-y-2";
 const arrowBase =
   "transition-all duration-[750ms] [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]";
 
+const CoreIdeaSection = () => {
+  const { ref, visible } = useInView();
+
   return (
-    <section id="core-idea" className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider">
+    <section
+      id="core-idea"
+      aria-labelledby="core-idea-heading"
+      className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider"
+    >
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mb-14">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+          <h2 id="core-idea-heading" className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
             Everything starts with the client
           </h2>
           <p className="text-text-secondary text-lg">
@@ -30,102 +44,46 @@ const arrowBase =
           ref={ref}
           className="bg-card rounded-xl border border-border p-8 md:p-12"
         >
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6">
+          {/* The hierarchy is a sequence, so expose it as an ordered list; arrows are decoration. */}
+          <ol
+            aria-label="How work is organised, from firm to documents"
+            className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6"
+          >
+            {steps.map((step, index) => {
+              const isAnchor = index === 0;
+              const isLast = index === steps.length - 1;
+              return (
+                <li key={step.label} className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+                  <div
+                    className={`${stepBase} ${visible ? stepVisible : stepHidden} w-max`}
+                    style={index > 0 ? { transitionDelay: `${index * STEP_STAGGER_MS}ms` } : undefined}
+                  >
+                    {isAnchor ? (
+                      <div className="px-6 py-4 bg-primary text-primary-foreground rounded-lg shadow-md">
+                        <p className="text-xs uppercase tracking-wide opacity-70 mb-1">{step.kicker}</p>
+                        <p className="font-semibold">{step.label}</p>
+                      </div>
+                    ) : (
+                      <div className="px-6 py-4 bg-accent border border-border rounded-lg">
+                        <p className="text-xs uppercase tracking-wide text-text-tertiary mb-1">{step.kicker}</p>
+                        <p className="font-medium">{step.label}</p>
+                      </div>
+                    )}
+                  </div>
 
-            {/* Step 1 — Anchor (stronger visual weight) */}
-            <div className={`${stepBase} ${visible ? stepVisible : stepHidden} w-max`}>
-              <div className="px-6 py-4 bg-primary text-primary-foreground rounded-lg shadow-md">
-                <p className="text-xs uppercase tracking-wide opacity-70 mb-1">
-                  Your
-                </p>
-                <p className="font-semibold">CA Firm</p>
-              </div>
-            </div>
-
-            {/* Arrow 1 */}
-            <ArrowRight
-              className={`hidden md:block w-5 h-5 text-text-tertiary ${arrowBase} ${
-                visible ? "opacity-100" : "opacity-0"
-              }`}
-              style={{ transitionDelay: "120ms" }}
-            />
-
-            {/* Step 2 */}
-            <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden} w-max`}
-              style={{ transitionDelay: "240ms" }}
-            >
-              <div className="px-6 py-4 bg-accent border border-border rounded-lg">
-                <p className="text-xs uppercase tracking-wide text-text-tertiary mb-1">
-                  Select
-                </p>
-                <p className="font-medium">Client</p>
-              </div>
-            </div>
-
-            {/* Arrow 2 */}
-            <ArrowRight
-              className={`hidden md:block w-5 h-5 text-text-tertiary ${arrowBase} ${
-                visible ? "opacity-100" : "opacity-0"
-              }`}
-              style={{ transitionDelay: "360ms" }}
-            />
-
-            {/* Step 3 */}
-            <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden} w-max`}
-              style={{ transitionDelay: "480ms" }}
-            >
-              <div className="px-6 py-4 bg-accent border border-border rounded-lg">
-                <p className="text-xs uppercase tracking-wide text-text-tertiary mb-1">
-                  Choose
-                </p>
-                <p className="font-medium">Financial Year</p>
-              </div>
-            </div>
-
-            {/* Arrow 3 */}
-            <ArrowRight
-              className={`hidden md:block w-5 h-5 text-text-tertiary ${arrowBase} ${
-                visible ? "opacity-100" : "opacity-0"
-              }`}
-              style={{ transitionDelay: "600ms" }}
-            />
-
-            {/* Step 4 */}
-            <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden} w-max`}
-              style={{ transitionDelay: "720ms" }}
-            >
-              <div className="px-6 py-4 bg-accent border border-border rounded-lg">
-                <p className="text-xs uppercase tracking-wide text-text-tertiary mb-1">
-                  Track
-                </p>
-                <p className="font-medium">Compliance Tasks</p>
-              </div>
-            </div>
-
-            {/* Arrow 4 */}
-            <ArrowRight
-              className={`hidden md:block w-5 h-5 text-text-tertiary ${arrowBase} ${
-                visible ? "opacity-100" : "opacity-0"
-              }`}
-              style={{ transitionDelay: "840ms" }}
-            />
-
-            {/* Step 5 */}
-            <div
-              className={`${stepBase} ${visible ? stepVisible : stepHidden} w-max`}
-              style={{ transitionDelay: "960ms" }}
-            >
-              <div className="px-6 py-4 bg-accent border border-border rounded-lg">
-                <p className="text-xs uppercase tracking-wide text-text-tertiary mb-1">
-                  Attach
-                </p>
-                <p className="font-medium">Documents</p>
-              </div>
-            </div>
-          </div>
+                  {!isLast && (
+                    <ArrowRight
+                      aria-hidden="true"
+                      className={`hidden md:block w-5 h-5 text-text-tertiary ${arrowBase} ${
+                        visible ? "opacity-100" : "opacity-0"
+                      }`}
+                      style={{ transitionDelay: `${index * STEP_STAGGER_MS + STEP_STAGGER_MS / 2}ms` }}
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ol>
 
           {/* Explanation — delayed payoff */}
           <div
