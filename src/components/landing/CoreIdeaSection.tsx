@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { useInView } from "@/hooks/useInView";
 
 const steps = [
@@ -71,6 +71,17 @@ const CoreIdeaSection = () => {
                     )}
                   </div>
 
+                  {/* Steps stack on small screens, so point the flow downwards there. */}
+                  {!isLast && (
+                    <ArrowDown
+                      aria-hidden="true"
+                      data-testid="core-idea-arrow-down"
+                      className={`md:hidden w-5 h-5 text-text-tertiary ${arrowBase} ${
+                        visible ? "opacity-100" : "opacity-0"
+                      }`}
+                      style={{ transitionDelay: `${index * STEP_STAGGER_MS + STEP_STAGGER_MS / 2}ms` }}
+                    />
+                  )}
                   {!isLast && (
                     <ArrowRight
                       aria-hidden="true"
