@@ -9,7 +9,8 @@ export function useInView(options?: IntersectionObserverInit) {
   optionsRef.current = options;
 
   useEffect(() => {
-    if (prefersReducedMotion()) {
+    // Without IntersectionObserver (older browsers) content would stay hidden forever, so just show it.
+    if (prefersReducedMotion() || typeof IntersectionObserver === "undefined") {
       setVisible(true);
       return;
     }
