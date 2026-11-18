@@ -87,7 +87,10 @@ const AccountabilitySection = () => {
   };
 
   return (
-    <section id="accountability" className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider">
+    <section
+      id="accountability"
+      aria-labelledby="accountability-heading"
+      className="scroll-mt-24 py-20 md:py-28 bg-muted/30 border-t border-divider">
       <div className="container mx-auto px-6">
         <div 
           ref={ref}
@@ -95,7 +98,10 @@ const AccountabilitySection = () => {
         >
           {/* Text Content - Static */}
           <div>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+            <h2
+              id="accountability-heading"
+              className="text-3xl md:text-4xl font-semibold tracking-tight mb-4"
+            >
               Know exactly who did what — always
             </h2>
             <p className="text-text-secondary text-lg mb-8">
@@ -103,7 +109,7 @@ const AccountabilitySection = () => {
             </p>
             <ul className="space-y-4 mt-6">
               <li className="flex items-start gap-3">
-                <span className="relative flex h-2 w-2 mt-2">
+                <span className="relative flex h-2 w-2 mt-2" aria-hidden="true">
                   {!reduceMotion && (
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
                   )}
@@ -115,7 +121,7 @@ const AccountabilitySection = () => {
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="relative flex h-2 w-2 mt-2">
+                <span className="relative flex h-2 w-2 mt-2" aria-hidden="true">
                   {!reduceMotion && (
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
                   )}
@@ -127,7 +133,7 @@ const AccountabilitySection = () => {
               </li>
 
               <li className="flex items-start gap-3">
-                <span className="relative flex h-2 w-2 mt-2">
+                <span className="relative flex h-2 w-2 mt-2" aria-hidden="true">
                   {!reduceMotion && (
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-100 [animation-delay:1000ms]"></span>
                   )}
