@@ -50,10 +50,10 @@ const ProblemSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-2">
-          {problems.map((problem, index) => (
-            <div
-              key={index}
+        <ul className="grid md:grid-cols-2 gap-6 mb-2">
+          {problems.map((problem) => (
+            <li
+              key={problem.title}
               className={`
                 group p-7 rounded-xl border border-border bg-card
                 relative overflow-hidden
@@ -70,7 +70,10 @@ const ProblemSection = () => {
               `}
             >
               {/* Icon */}
-              <div className="w-9 h-9 rounded-md bg-muted flex items-center justify-center mb-4 transition-colors duration-300">
+              <div
+                className="w-9 h-9 rounded-md bg-muted flex items-center justify-center mb-4 transition-colors duration-300"
+                aria-hidden="true"
+              >
                 <problem.icon
                   className={`w-4.5 h-4.5 ${problem.color} opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all`}
                 />
@@ -85,9 +88,9 @@ const ProblemSection = () => {
               <p className="text-sm text-text-secondary leading-relaxed">
                 {problem.description}
               </p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
