@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
+import { CONTACT_EMAIL, mailtoLink } from "@/lib/contact";
 import { LEGAL_LAST_UPDATED, formatLegalDate, legalIsoDate } from "@/lib/legal";
+
+/** Deletion requests arrive with a subject the team can spot and act on. */
+const DELETION_MAILTO = mailtoLink("Personal data deletion request");
 
 const Privacy = () => {
   return (
@@ -35,10 +39,10 @@ const Privacy = () => {
             reply to your request and to share product updates you asked for.
             You can request deletion at any time by emailing{" "}
             <a
-              href="mailto:hello@compliancework.in"
+              href={DELETION_MAILTO}
               className="text-text-primary underline underline-offset-2 hover:opacity-80"
             >
-              hello@compliancework.in
+              {CONTACT_EMAIL}
             </a>
             .
           </p>

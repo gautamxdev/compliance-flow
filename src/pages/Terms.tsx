@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CONTACT_EMAIL, mailtoLink } from "@/lib/contact";
 import { LEGAL_LAST_UPDATED, formatLegalDate, legalIsoDate } from "@/lib/legal";
 
 const Terms = () => {
@@ -40,10 +41,10 @@ const Terms = () => {
             change features, availability, or these terms as the product
             matures. Questions:{" "}
             <a
-              href="mailto:hello@compliancework.in"
+              href={mailtoLink()}
               className="text-text-primary underline underline-offset-2 hover:opacity-80"
             >
-              hello@compliancework.in
+              {CONTACT_EMAIL}
             </a>
             .
           </p>
