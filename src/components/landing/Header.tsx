@@ -25,7 +25,10 @@ const NAV_LINKS = [
 const DESKTOP_QUERY = "(min-width: 768px)";
 
 const DESKTOP_LINK_IDS = ["problem", "who-its-for", "faq"] as const;
-const TRACKED_SECTION_IDS = NAV_LINKS.map((item) => item.id);
+const SAMPLE_DASHBOARD_ID = "sample-dashboard";
+// The sample dashboard sits in the hero, above every other section, so it goes
+// first: useActiveSection picks the first visible id in this order.
+const TRACKED_SECTION_IDS = [SAMPLE_DASHBOARD_ID, ...NAV_LINKS.map((item) => item.id)];
 
 const desktopLinkClass = (active: boolean) =>
   cn(
@@ -37,6 +40,7 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const activeSection = useActiveSection(TRACKED_SECTION_IDS);
   const { pathname, hash } = useLocation();
+  const dashboardActive = activeSection === SAMPLE_DASHBOARD_ID;
 
   // The menu trigger is md:hidden, so a sheet left open while the window grows
   // to desktop width would cover the page with no visible way to close it.
@@ -105,7 +109,9 @@ const Header = () => {
             type="button"
             variant="outline"
             size="sm"
-            className="
+            aria-current={dashboardActive ? "location" : undefined}
+            className={cn(
+              `
               relative h-9 px-4 text-sm gap-2 group
               border-transparent bg-background rounded-lg
               before:absolute before:inset-0 before:rounded-lg before:p-[1px]
@@ -114,8 +120,10 @@ const Header = () => {
               after:absolute after:inset-[1px] after:rounded-[8px] after:bg-background after:content-['']
               hover:before:opacity-100 hover:shadow-[0_0_18px_rgba(99,102,241,0.45)]
               transition-all duration-300
-            "
-            onClick={() => scrollToId("sample-dashboard")}
+            `,
+              dashboardActive && "before:opacity-100",
+            )}
+            onClick={() => scrollToId(SAMPLE_DASHBOARD_ID)}
           >
             <span className="relative z-10 flex items-center gap-2">
               View sample dashboard
@@ -186,8 +194,12 @@ const Header = () => {
                 })}
                 <button
                   type="button"
-                  className="rounded-lg px-3 py-3 text-left text-sm text-text-secondary transition-colors hover:bg-muted hover:text-text-primary"
-                  onClick={() => goTo("sample-dashboard")}
+                  aria-current={dashboardActive ? "location" : undefined}
+                  className={cn(
+                    "rounded-lg px-3 py-3 text-left text-sm transition-colors hover:bg-muted hover:text-text-primary",
+                    dashboardActive ? "bg-muted font-medium text-text-primary" : "text-text-secondary",
+                  )}
+                  onClick={() => goTo(SAMPLE_DASHBOARD_ID)}
                 >
                   View sample dashboard
                 </button>
