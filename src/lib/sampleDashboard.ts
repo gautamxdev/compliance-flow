@@ -190,6 +190,13 @@ export function tasksToCsv(tasks: SampleTask[], today: Date = new Date()): strin
 }
 
 /**
+ * How long the CSV blob URL stays alive after the download starts. Revoking it
+ * in the same tick as click() can cancel the download in Safari and Firefox,
+ * which fetch the blob asynchronously.
+ */
+export const CSV_URL_REVOKE_DELAY_MS = 1000;
+
+/**
  * "sharma-enterprises-fy-2026-27-filings.csv" from the client and FY label.
  * A narrowed scope is named in the file ("...-overdue-filings.csv") so an
  * export of only some filings is not mistaken for the full list.

@@ -5,6 +5,7 @@ import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { getIndianFinancialYear } from "@/lib/indianFy";
 import {
   countOpenTasks,
+  CSV_URL_REVOKE_DELAY_MS,
   dashboardViewSearch,
   dashboardViewUrl,
   dueRelativeLabel,
@@ -148,7 +149,7 @@ const HeroSection = () => {
     document.body.appendChild(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), CSV_URL_REVOKE_DELAY_MS);
   };
   const [linkCopied, setLinkCopied] = useState(false);
   const copiedTimerRef = useRef<number | null>(null);

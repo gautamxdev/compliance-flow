@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import HeroSection from "@/components/landing/HeroSection";
-import { filingsCsvFileName, tasksToCsv, type SampleTask } from "@/lib/sampleDashboard";
+import { CSV_URL_REVOKE_DELAY_MS, filingsCsvFileName, tasksToCsv, type SampleTask } from "@/lib/sampleDashboard";
 
 describe("tasksToCsv", () => {
   it("writes a header, ISO due dates and the late/left hint for open filings", () => {
@@ -69,7 +69,6 @@ describe("sample dashboard CSV export", () => {
     fireEvent.click(screen.getByRole("button", { name: "Export CSV" }));
 
     expect(downloadName).toBe("sharma-enterprises-fy-2026-27-overdue-filings.csv");
-    expect(revokeObjectURL).toHaveBeenCalledWith("blob:filings");
     const text = await new Promise<string>((resolve) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result as string);
@@ -79,6 +78,23 @@ describe("sample dashboard CSV export", () => {
       "Task,Status,Assigned,Due,Note",
       "Tax Audit,In Progress,Rahul M.,2026-09-30,9 days late",
     ]);
+  });
+
+  it("keeps the blob URL alive until the download has had time to start", () => {
+    vi.useFakeTimers();
+    const revokeObjectURL = vi.fn();
+    Object.assign(URL, { createObjectURL: vi.fn(() => "blob:filings"), revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
+
+    render(<HeroSection />);
+    fireEvent.click(screen.getByRole("button", { name: "Export CSV" }));
+
+    expect(click).toHaveBeenCalledTimes(1);
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(CSV_URL_REVOKE_DELAY_MS - 1);
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(1);
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:filings");
   });
 
   it("is disabled when the view has no rows", () => {
