@@ -165,9 +165,20 @@ export function splitByQuery(text: string, query: string): MatchSegment[] {
   return segments;
 }
 
-/** Quote a CSV field when it holds a comma, quote or line break (RFC 4180). */
-function csvField(value: string): string {
-  return /[",\r\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value;
+/**
+ * Leading characters that make Excel, Sheets and LibreOffice treat a cell as a
+ * formula (OWASP "CSV injection").
+ */
+const CSV_FORMULA_TRIGGER = /^[=+\-@\t\r]/;
+
+/**
+ * Quote a CSV field when it holds a comma, quote or line break (RFC 4180).
+ * A value that would open as a formula is prefixed with an apostrophe so a
+ * task or assignee name like "=HYPERLINK(...)" is shown as text, not run.
+ */
+export function csvField(value: string): string {
+  const safe = CSV_FORMULA_TRIGGER.test(value) ? `'${value}` : value;
+  return /[",\r\n]/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
 }
 
 /**
