@@ -1,3 +1,5 @@
+import { decodePath } from "@/lib/decodePath";
+
 /** `key` is the URL word that points at the page; it defaults to the path without its leading slash. */
 export type KnownPage = { path: string; label: string; key?: string };
 
@@ -29,12 +31,17 @@ function editDistance(a: string, b: string): number {
 /**
  * Best guess at the page a missing path meant: "/Privacy/", "/privacy-policy",
  * "/term", "/terms-of-use" and "/legal/terms_and_conditions" all point
- * somewhere real. Returns null when the path is not close to any known page.
+ * somewhere real, as do encoded or form-style links such as "/%50rivacy" and
+ * "/privacy+policy". Returns null when the path is not close to any known page.
  */
 export function suggestPage(pathname: string, pages: KnownPage[] = KNOWN_PAGES): KnownPage | null {
-  const segments = pathname.toLowerCase().split("/").filter(Boolean);
+  // Decode each segment on its own so one malformed escape doesn't block the rest.
+  const segments = pathname
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => decodePath(segment).toLowerCase());
   if (segments.length === 0) return null;
-  const words = segments.flatMap((segment) => segment.split(/[-_.\s]+|%20/).filter(Boolean));
+  const words = segments.flatMap((segment) => segment.split(/[-_.+\s]+|%20/).filter(Boolean));
   const candidates = [...segments, ...words];
 
   let best: { page: KnownPage; distance: number } | null = null;
