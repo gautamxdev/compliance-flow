@@ -12,6 +12,7 @@ import {
 import { ArrowRight, Menu } from "lucide-react";
 import { prefersReducedMotion, scrollToId } from "@/lib/scrollToId";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { onMediaQueryChange } from "@/lib/mediaQuery";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -54,8 +55,7 @@ const Header = () => {
     const onChange = (e: MediaQueryListEvent) => {
       if (e.matches) setMobileOpen(false);
     };
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
+    return onMediaQueryChange(mql, onChange);
   }, [mobileOpen]);
 
   const goHome = () => {

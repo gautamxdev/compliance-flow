@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { prefersReducedMotion } from "@/lib/scrollToId";
+import { onMediaQueryChange } from "@/lib/mediaQuery";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -15,8 +16,7 @@ export function usePrefersReducedMotion(): boolean {
     const mql = window.matchMedia(QUERY);
     const onChange = () => setReduce(mql.matches);
     onChange();
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
+    return onMediaQueryChange(mql, onChange);
   }, []);
 
   return reduce;
