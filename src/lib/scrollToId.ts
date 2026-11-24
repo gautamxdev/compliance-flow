@@ -2,9 +2,8 @@
 export function scrollToId(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   el.scrollIntoView({
-    behavior: prefersReduced ? "auto" : "smooth",
+    behavior: prefersReducedMotion() ? "auto" : "smooth",
     block: "start",
   });
 
@@ -15,7 +14,12 @@ export function scrollToId(id: string) {
   el.focus({ preventScroll: true });
 }
 
+/**
+ * True when the visitor asked the OS for reduced motion. Browsers and embedded
+ * webviews without matchMedia are treated as "no preference" instead of
+ * throwing, so navigation clicks still scroll.
+ */
 export function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return false;
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
