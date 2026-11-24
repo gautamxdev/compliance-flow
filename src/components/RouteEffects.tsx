@@ -20,6 +20,24 @@ function titleForPath(pathname: string): string {
   return TITLES[normalized] ?? "Page not found · FirmOps";
 }
 
+/**
+ * Section id a URL hash points at. Shared links arrive percent-encoded
+ * ("#who%2Dits%2Dfor") or re-cased by hand ("#FAQ"), so decode the hash and,
+ * when no element has that exact id, fall back to its lowercase form (every
+ * landing section id is lowercase).
+ */
+function sectionIdFromHash(hash: string): string {
+  const raw = hash.replace(/^#/, "");
+  let id = raw;
+  try {
+    id = decodeURIComponent(raw);
+  } catch {
+    // Malformed escape: use the hash as typed.
+  }
+  if (!id || document.getElementById(id)) return id;
+  return id.toLowerCase();
+}
+
 /** Keep the tab title and scroll position in sync with the active route. */
 export function RouteEffects() {
   const { pathname, hash } = useLocation();
@@ -27,10 +45,9 @@ export function RouteEffects() {
   useEffect(() => {
     document.title = titleForPath(pathname);
 
-    const id = hash.replace(/^#/, "");
-    if (pathname === "/" && id) {
+    if (pathname === "/" && hash.replace(/^#/, "")) {
       // Defer until the landing sections are in the DOM.
-      window.requestAnimationFrame(() => scrollToId(id));
+      window.requestAnimationFrame(() => scrollToId(sectionIdFromHash(hash)));
       return;
     }
 
@@ -40,4 +57,4 @@ export function RouteEffects() {
   return null;
 }
 
-export { DEFAULT_TITLE, TITLES, titleForPath };
+export { DEFAULT_TITLE, TITLES, sectionIdFromHash, titleForPath };
