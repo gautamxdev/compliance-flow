@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { suggestPage } from "@/lib/suggestRoute";
+import { decodePath } from "@/lib/decodePath";
 
 /**
  * The SPA answers every unknown URL with 200, so tell crawlers not to index
@@ -65,7 +66,7 @@ const NotFound = () => {
             className="break-all rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-text-primary"
             data-testid="missing-path"
           >
-            {pathname}
+            {decodePath(pathname)}
           </code>
         </p>
         {suggestion ? (
