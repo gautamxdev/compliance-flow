@@ -238,11 +238,24 @@ const VIEW_PARAMS = { scope: "filter", sort: "due", query: "q" } as const;
 const SCOPES: readonly FilingScope[] = ["all", "open", "due-soon", "overdue"];
 const SORTS: readonly DueSort[] = ["none", "asc", "desc"];
 
-/** Read a dashboard view from a URL query string; unknown values fall back to the default view. */
+/**
+ * Canonical form of a hand-typed or re-cased param value: trimmed, lower-case,
+ * with spaces and underscores as hyphens ("Due Soon", "due_soon" → "due-soon").
+ */
+function normaliseViewParam(value: string | null): string | null {
+  if (value === null) return null;
+  return value.trim().toLowerCase().replace(/[\s_]+/g, "-");
+}
+
+/**
+ * Read a dashboard view from a URL query string; unknown values fall back to
+ * the default view. Filter and sort values are matched loosely, so a link
+ * typed as "?filter=Overdue" or "?filter=due+soon" still opens that view.
+ */
 export function parseDashboardView(search: string): DashboardView {
   const params = new URLSearchParams(search);
-  const scope = params.get(VIEW_PARAMS.scope) as FilingScope | null;
-  const sort = params.get(VIEW_PARAMS.sort) as DueSort | null;
+  const scope = normaliseViewParam(params.get(VIEW_PARAMS.scope)) as FilingScope | null;
+  const sort = normaliseViewParam(params.get(VIEW_PARAMS.sort)) as DueSort | null;
   return {
     scope: scope && SCOPES.includes(scope) ? scope : DEFAULT_DASHBOARD_VIEW.scope,
     sort: sort && SORTS.includes(sort) ? sort : DEFAULT_DASHBOARD_VIEW.sort,
