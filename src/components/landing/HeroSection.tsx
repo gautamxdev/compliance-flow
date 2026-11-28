@@ -287,7 +287,7 @@ const HeroSection = () => {
             >
               <span className="relative z-10 flex items-center">
                 Request early access
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
               </span>
 
               {/* moving light */}

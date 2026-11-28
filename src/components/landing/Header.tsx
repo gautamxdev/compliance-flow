@@ -127,7 +127,7 @@ const Header = () => {
           >
             <span className="relative z-10 flex items-center gap-2">
               View sample dashboard
-              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </span>
           </Button>
         </nav>
@@ -164,7 +164,7 @@ const Header = () => {
                 className="md:hidden h-9 w-9 text-text-primary"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5" aria-hidden="true" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[min(100%,20rem)] p-0">
