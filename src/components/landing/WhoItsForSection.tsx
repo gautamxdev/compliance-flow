@@ -61,10 +61,12 @@ const WhoItsForSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        {/* One list item per role, so screen readers announce "list, 3 items". */}
+        <ul className="grid md:grid-cols-3 gap-6">
           {personas.map((persona, index) => (
-            <div
+            <li
               key={persona.title}
+              aria-labelledby={`who-its-for-${index}-title`}
               className={`p-6 rounded-xl border border-border bg-card ${baseTransition} ${
                 visible ? "opacity-100" : "opacity-0"
               }`}
@@ -84,8 +86,8 @@ const WhoItsForSection = () => {
               >
                 <persona.icon className="w-6 h-6" aria-hidden="true" />
               </div>
-              <h3 className="font-semibold text-xl mb-4">{persona.title}</h3>
-              <ul className="space-y-3">
+              <h3 id={`who-its-for-${index}-title`} className="font-semibold text-xl mb-4">{persona.title}</h3>
+              <ul className="space-y-3" aria-label={`${persona.title} benefits`}>
                 {persona.benefits.map((benefit, benefitIndex) => (
                   <li key={benefitIndex} className="flex items-start gap-2 text-sm text-text-secondary">
                     <span className="text-primary mt-1" aria-hidden="true">—</span>
@@ -93,9 +95,9 @@ const WhoItsForSection = () => {
                   </li>
                 ))}
               </ul>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
