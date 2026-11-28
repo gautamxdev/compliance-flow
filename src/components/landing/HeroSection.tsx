@@ -320,6 +320,8 @@ const HeroSection = () => {
 <div
   ref={dashboardRef}
   id="sample-dashboard"
+  role="region"
+  aria-labelledby="sample-dashboard-title"
   className="mt-16 md:mt-20 scroll-mt-32"
   style={{ perspective: "900px" }}
 >
@@ -361,14 +363,16 @@ radial-gradient(
 
             {/* Window Controls */}
             <div className="flex items-center gap-2 px-4 py-3 border-b border-divider bg-muted/30">
-              <div className="flex gap-1.5">
+              <div className="flex gap-1.5" aria-hidden="true">
                 <div className="w-3 h-3 rounded-full bg-[hsl(0,72%,51%)]"></div>
                 <div className="w-3 h-3 rounded-full bg-[hsl(45,93%,47%)]"></div>
                 <div className="w-3 h-3 rounded-full bg-[hsl(142,71%,45%)]"></div>
               </div>
               <div className="flex-1 text-center">
-                <span className="text-xs text-text-tertiary">FirmOps— Client Dashboard</span>
-        
+                {/* Names the sample dashboard region for screen readers and the landmarks list. */}
+                <span id="sample-dashboard-title" className="text-xs text-text-tertiary">
+                  FirmOps — Sample client dashboard
+                </span>
               </div>
             </div>
             
