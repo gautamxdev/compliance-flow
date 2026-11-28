@@ -101,6 +101,9 @@ const HeroSection = () => {
   const [isHovering, setIsHovering] = useState(false);
   const frameRef = useRef<number | null>(null);
   const lastPointerRef = useRef<{ clientX: number; clientY: number } | null>(null);
+  // Touch and pen taps are followed by emulated mouse events with no matching
+  // mouseleave, which would leave the card tilted and glowing after a tap.
+  const nonMousePointerRef = useRef(false);
   const currentFy = getIndianFinancialYear().label;
   // The sample data only changes with the day, not on every pointer-driven re-render.
   const todayKey = new Date().toDateString();
@@ -206,8 +209,12 @@ const HeroSection = () => {
 
   useEffect(() => cancelPendingFrame, [cancelPendingFrame]);
 
+  const handlePointerType = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    nonMousePointerRef.current = e.pointerType === "touch" || e.pointerType === "pen";
+  }, []);
+
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || prefersReducedMotion()) return;
+    if (!cardRef.current || nonMousePointerRef.current || prefersReducedMotion()) return;
 
     lastPointerRef.current = { clientX: e.clientX, clientY: e.clientY };
     // Mouse events can fire several times per frame; render at most once per frame.
@@ -245,7 +252,7 @@ const HeroSection = () => {
   }, [cancelPendingFrame]);
 
   const handleMouseEnter = useCallback(() => {
-    if (prefersReducedMotion()) return;
+    if (nonMousePointerRef.current || prefersReducedMotion()) return;
     setIsHovering(true);
   }, []);
 
@@ -322,6 +329,8 @@ const HeroSection = () => {
     onMouseMove={handleMouseMove}
     onMouseLeave={handleMouseLeave}
     onMouseEnter={handleMouseEnter}
+    onPointerDown={handlePointerType}
+    onPointerMove={handlePointerType}
     className="relative rounded-xl"
    style={{
   transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`,
